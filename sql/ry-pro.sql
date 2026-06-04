@@ -11,7 +11,7 @@
  Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 05/06/2026 00:38:57
+ Date: 05/06/2026 01:20:54
 */
 
 SET NAMES utf8mb4;
@@ -621,6 +621,79 @@ CREATE TABLE `qrtz_triggers`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for scm_sales_contract
+-- ----------------------------
+DROP TABLE IF EXISTS `scm_sales_contract`;
+CREATE TABLE `scm_sales_contract`  (
+  `contract_id` bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `contract_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '合同编号',
+  `order_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '订单编号',
+  `customer_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '客户名称',
+  `contact_person` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '联系人',
+  `contact_phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '联系方式',
+  `total_amount` decimal(12, 2) NULL DEFAULT NULL COMMENT '金额合计',
+  `delivery_date` date NULL DEFAULT NULL COMMENT '交货日期',
+  `delivery_method` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '送货方式：0快递,1物流',
+  `delivery_address` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '收货地址',
+  `sign_date` date NULL DEFAULT NULL COMMENT '签订日期',
+  `applicant` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请人',
+  `apply_date` date NULL DEFAULT NULL COMMENT '申请时间',
+  `apply_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '申请状态：0未提交,1待审核,2已审核',
+  `auditor` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核人',
+  `audit_date` date NULL DEFAULT NULL COMMENT '审核时间',
+  `audit_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核状态：0通过,1驳回',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`contract_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售合同主表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of scm_sales_contract
+-- ----------------------------
+INSERT INTO `scm_sales_contract` VALUES (1, 'SC-20260601-0001', 'SO-20260601-0001', '华东汽车集团', '张伟', '13800001111', 98000.00, '2026-07-15', '0', '上海市浦东新区张江路88号', '2026-06-05', '若依', '2026-06-01', '2', 'admin', '2026-06-06', '0', 'admin', '2026-06-05 01:14:53', '', '2026-06-05 01:14:53', '首批合同');
+INSERT INTO `scm_sales_contract` VALUES (2, 'SC-20260602-0002', 'SO-20260602-0002', '南方新能源科技', '李娜', '13900002222', 156000.00, '2026-07-20', '1', '深圳市南山区科技园路12号', '2026-06-08', '若依', '2026-06-02', '1', NULL, NULL, NULL, 'admin', '2026-06-05 01:14:53', '', '2026-06-05 01:14:53', '待审核合同');
+INSERT INTO `scm_sales_contract` VALUES (3, 'SC-20260603-0003', 'SO-20260603-0003', '北方重工机械', '王强', '13700003333', 68000.00, '2026-08-01', '0', '北京市朝阳区建国路100号', NULL, 'admin', '2026-06-03', '0', NULL, NULL, NULL, 'admin', '2026-06-05 01:14:53', '', '2026-06-05 01:14:53', '未提交合同');
+
+-- ----------------------------
+-- Table structure for scm_sales_contract_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `scm_sales_contract_detail`;
+CREATE TABLE `scm_sales_contract_detail`  (
+  `detail_id` bigint NOT NULL AUTO_INCREMENT,
+  `contract_id` bigint NOT NULL COMMENT '合同ID',
+  `seq_no` int NULL DEFAULT NULL COMMENT '序号',
+  `material_id` bigint NULL DEFAULT NULL COMMENT '物料ID',
+  `product_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '产品名称',
+  `product_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '型号',
+  `product_spec` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '规格',
+  `unit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '单位',
+  `price` decimal(12, 2) NULL DEFAULT NULL COMMENT '单价',
+  `order_quantity` int NULL DEFAULT NULL COMMENT '订货数量',
+  `amount` decimal(12, 2) NULL DEFAULT NULL COMMENT '金额',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`detail_id`) USING BTREE,
+  INDEX `contract_id`(`contract_id` ASC) USING BTREE,
+  CONSTRAINT `scm_sales_contract_detail_ibfk_1` FOREIGN KEY (`contract_id`) REFERENCES `scm_sales_contract` (`contract_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售合同明细' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of scm_sales_contract_detail
+-- ----------------------------
+INSERT INTO `scm_sales_contract_detail` VALUES (1, 1, 1, 101, '汽油发动机', 'EA888', '2.0T/162kW', '台', 35000.00, 2, 70000.00, NULL);
+INSERT INTO `scm_sales_contract_detail` VALUES (2, 1, 2, 104, '前副车架', 'MQB-A', '钢制/焊接', '件', 4500.00, 2, 9000.00, NULL);
+INSERT INTO `scm_sales_contract_detail` VALUES (3, 1, 3, 105, '后桥总成', 'R-Axle-01', '承载1.5T', '件', 6800.00, 2, 13600.00, NULL);
+INSERT INTO `scm_sales_contract_detail` VALUES (4, 1, 4, 108, '涡轮增压器', 'TC-28', '28mm/单涡管', '件', 5200.00, 1, 5400.00, NULL);
+INSERT INTO `scm_sales_contract_detail` VALUES (5, 2, 1, 103, '三元锂电池包', 'NE-75', '75kWh/350V', '组', 65000.00, 2, 130000.00, NULL);
+INSERT INTO `scm_sales_contract_detail` VALUES (6, 2, 2, 106, '驱动电机', 'EM-150', '150kW/永磁', '台', 12000.00, 1, 12000.00, NULL);
+INSERT INTO `scm_sales_contract_detail` VALUES (7, 2, 3, 107, 'MCU控制器', 'MCU-01', '400V/IGBT', '个', 8500.00, 2, 17000.00, NULL);
+INSERT INTO `scm_sales_contract_detail` VALUES (8, 3, 1, 102, '双离合变速箱', 'DQ381', '7速/380Nm', '台', 28000.00, 2, 56000.00, NULL);
+INSERT INTO `scm_sales_contract_detail` VALUES (9, 3, 2, 104, '前副车架', 'MQB-A', '钢制/焊接', '件', 4500.00, 2, 9000.00, NULL);
+INSERT INTO `scm_sales_contract_detail` VALUES (10, 3, 3, 108, '涡轮增压器', 'TC-28', '28mm/单涡管', '件', 5200.00, 1, 3000.00, NULL);
+
+-- ----------------------------
 -- Table structure for scm_sales_order
 -- ----------------------------
 DROP TABLE IF EXISTS `scm_sales_order`;
@@ -705,7 +778,7 @@ CREATE TABLE `scm_sales_plan`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`plan_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售计划主表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售计划主表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of scm_sales_plan
@@ -733,7 +806,7 @@ CREATE TABLE `scm_sales_plan_detail`  (
   PRIMARY KEY (`detail_id`) USING BTREE,
   INDEX `plan_id`(`plan_id` ASC) USING BTREE,
   CONSTRAINT `scm_sales_plan_detail_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `scm_sales_plan` (`plan_id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售计划指标配置' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售计划指标配置' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of scm_sales_plan_detail
@@ -745,6 +818,70 @@ INSERT INTO `scm_sales_plan_detail` VALUES (4, 2, 1, 101, '汽油发动机', 'EA
 INSERT INTO `scm_sales_plan_detail` VALUES (5, 2, 2, 104, '前副车架', 'MQB-A', '钢制/焊接', '件', 4500.00, 540000.00, NULL);
 INSERT INTO `scm_sales_plan_detail` VALUES (12, 3, 1, 102, '双离合变速箱', 'DQ381', '7速/380Nm', '台', 28000.00, 560000.00, NULL);
 INSERT INTO `scm_sales_plan_detail` VALUES (13, 3, 2, 105, '后桥总成', 'R-Axle-01', '承载1.5T', '件', 6800.00, 136000.00, NULL);
+
+-- ----------------------------
+-- Table structure for scm_sales_return
+-- ----------------------------
+DROP TABLE IF EXISTS `scm_sales_return`;
+CREATE TABLE `scm_sales_return`  (
+  `return_id` bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `return_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '退货单号',
+  `delivery_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '发货单号',
+  `contract_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '合同编号',
+  `customer_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '客户名称',
+  `return_date` date NOT NULL COMMENT '退货日期',
+  `refund_amount` decimal(12, 2) NULL DEFAULT NULL COMMENT '退款金额',
+  `inbound_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '入库状态：0未入库,1入库中,2已入库',
+  `return_reason` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '退货原因',
+  `delivery_method` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '送货方式',
+  `delivery_date` date NULL DEFAULT NULL COMMENT '交货日期',
+  `delivery_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '收货地址',
+  `contact_person` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '联系人',
+  `contact_phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '联系电话',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`return_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售退货主表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of scm_sales_return
+-- ----------------------------
+INSERT INTO `scm_sales_return` VALUES (1, 'SR-20260605-0001', 'DL-20260601-0001', 'HT-2026-001', '华东汽车集团', '2026-06-05', 39800.00, '2', '发动机异响', '公路运输', '2026-07-15', '上海市浦东新区张江路88号', '张伟', '13800001111', 'admin', '2026-06-05 01:15:46', '', '2026-06-05 01:15:46', '质量退货');
+INSERT INTO `scm_sales_return` VALUES (2, 'SR-20260608-0002', 'DL-20260602-0002', 'HT-2026-002', '南方新能源科技', '2026-06-08', 65000.00, '1', '电池续航不达标', '铁路运输', '2026-07-20', '深圳市南山区科技园路66号', '李娜', '13900002222', 'admin', '2026-06-05 01:15:46', '', '2026-06-05 01:15:46', '待入库');
+INSERT INTO `scm_sales_return` VALUES (3, 'SR-20260610-0003', 'DL-20260603-0003', 'HT-2026-003', '北方重工机械', '2026-06-10', 28000.00, '0', '客户取消订单', '公路运输', '2026-08-01', '沈阳市铁西区重工街120号', '王强', '13700003333', 'admin', '2026-06-05 01:15:46', '', '2026-06-05 01:15:46', '未入库');
+
+-- ----------------------------
+-- Table structure for scm_sales_return_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `scm_sales_return_detail`;
+CREATE TABLE `scm_sales_return_detail`  (
+  `detail_id` bigint NOT NULL AUTO_INCREMENT,
+  `return_id` bigint NOT NULL COMMENT '退货主表ID',
+  `seq_no` int NULL DEFAULT NULL COMMENT '序号',
+  `material_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '物料',
+  `product_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '型号',
+  `product_spec` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '规格',
+  `unit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '单位',
+  `price` decimal(12, 2) NULL DEFAULT NULL COMMENT '价格',
+  `order_quantity` int NULL DEFAULT NULL COMMENT '订货数量',
+  `delivery_quantity` int NULL DEFAULT NULL COMMENT '发货数量',
+  `return_quantity` int NULL DEFAULT NULL COMMENT '退货数量',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`detail_id`) USING BTREE,
+  INDEX `return_id`(`return_id` ASC) USING BTREE,
+  CONSTRAINT `scm_sales_return_detail_ibfk_1` FOREIGN KEY (`return_id`) REFERENCES `scm_sales_return` (`return_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售退货明细' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of scm_sales_return_detail
+-- ----------------------------
+INSERT INTO `scm_sales_return_detail` VALUES (1, 1, 1, '汽油发动机', 'EA888', '2.0T/162kW', '台', 35000.00, 2, 2, 1, NULL);
+INSERT INTO `scm_sales_return_detail` VALUES (2, 1, 2, '后桥总成', 'R-Axle-01', '承载1.5T', '件', 6800.00, 2, 2, 1, NULL);
+INSERT INTO `scm_sales_return_detail` VALUES (3, 2, 1, '三元锂电池包', 'NE-75', '75kWh/350V', '组', 65000.00, 2, 2, 1, NULL);
+INSERT INTO `scm_sales_return_detail` VALUES (4, 3, 1, '双离合变速箱', 'DQ381', '7速/380Nm', '台', 28000.00, 2, 2, 1, NULL);
 
 -- ----------------------------
 -- Table structure for sys_config
@@ -833,7 +970,7 @@ CREATE TABLE `sys_dict_data`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 130 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 135 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dict_data
@@ -887,6 +1024,11 @@ INSERT INTO `sys_dict_data` VALUES (126, 2, '待审核', '1', 'sys_apply_status'
 INSERT INTO `sys_dict_data` VALUES (127, 3, '已审核', '2', 'sys_apply_status', '', 'success', 'N', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '已审核');
 INSERT INTO `sys_dict_data` VALUES (128, 1, '通过', '0', 'sys_audit_status', '', 'success', 'N', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '通过');
 INSERT INTO `sys_dict_data` VALUES (129, 2, '驳回', '1', 'sys_audit_status', '', 'danger', 'N', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '驳回');
+INSERT INTO `sys_dict_data` VALUES (130, 1, '快递', '0', 'sys_delivery_method', '', 'primary', 'N', '0', 'admin', '2026-06-05 01:14:29', '', NULL, '快递');
+INSERT INTO `sys_dict_data` VALUES (131, 2, '物流', '1', 'sys_delivery_method', '', 'success', 'N', '0', 'admin', '2026-06-05 01:14:29', '', NULL, '物流');
+INSERT INTO `sys_dict_data` VALUES (132, 1, '未入库', '0', 'sys_inbound_status', '', 'info', 'N', '0', 'admin', '2026-06-05 01:15:46', '', NULL, '未入库');
+INSERT INTO `sys_dict_data` VALUES (133, 2, '入库中', '1', 'sys_inbound_status', '', 'warning', 'N', '0', 'admin', '2026-06-05 01:15:46', '', NULL, '入库中');
+INSERT INTO `sys_dict_data` VALUES (134, 3, '已入库', '2', 'sys_inbound_status', '', 'success', 'N', '0', 'admin', '2026-06-05 01:15:46', '', NULL, '已入库');
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -904,7 +1046,7 @@ CREATE TABLE `sys_dict_type`  (
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_id`) USING BTREE,
   UNIQUE INDEX `dict_type`(`dict_type` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 206 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 208 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dict_type
@@ -925,6 +1067,8 @@ INSERT INTO `sys_dict_type` VALUES (202, '检验结果', 'mes_test_result', '0',
 INSERT INTO `sys_dict_type` VALUES (203, '计划类型', 'sys_plan_type', '0', 'admin', '2026-06-05 00:16:10', '', NULL, '计划类型列表');
 INSERT INTO `sys_dict_type` VALUES (204, '申请状态', 'sys_apply_status', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '申请状态列表');
 INSERT INTO `sys_dict_type` VALUES (205, '审核状态', 'sys_audit_status', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '审核状态列表');
+INSERT INTO `sys_dict_type` VALUES (206, '送货方式', 'sys_delivery_method', '0', 'admin', '2026-06-05 01:14:29', '', NULL, '送货方式列表');
+INSERT INTO `sys_dict_type` VALUES (207, '入库状态', 'sys_inbound_status', '0', 'admin', '2026-06-05 01:15:46', '', NULL, '入库状态列表');
 
 -- ----------------------------
 -- Table structure for sys_job
@@ -993,7 +1137,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 105 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 106 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -1003,6 +1147,7 @@ INSERT INTO `sys_logininfor` VALUES (101, 'admin', '127.0.0.1', '内网IP', 'Edg
 INSERT INTO `sys_logininfor` VALUES (102, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 18:45:36');
 INSERT INTO `sys_logininfor` VALUES (103, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 20:39:45');
 INSERT INTO `sys_logininfor` VALUES (104, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 23:36:39');
+INSERT INTO `sys_logininfor` VALUES (105, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-05 01:17:16');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -1225,7 +1370,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 181 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 183 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -1311,6 +1456,8 @@ INSERT INTO `sys_oper_log` VALUES (177, '销售订单', 2, 'com.ruoyi.scm.contro
 INSERT INTO `sys_oper_log` VALUES (178, '销售订单', 2, 'com.ruoyi.scm.controller.SalesOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/salesOrder', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-01\",\"applyStatus\":\"1\",\"auditDate\":\"2026-06-02\",\"auditStatus\":\"0\",\"auditor\":\"admin\",\"contactPerson\":\"张伟\",\"contactPhone\":\"13800001111\",\"createBy\":\"admin\",\"createTime\":\"2026-06-05 00:35:17\",\"customerId\":1,\"customerName\":\"华东汽车集团\",\"deliveryDate\":\"2026-07-15\",\"detailList\":[{\"amount\":70000,\"detailId\":1,\"materialId\":101,\"orderId\":1,\"orderQuantity\":2,\"price\":35000,\"productModel\":\"EA888\",\"productName\":\"汽油发动机\",\"productSpec\":\"2.0T/162kW\",\"seqNo\":1,\"unit\":\"台\"},{\"amount\":9000,\"detailId\":2,\"materialId\":104,\"orderId\":1,\"orderQuantity\":2,\"price\":4500,\"productModel\":\"MQB-A\",\"productName\":\"前副车架\",\"productSpec\":\"钢制/焊接\",\"seqNo\":2,\"unit\":\"件\"},{\"amount\":13600,\"detailId\":3,\"materialId\":105,\"orderId\":1,\"orderQuantity\":2,\"price\":6800,\"productModel\":\"R-Axle-01\",\"productName\":\"后桥总成\",\"productSpec\":\"承载1.5T\",\"seqNo\":3,\"unit\":\"件\"}],\"orderId\":1,\"orderNo\":\"SO-20260601-0001\",\"params\":{},\"remark\":\"首批订单\",\"totalAmount\":98000,\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 00:35:17\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:37:39', 17);
 INSERT INTO `sys_oper_log` VALUES (179, '销售订单', 2, 'com.ruoyi.scm.controller.SalesOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/salesOrder', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-01\",\"applyStatus\":\"0\",\"auditDate\":\"2026-06-02\",\"auditStatus\":\"0\",\"auditor\":\"admin\",\"contactPerson\":\"张伟\",\"contactPhone\":\"13800001111\",\"createBy\":\"admin\",\"createTime\":\"2026-06-05 00:35:17\",\"customerId\":1,\"customerName\":\"华东汽车集团\",\"deliveryDate\":\"2026-07-16\",\"detailList\":[{\"amount\":70000,\"detailId\":12,\"materialId\":101,\"orderId\":1,\"orderQuantity\":2,\"price\":35000,\"productModel\":\"EA888\",\"productName\":\"汽油发动机\",\"productSpec\":\"2.0T/162kW\",\"seqNo\":1,\"unit\":\"台\"},{\"amount\":9000,\"detailId\":13,\"materialId\":104,\"orderId\":1,\"orderQuantity\":2,\"price\":4500,\"productModel\":\"MQB-A\",\"productName\":\"前副车架\",\"productSpec\":\"钢制/焊接\",\"seqNo\":2,\"unit\":\"件\"},{\"amount\":13600,\"detailId\":14,\"materialId\":105,\"orderId\":1,\"orderQuantity\":2,\"price\":6800,\"productModel\":\"R-Axle-01\",\"productName\":\"后桥总成\",\"productSpec\":\"承载1.5T\",\"seqNo\":3,\"unit\":\"件\"}],\"orderId\":1,\"orderNo\":\"SO-20260601-0001\",\"params\":{},\"remark\":\"首批订单\",\"totalAmount\":98000,\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 00:37:39\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:37:47', 30);
 INSERT INTO `sys_oper_log` VALUES (180, '销售订单', 2, 'com.ruoyi.scm.controller.SalesOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/salesOrder', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-02\",\"applyStatus\":\"1\",\"contactPerson\":\"李娜\",\"contactPhone\":\"13900002222\",\"createBy\":\"admin\",\"createTime\":\"2026-06-05 00:35:17\",\"customerId\":2,\"customerName\":\"南方新能源科技\",\"deliveryDate\":\"2026-07-20\",\"detailList\":[{\"amount\":130000,\"detailId\":9,\"materialId\":103,\"orderId\":2,\"orderQuantity\":2,\"price\":65000,\"productModel\":\"NE-75\",\"productName\":\"三元锂电池包\",\"productSpec\":\"75kWh/350V\",\"seqNo\":1,\"unit\":\"组\"},{\"amount\":12000,\"detailId\":10,\"materialId\":106,\"orderId\":2,\"orderQuantity\":1,\"price\":12000,\"productModel\":\"EM-150\",\"productName\":\"驱动电机\",\"productSpec\":\"150kW/永磁\",\"seqNo\":2,\"unit\":\"台\"},{\"amount\":93500,\"detailId\":11,\"materialId\":107,\"orderId\":2,\"orderQuantity\":11,\"price\":8500,\"productModel\":\"MCU-01\",\"productName\":\"MCU控制器\",\"productSpec\":\"400V/IGBT\",\"seqNo\":3,\"unit\":\"个\"}],\"orderId\":2,\"orderNo\":\"SO-20260602-0002\",\"params\":{},\"remark\":\"待审核订\",\"totalAmount\":235500,\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 00:36:49\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:37:59', 12);
+INSERT INTO `sys_oper_log` VALUES (181, '销售计划', 1, 'com.ruoyi.scm.controller.SalesPlanController.add()', 'POST', 1, 'admin', '研发部门', '/scm/salesPlan', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"detailList\":[{\"materialId\":102,\"planId\":4,\"price\":28000,\"productModel\":\"DQ381\",\"productName\":\"双离合变速箱\",\"productSpec\":\"7速/380Nm\",\"salesAmount\":28000,\"seqNo\":1,\"unit\":\"台\"}],\"endDate\":\"2026-06-19\",\"params\":{},\"planId\":4,\"planNo\":\"SP-20260605-5370\",\"planTitle\":\"1\",\"planType\":\"0\",\"remark\":\"1\",\"startDate\":\"2026-06-03\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 01:19:38', 37);
+INSERT INTO `sys_oper_log` VALUES (182, '销售计划', 3, 'com.ruoyi.scm.controller.SalesPlanController.remove()', 'DELETE', 1, 'admin', '研发部门', '/scm/salesPlan/4', '127.0.0.1', '内网IP', '[4] ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 01:19:52', 18);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1513,7 +1660,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-04 23:36:37', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-05 01:17:14', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-04 10:35:53', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '测试员');
 
 -- ----------------------------
