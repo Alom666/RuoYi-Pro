@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mes.mapper.HomeworkAssemblyMapper">
+
+    <resultMap type="HomeworkAssembly" id="HomeworkAssemblyResult">
+        <result property="assemblyId"          column="assembly_id"           />
+        <result property="homeworkName"        column="homework_name"         />
+        <result property="productionPlanCode"  column="production_plan_code"  />
+        <result property="schedulingCode"      column="scheduling_code"       />
+        <result property="productName"         column="product_name"          />
+        <result property="productModel"        column="product_model"         />
+        <result property="productSpec"         column="product_spec"          />
+        <result property="productUnit"         column="product_unit"          />
+        <result property="productionQuantity"  column="production_quantity"   />
+        <result property="startTime"           column="start_time"            />
+        <result property="endTime"             column="end_time"              />
+        <result property="homeworkStatus"      column="homework_status"       />
+        <result property="materialRemark"      column="material_remark"       />
+        <result property="createBy"            column="create_by"             />
+        <result property="createTime"          column="create_time"           />
+        <result property="updateBy"            column="update_by"             />
+        <result property="updateTime"          column="update_time"           />
+        <result property="remark"              column="remark"                />
+    </resultMap>
+
+    <sql id="selectHomeworkAssemblyVo">
+        select assembly_id, homework_name, production_plan_code, scheduling_code, product_name, product_model,
+               product_spec, product_unit, production_quantity, start_time, end_time, homework_status,
+               material_remark, create_by, create_time, update_by, update_time, remark
+        from mes_homework_assembly
+    </sql>
+
+    <select id="selectHomeworkAssemblyById" parameterType="Long" resultMap="HomeworkAssemblyResult">
+        <include refid="selectHomeworkAssemblyVo"/>
+        where assembly_id = #{assemblyId}
+    </select>
+
+    <select id="selectHomeworkAssemblyList" parameterType="HomeworkAssembly" resultMap="HomeworkAssemblyResult">
+        <include refid="selectHomeworkAssemblyVo"/>
+        <where>
+            <if test="homeworkName != null and homeworkName != ''">
+                AND homework_name like concat('%', #{homeworkName}, '%')
+            </if>
+            <if test="productionPlanCode != null and productionPlanCode != ''">
+                AND production_plan_code like concat('%', #{productionPlanCode}, '%')
+            </if>
+            <if test="schedulingCode != null and schedulingCode != ''">
+                AND scheduling_code like concat('%', #{schedulingCode}, '%')
+            </if>
+            <if test="productName != null and productName != ''">
+                AND product_name like concat('%', #{productName}, '%')
+            </if>
+            <if test="homeworkStatus != null and homeworkStatus != ''">
+                AND homework_status = #{homeworkStatus}
+            </if>
+            <if test="params.beginStartTime != null and params.beginStartTime != ''">
+                AND start_time &gt;= #{params.beginStartTime}
+            </if>
+            <if test="params.endStartTime != null and params.endStartTime != ''">
+                AND start_time &lt;= #{params.endStartTime}
+            </if>
+            <if test="params.beginEndTime != null and params.beginEndTime != ''">
+                AND end_time &gt;= #{params.beginEndTime}
+            </if>
+            <if test="params.endEndTime != null and params.endEndTime != ''">
+                AND end_time &lt;= #{params.endEndTime}
+            </if>
+        </where>
+        order by assembly_id desc
+    </select>
+
+    <insert id="insertHomeworkAssembly" parameterType="HomeworkAssembly" useGeneratedKeys="true" keyProperty="assemblyId">
+        insert into mes_homework_assembly (
+            <if test="homeworkName != null and homeworkName != ''">homework_name,</if>
+            <if test="productionPlanCode != null and productionPlanCode != ''">production_plan_code,</if>
+            <if test="schedulingCode != null and schedulingCode != ''">scheduling_code,</if>
+            <if test="productName != null and productName != ''">product_name,</if>
+            <if test="productModel != null and productModel != ''">product_model,</if>
+            <if test="productSpec != null and productSpec != ''">product_spec,</if>
+            <if test="productUnit != null and productUnit != ''">product_unit,</if>
+            <if test="productionQuantity != null">production_quantity,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="homeworkStatus != null and homeworkStatus != ''">homework_status,</if>
+            <if test="materialRemark != null and materialRemark != ''">material_remark,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="homeworkName != null and homeworkName != ''">#{homeworkName},</if>
+            <if test="productionPlanCode != null and productionPlanCode != ''">#{productionPlanCode},</if>
+            <if test="schedulingCode != null and schedulingCode != ''">#{schedulingCode},</if>
+            <if test="productName != null and productName != ''">#{productName},</if>
+            <if test="productModel != null and productModel != ''">#{productModel},</if>
+            <if test="productSpec != null and productSpec != ''">#{productSpec},</if>
+            <if test="productUnit != null and productUnit != ''">#{productUnit},</if>
+            <if test="productionQuantity != null">#{productionQuantity},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="homeworkStatus != null and homeworkStatus != ''">#{homeworkStatus},</if>
+            <if test="materialRemark != null and materialRemark != ''">#{materialRemark},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateHomeworkAssembly" parameterType="HomeworkAssembly">
+        update mes_homework_assembly
+        <set>
+            <if test="homeworkName != null and homeworkName != ''">homework_name = #{homeworkName},</if>
+            <if test="productionPlanCode != null">production_plan_code = #{productionPlanCode},</if>
+            <if test="schedulingCode != null">scheduling_code = #{schedulingCode},</if>
+            <if test="productName != null">product_name = #{productName},</if>
+            <if test="productModel != null">product_model = #{productModel},</if>
+            <if test="productSpec != null">product_spec = #{productSpec},</if>
+            <if test="productUnit != null">product_unit = #{productUnit},</if>
+            <if test="productionQuantity != null">production_quantity = #{productionQuantity},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="homeworkStatus != null and homeworkStatus != ''">homework_status = #{homeworkStatus},</if>
+            <if test="materialRemark != null">material_remark = #{materialRemark},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where assembly_id = #{assemblyId}
+    </update>
+
+    <delete id="deleteHomeworkAssemblyById" parameterType="Long">
+        delete from mes_homework_assembly where assembly_id = #{assemblyId}
+    </delete>
+
+    <delete id="deleteHomeworkAssemblyByIds" parameterType="Long">
+        delete from mes_homework_assembly where assembly_id in
+        <foreach item="assemblyId" collection="array" open="(" separator="," close=")">
+            #{assemblyId}
+        </foreach>
+    </delete>
+
+</mapper>

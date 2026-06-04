@@ -11,7 +11,7 @@
  Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 04/06/2026 20:30:47
+ Date: 04/06/2026 22:37:05
 */
 
 SET NAMES utf8mb4;
@@ -84,6 +84,141 @@ CREATE TABLE `gen_table_column`  (
 -- ----------------------------
 -- Records of gen_table_column
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for mes_completion_order
+-- ----------------------------
+DROP TABLE IF EXISTS `mes_completion_order`;
+CREATE TABLE `mes_completion_order`  (
+  `completion_id` bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `order_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '单号',
+  `production_plan_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '生产计划编号',
+  `homework_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '生产作业名称',
+  `product_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '产品名称',
+  `product_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '型号',
+  `product_spec` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '规格',
+  `product_unit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '单位',
+  `completion_date` datetime NULL DEFAULT NULL COMMENT '完工日期',
+  `production_quantity` int NULL DEFAULT NULL COMMENT '生产数量',
+  `batch_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '生产批号',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '状态：0未入库,1入库中,2已入库,3检验合格,4检验未合格',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`completion_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = 'MES-生产完工单' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mes_completion_order
+-- ----------------------------
+INSERT INTO `mes_completion_order` VALUES (1, 'CO-2026-001', 'PP-2026-001', '发动机总装作业', '汽油发动机', 'EA888', '2.0T/162kW', '台', '2026-06-01 00:00:00', 50, 'BATCH-20260601-001', '2', 'admin', '2026-06-04 22:26:11', 'admin', '2026-06-04 22:28:30', '首批完工，质检通过');
+INSERT INTO `mes_completion_order` VALUES (2, 'CO-2026-002', 'PP-2026-002', '变速箱装配作业', '双离合变速箱', 'DQ381', '7速/380Nm', '台', '2026-06-05 00:00:00', 30, 'BATCH-20260605-002', '0', 'admin', '2026-06-04 22:26:11', 'admin', '2026-06-04 22:34:49', '待入库');
+
+-- ----------------------------
+-- Table structure for mes_homework_assembly
+-- ----------------------------
+DROP TABLE IF EXISTS `mes_homework_assembly`;
+CREATE TABLE `mes_homework_assembly`  (
+  `assembly_id` bigint NOT NULL AUTO_INCREMENT COMMENT '作业装配ID（编号）',
+  `homework_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '作业名称',
+  `production_plan_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '生产计划编号',
+  `scheduling_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '计划排产编号',
+  `product_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '产品名称',
+  `product_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '型号',
+  `product_spec` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '规格',
+  `product_unit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '单位',
+  `production_quantity` int NOT NULL COMMENT '生产数量',
+  `start_time` datetime NULL DEFAULT NULL COMMENT '开始时间',
+  `end_time` datetime NULL DEFAULT NULL COMMENT '结束时间',
+  `homework_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '作业状态：0未执行,1执行中,2已完成,3异常',
+  `material_remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '生产作业物料信息备注',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`assembly_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = 'MES-作业装配表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mes_homework_assembly
+-- ----------------------------
+INSERT INTO `mes_homework_assembly` VALUES (1, '发动机总成装配', 'PP-2026-001', 'SC-2026-001', '汽油发动机', 'EA888', '2.0T/162kW', '台', 50, '2026-06-01 08:00:00', '2026-06-15 18:00:00', '2', '缸体、缸盖、曲轴、连杆、活塞组件已齐套', 'admin', '2026-06-04 20:36:46', '', '2026-06-04 20:36:46', '优先装配批次');
+INSERT INTO `mes_homework_assembly` VALUES (2, '变速箱装配作业', 'PP-2026-002', 'SC-2026-002', '双离合变速箱', 'DQ381', '7速/380Nm', '台', 30, '2026-06-10 08:00:00', '2026-06-25 18:00:00', '1', '齿轮组、同步器、离合器模块已入库', 'admin', '2026-06-04 20:36:46', '', '2026-06-04 20:36:46', '注意温度控制');
+INSERT INTO `mes_homework_assembly` VALUES (3, '底盘焊接装配', 'PP-2026-003', 'SC-2026-003', '前副车架', 'MQB-A', '钢制/焊接', '件', 100, '2026-07-01 08:00:00', '2026-07-20 18:00:00', '0', '钢板原材料已到位，焊丝已备料', 'admin', '2026-06-04 20:36:46', '', '2026-06-04 20:36:46', NULL);
+INSERT INTO `mes_homework_assembly` VALUES (4, '电池包组装', 'PP-2026-004', 'SC-2026-004', '三元锂电池包', 'NE-75', '75kWh/350V', '组', 20, '2026-06-05 08:00:00', '2026-06-08 18:00:00', '3', '电芯到货缺10组，BMS模块待检', 'admin', '2026-06-04 20:36:46', 'admin', '2026-06-04 20:43:55', '物料短缺需协调');
+
+-- ----------------------------
+-- Table structure for mes_material_apply
+-- ----------------------------
+DROP TABLE IF EXISTS `mes_material_apply`;
+CREATE TABLE `mes_material_apply`  (
+  `apply_id` bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `apply_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '领料单号',
+  `production_plan_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '生产计划编号',
+  `scheduling_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '计划排产编号',
+  `product_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '产品名称',
+  `product_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '型号',
+  `product_spec` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '规格',
+  `product_unit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '单位',
+  `pending_quantity` int NULL DEFAULT NULL COMMENT '待产数量',
+  `production_date` datetime NULL DEFAULT NULL COMMENT '生产日期',
+  `receive_date` datetime NOT NULL COMMENT '领取日期',
+  `applicant` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请人',
+  `apply_date` datetime NULL DEFAULT NULL COMMENT '申请时间',
+  `apply_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '申请状态：0未提交,1待审核,2已审核',
+  `auditor` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核人',
+  `audit_date` datetime NULL DEFAULT NULL COMMENT '审核时间',
+  `audit_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核状态：0通过,1驳回',
+  `audit_opinion` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '审核意见',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`apply_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = 'MES-领料申请表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mes_material_apply
+-- ----------------------------
+INSERT INTO `mes_material_apply` VALUES (1, 'ML-2026-0001', 'PP-2026-001', 'SC-2026-001', '汽油发动机', 'EA888', '2.0T/162kW', '台', 50, '2026-06-10 00:00:00', '2026-06-08 00:00:00', '张三', '2026-06-05 09:30:00', '2', '李主管', '2026-06-05 14:00:00', '0', '同意，请尽快领取', 'admin', '2026-06-05 09:30:00', '', '2026-06-04 21:23:33', '一期发动机产线领料');
+INSERT INTO `mes_material_apply` VALUES (2, 'ML-2026-0002', 'PP-2026-002', 'SC-2026-002', '双离合变速箱', 'DQ381', '7速/380Nm', '台', 30, '2026-06-12 00:00:00', '2026-06-10 00:00:00', '李四', '2026-06-06 10:15:00', '2', 'admin', '2026-06-04 21:57:57', '0', NULL, 'admin', '2026-06-06 10:15:00', 'admin', '2026-06-04 21:57:57', '变速箱产线领料');
+INSERT INTO `mes_material_apply` VALUES (3, 'ML-2026-0003', 'PP-2026-003', 'SC-2026-003', '前副车架', 'MQB-A', '钢制/焊接', '件', 100, '2026-06-15 00:00:00', '2026-06-13 00:00:00', '王五', '2026-06-07 11:00:00', '2', 'admin', '2026-06-04 21:57:52', '1', NULL, 'admin', '2026-06-07 11:00:00', 'admin', '2026-06-04 21:57:52', '副车架产线领料');
+INSERT INTO `mes_material_apply` VALUES (4, 'ML-2026-0004', 'PP-2026-004', 'SC-2026-004', '三元锂电池包', 'NE-75', '75kWh/350V', '组', 20, '2026-06-18 00:00:00', '2026-06-16 00:00:00', '赵六', '2026-06-08 08:45:00', '2', '周经理', '2026-06-08 16:30:00', '1', '物料库存不足，请调整数量后重新申请', 'admin', '2026-06-08 08:45:00', '', '2026-06-04 21:23:33', '电池产线领料');
+
+-- ----------------------------
+-- Table structure for mes_material_apply_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `mes_material_apply_detail`;
+CREATE TABLE `mes_material_apply_detail`  (
+  `detail_id` bigint NOT NULL AUTO_INCREMENT COMMENT '明细编号',
+  `apply_id` bigint NOT NULL COMMENT '领料申请ID',
+  `material_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '物料',
+  `product_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '型号',
+  `product_spec` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '规格',
+  `unit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '单位',
+  `required_quantity` int NULL DEFAULT NULL COMMENT '需求数量',
+  `received_quantity` int NULL DEFAULT NULL COMMENT '已领数量',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`detail_id`) USING BTREE,
+  INDEX `idx_apply_id`(`apply_id` ASC) USING BTREE,
+  CONSTRAINT `fk_detail_apply` FOREIGN KEY (`apply_id`) REFERENCES `mes_material_apply` (`apply_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '领料申请明细表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mes_material_apply_detail
+-- ----------------------------
+INSERT INTO `mes_material_apply_detail` VALUES (1, 1, '缸体铸件', 'CY-EA888-01', '铸铁/灰口', '件', 50, 50, '已全部领取');
+INSERT INTO `mes_material_apply_detail` VALUES (2, 1, '曲轴总成', 'QS-EA888-01', '锻钢/40Cr', '根', 50, 30, '部分领取');
+INSERT INTO `mes_material_apply_detail` VALUES (3, 2, '齿轮组', 'CL-DQ381-01', '20CrMnTi', '套', 30, 0, '');
+INSERT INTO `mes_material_apply_detail` VALUES (4, 2, '离合器片', 'LP-DQ381-01', '摩擦/有机', '片', 60, 0, '双片配置');
+INSERT INTO `mes_material_apply_detail` VALUES (7, 4, '电芯模组', 'NE-75-CELL', '50Ah/三元', '组', 80, 0, '');
+INSERT INTO `mes_material_apply_detail` VALUES (8, 4, 'BMS控制板', 'NE-75-BMS', '350V/CAN', '块', 20, 0, '');
+INSERT INTO `mes_material_apply_detail` VALUES (9, 3, '冲压钢板', 'MB-MQBA-01', 'Q235/3mm', '张', 200, 0, '');
+INSERT INTO `mes_material_apply_detail` VALUES (10, 3, '焊接螺母', 'NM-MQBA-01', 'M10/镀锌', '个', 600, 0, '含防松型');
 
 -- ----------------------------
 -- Table structure for mytask_inbound_audit
@@ -454,7 +589,7 @@ CREATE TABLE `sys_dict_data`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 120 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dict_data
@@ -488,6 +623,16 @@ INSERT INTO `sys_dict_data` VALUES (26, 8, '生成代码', '8', 'sys_oper_type',
 INSERT INTO `sys_dict_data` VALUES (27, 9, '清空数据', '9', 'sys_oper_type', '', 'danger', 'N', '0', 'admin', '2026-06-04 10:35:54', '', NULL, '清空操作');
 INSERT INTO `sys_dict_data` VALUES (28, 1, '成功', '0', 'sys_common_status', '', 'primary', 'N', '0', 'admin', '2026-06-04 10:35:54', '', NULL, '正常状态');
 INSERT INTO `sys_dict_data` VALUES (29, 2, '失败', '1', 'sys_common_status', '', 'danger', 'N', '0', 'admin', '2026-06-04 10:35:54', '', NULL, '停用状态');
+INSERT INTO `sys_dict_data` VALUES (110, 1, '未提交', '0', 'mes_apply_status', '', 'info', 'Y', '0', 'admin', '2026-06-04 21:57:10', '', NULL, '未提交');
+INSERT INTO `sys_dict_data` VALUES (111, 2, '待审核', '1', 'mes_apply_status', '', 'warning', 'N', '0', 'admin', '2026-06-04 21:57:10', '', NULL, '待审核');
+INSERT INTO `sys_dict_data` VALUES (112, 3, '已审核', '2', 'mes_apply_status', '', 'success', 'N', '0', 'admin', '2026-06-04 21:57:10', '', NULL, '已审核');
+INSERT INTO `sys_dict_data` VALUES (113, 1, '通过', '0', 'mes_audit_status', '', 'success', 'Y', '0', 'admin', '2026-06-04 21:57:10', '', NULL, '审核通过');
+INSERT INTO `sys_dict_data` VALUES (114, 2, '驳回', '1', 'mes_audit_status', '', 'danger', 'N', '0', 'admin', '2026-06-04 21:57:10', '', NULL, '审核驳回');
+INSERT INTO `sys_dict_data` VALUES (115, 1, '未入库', '0', 'sys_completion_status', '', 'info', 'Y', '0', 'admin', '2026-06-04 22:26:06', '', NULL, '未入库');
+INSERT INTO `sys_dict_data` VALUES (116, 2, '入库中', '1', 'sys_completion_status', '', '', 'N', '0', 'admin', '2026-06-04 22:26:06', '', NULL, '入库中');
+INSERT INTO `sys_dict_data` VALUES (117, 3, '已入库', '2', 'sys_completion_status', '', 'success', 'N', '0', 'admin', '2026-06-04 22:26:06', '', NULL, '已入库');
+INSERT INTO `sys_dict_data` VALUES (118, 4, '检验合格', '3', 'sys_completion_status', '', 'success', 'N', '0', 'admin', '2026-06-04 22:26:06', '', NULL, '检验合格');
+INSERT INTO `sys_dict_data` VALUES (119, 5, '检验未合格', '4', 'sys_completion_status', '', 'danger', 'N', '0', 'admin', '2026-06-04 22:26:06', '', NULL, '检验未合格');
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -505,7 +650,7 @@ CREATE TABLE `sys_dict_type`  (
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_id`) USING BTREE,
   UNIQUE INDEX `dict_type`(`dict_type` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 202 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dict_type
@@ -520,6 +665,8 @@ INSERT INTO `sys_dict_type` VALUES (7, '通知类型', 'sys_notice_type', '0', '
 INSERT INTO `sys_dict_type` VALUES (8, '通知状态', 'sys_notice_status', '0', 'admin', '2026-06-04 10:35:54', '', NULL, '通知状态列表');
 INSERT INTO `sys_dict_type` VALUES (9, '操作类型', 'sys_oper_type', '0', 'admin', '2026-06-04 10:35:54', '', NULL, '操作类型列表');
 INSERT INTO `sys_dict_type` VALUES (10, '系统状态', 'sys_common_status', '0', 'admin', '2026-06-04 10:35:54', '', NULL, '登录状态列表');
+INSERT INTO `sys_dict_type` VALUES (200, '申请状态', 'mes_apply_status', '0', 'admin', '2026-06-04 21:57:10', '', NULL, '领料申请状态');
+INSERT INTO `sys_dict_type` VALUES (201, '审核状态', 'mes_audit_status', '0', 'admin', '2026-06-04 21:57:10', '', NULL, '领料审核状态');
 
 -- ----------------------------
 -- Table structure for sys_job
@@ -588,7 +735,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 103 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 104 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -596,6 +743,7 @@ CREATE TABLE `sys_logininfor`  (
 INSERT INTO `sys_logininfor` VALUES (100, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 10:45:14');
 INSERT INTO `sys_logininfor` VALUES (101, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 13:52:12');
 INSERT INTO `sys_logininfor` VALUES (102, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 18:45:36');
+INSERT INTO `sys_logininfor` VALUES (103, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 20:39:45');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -623,7 +771,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2009 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2026 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -722,6 +870,11 @@ INSERT INTO `sys_menu` VALUES (2005, '生产管理', 2004, 1, 'production', NULL
 INSERT INTO `sys_menu` VALUES (2006, '作业装配', 2005, 1, 'assembly', 'mes/assembly/index', NULL, '', 1, 0, 'C', '0', '0', 'mes:HomeworkAssembly:list', '#', 'admin', '2026-06-04 20:11:36', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2007, '领料申请', 2005, 1, 'materialApply', 'mes/materialApply/index', NULL, '', 1, 0, 'C', '0', '0', 'mes:materialApply:list', '#', 'admin', '2026-06-04 20:12:20', 'admin', '2026-06-04 20:12:42', '');
 INSERT INTO `sys_menu` VALUES (2008, '生产完工单', 2005, 1, 'completionOrder', 'mes/completionOrder/index', NULL, '', 1, 0, 'C', '0', '0', 'mes:completionOrder:list', '#', 'admin', '2026-06-04 20:13:23', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2021, '领料申请查询', 2020, 1, '', '', NULL, '', 1, 0, 'F', '0', '0', 'mes:materialApply:query', '#', 'admin', '2026-06-04 21:22:54', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2022, '领料申请新增', 2020, 2, '', '', NULL, '', 1, 0, 'F', '0', '0', 'mes:materialApply:add', '#', 'admin', '2026-06-04 21:22:54', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2023, '领料申请修改', 2020, 3, '', '', NULL, '', 1, 0, 'F', '0', '0', 'mes:materialApply:edit', '#', 'admin', '2026-06-04 21:22:54', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2024, '领料申请删除', 2020, 4, '', '', NULL, '', 1, 0, 'F', '0', '0', 'mes:materialApply:remove', '#', 'admin', '2026-06-04 21:22:54', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2025, '领料申请导出', 2020, 5, '', '', NULL, '', 1, 0, 'F', '0', '0', 'mes:materialApply:export', '#', 'admin', '2026-06-04 21:22:54', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -794,7 +947,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 124 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 142 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -823,6 +976,24 @@ INSERT INTO `sys_oper_log` VALUES (120, '菜单管理', 1, 'com.ruoyi.web.contro
 INSERT INTO `sys_oper_log` VALUES (121, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/materialApply/index\",\"createTime\":\"2026-06-04 20:12:20\",\"icon\":\"#\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2007,\"menuName\":\"领料申请\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":2005,\"path\":\"materialApply\",\"perms\":\"mes:materialApply:list\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 20:12:42', 22);
 INSERT INTO `sys_oper_log` VALUES (122, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/completionOrder/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"生产完工单\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":2005,\"path\":\"completionOrder\",\"perms\":\"mes:completionOrder:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 20:13:23', 17);
 INSERT INTO `sys_oper_log` VALUES (123, '保存菜单排序', 2, 'com.ruoyi.web.controller.system.SysMenuController.updateSort()', 'PUT', 1, 'admin', '研发部门', '/system/menu/updateSort', '127.0.0.1', '内网IP', '{\"menuIds\":\"2000,2004,3,4\",\"orderNums\":\"3,3,4,5\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 20:14:01', 28);
+INSERT INTO `sys_oper_log` VALUES (124, '作业装配', 2, 'com.ruoyi.mes.controller.HomeworkAssemblyController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/HomeworkAssembly', '127.0.0.1', '内网IP', '{\"assemblyId\":4,\"createBy\":\"admin\",\"createTime\":\"2026-06-04 20:36:46\",\"endTime\":\"2026-06-08 18:00:00\",\"homeworkName\":\"电池包组装\",\"homeworkStatus\":\"3\",\"materialRemark\":\"电芯到货缺10组，BMS模块待检\",\"params\":{},\"productModel\":\"NE-75\",\"productName\":\"三元锂电池包\",\"productSpec\":\"75kWh/350V\",\"productUnit\":\"组\",\"productionPlanCode\":\"PP-2026-004\",\"productionQuantity\":20,\"remark\":\"物料短缺需协调\",\"schedulingCode\":\"SC-2026-004\",\"startTime\":\"2026-06-05 08:00:00\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 20:36:46\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 20:43:55', 35);
+INSERT INTO `sys_oper_log` VALUES (125, '领料申请', 1, 'com.ruoyi.mes.controller.MaterialApplyController.add()', 'POST', 1, 'admin', '研发部门', '/mes/materialApply', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-04 21:19:08\",\"applyStatus\":\"0\",\"createBy\":\"admin\",\"detailList\":[{\"receivedQuantity\":0,\"requiredQuantity\":0}],\"params\":{},\"pendingQuantity\":1,\"productModel\":\"EA888\",\"productName\":\"汽油发动机\",\"productSpec\":\"2.0T/162kW\",\"productUnit\":\"台\",\"productionPlanCode\":\"PP-2026-001\",\"receiveDate\":\"2026-06-05\",\"schedulingCode\":\"SC-2026-001\"} ', NULL, 1, '\r\n### Error updating database.  Cause: java.sql.SQLException: Field \'apply_no\' doesn\'t have a default value\r\n### The error may exist in file [E:\\RuoYi-Pro\\ruoyi-admin\\target\\classes\\mapper\\mes\\MaterialApplyMapper.xml]\r\n### The error may involve com.ruoyi.mes.mapper.MaterialApplyMapper.insertMaterialApply-Inline\r\n### The error occurred while setting parameters\r\n### SQL: insert into mes_material_apply (                            production_plan_code,               scheduling_code,               product_name,               product_model,               product_spec,               product_unit,               pending_quantity,                             receive_date,               applicant,               apply_date,               apply_status,                                                                                     create_by,              create_time         )values(                            ?,               ?,               ?,               ?,               ?,               ?,               ?,                             ?,               ?,               ?,               ?,                                                                                     ?,              sysdate()         )\r\n### Cause: java.sql.SQLException: Field \'apply_no\' doesn\'t have a default value\n; Field \'apply_no\' doesn\'t have a default value', '2026-06-04 21:19:18', 127);
+INSERT INTO `sys_oper_log` VALUES (126, '领料申请', 1, 'com.ruoyi.mes.controller.MaterialApplyController.add()', 'POST', 1, 'admin', '研发部门', '/mes/materialApply', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-04 21:19:08\",\"applyStatus\":\"1\",\"createBy\":\"admin\",\"detailList\":[{\"receivedQuantity\":0,\"requiredQuantity\":0}],\"params\":{},\"pendingQuantity\":1,\"productModel\":\"EA888\",\"productName\":\"汽油发动机\",\"productSpec\":\"2.0T/162kW\",\"productUnit\":\"台\",\"productionPlanCode\":\"PP-2026-001\",\"receiveDate\":\"2026-06-05\",\"schedulingCode\":\"SC-2026-001\"} ', NULL, 1, '\r\n### Error updating database.  Cause: java.sql.SQLException: Field \'apply_no\' doesn\'t have a default value\r\n### The error may exist in file [E:\\RuoYi-Pro\\ruoyi-admin\\target\\classes\\mapper\\mes\\MaterialApplyMapper.xml]\r\n### The error may involve com.ruoyi.mes.mapper.MaterialApplyMapper.insertMaterialApply-Inline\r\n### The error occurred while setting parameters\r\n### SQL: insert into mes_material_apply (                            production_plan_code,               scheduling_code,               product_name,               product_model,               product_spec,               product_unit,               pending_quantity,                             receive_date,               applicant,               apply_date,               apply_status,                                                                                     create_by,              create_time         )values(                            ?,               ?,               ?,               ?,               ?,               ?,               ?,                             ?,               ?,               ?,               ?,                                                                                     ?,              sysdate()         )\r\n### Cause: java.sql.SQLException: Field \'apply_no\' doesn\'t have a default value\n; Field \'apply_no\' doesn\'t have a default value', '2026-06-04 21:19:20', 4);
+INSERT INTO `sys_oper_log` VALUES (127, '领料申请', 2, 'com.ruoyi.mes.controller.MaterialApplyController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/materialApply', '127.0.0.1', '内网IP', '{\"applicant\":\"王五\",\"applyDate\":\"2026-06-07 11:00:00\",\"applyId\":3,\"applyNo\":\"ML-2026-0003\",\"applyStatus\":\"1\",\"createBy\":\"admin\",\"createTime\":\"2026-06-07 11:00:00\",\"detailList\":[{\"applyId\":3,\"detailId\":5,\"materialName\":\"冲压钢板\",\"productModel\":\"MB-MQBA-01\",\"productSpec\":\"Q235/3mm\",\"receivedQuantity\":0,\"remark\":\"\",\"requiredQuantity\":200,\"unit\":\"张\"},{\"applyId\":3,\"detailId\":6,\"materialName\":\"焊接螺母\",\"productModel\":\"NM-MQBA-01\",\"productSpec\":\"M10/镀锌\",\"receivedQuantity\":0,\"remark\":\"含防松型\",\"requiredQuantity\":600,\"unit\":\"个\"}],\"params\":{},\"pendingQuantity\":100,\"productModel\":\"MQB-A\",\"productName\":\"前副车架\",\"productSpec\":\"钢制/焊接\",\"productUnit\":\"件\",\"productionDate\":\"2026-06-15\",\"productionPlanCode\":\"PP-2026-003\",\"receiveDate\":\"2026-06-13\",\"remark\":\"副车架产线领料\",\"schedulingCode\":\"SC-2026-003\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 21:23:33\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 21:57:43', 128);
+INSERT INTO `sys_oper_log` VALUES (128, '领料申请', 2, 'com.ruoyi.mes.controller.MaterialApplyController.audit()', 'PUT', 1, 'admin', '研发部门', '/mes/materialApply/audit', '127.0.0.1', '内网IP', '{\"applyId\":3,\"applyNo\":\"ML-2026-0003\",\"applyStatus\":\"2\",\"auditDate\":\"2026-06-04 21:57:52\",\"auditStatus\":\"1\",\"auditor\":\"admin\",\"params\":{},\"updateBy\":\"admin\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 21:57:52', 15);
+INSERT INTO `sys_oper_log` VALUES (129, '领料申请', 2, 'com.ruoyi.mes.controller.MaterialApplyController.audit()', 'PUT', 1, 'admin', '研发部门', '/mes/materialApply/audit', '127.0.0.1', '内网IP', '{\"applyId\":2,\"applyNo\":\"ML-2026-0002\",\"applyStatus\":\"2\",\"auditDate\":\"2026-06-04 21:57:57\",\"auditStatus\":\"0\",\"auditor\":\"admin\",\"params\":{},\"updateBy\":\"admin\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 21:57:57', 14);
+INSERT INTO `sys_oper_log` VALUES (130, '领料申请', 1, 'com.ruoyi.mes.controller.MaterialApplyController.add()', 'POST', 1, 'admin', '研发部门', '/mes/materialApply', '127.0.0.1', '内网IP', '{\"applyDate\":\"2026-06-04 22:06:46\",\"applyId\":5,\"applyNo\":\"ML-20260604-4076\",\"applyStatus\":\"1\",\"createBy\":\"admin\",\"detailList\":[{\"applyId\":5,\"receivedQuantity\":0,\"requiredQuantity\":0}],\"params\":{},\"productModel\":\"EA888\",\"productName\":\"汽油发动机\",\"productSpec\":\"2.0T/162kW\",\"productUnit\":\"台\",\"productionPlanCode\":\"PP-2026-001\",\"receiveDate\":\"2026-06-04\",\"schedulingCode\":\"SC-2026-001\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:07:01', 20);
+INSERT INTO `sys_oper_log` VALUES (131, '领料申请', 2, 'com.ruoyi.mes.controller.MaterialApplyController.audit()', 'PUT', 1, 'admin', '研发部门', '/mes/materialApply/audit', '127.0.0.1', '内网IP', '{\"applyId\":5,\"applyNo\":\"ML-20260604-4076\",\"applyStatus\":\"2\",\"auditDate\":\"2026-06-04 22:07:13\",\"auditStatus\":\"1\",\"auditor\":\"admin\",\"params\":{},\"updateBy\":\"admin\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:07:13', 22);
+INSERT INTO `sys_oper_log` VALUES (132, '领料申请', 3, 'com.ruoyi.mes.controller.MaterialApplyController.remove()', 'DELETE', 1, 'admin', '研发部门', '/mes/materialApply/5', '127.0.0.1', '内网IP', '[5] ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:07:16', 18);
+INSERT INTO `sys_oper_log` VALUES (133, '领料申请', 1, 'com.ruoyi.mes.controller.MaterialApplyController.add()', 'POST', 1, 'admin', '研发部门', '/mes/materialApply', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-04\",\"applyId\":6,\"applyNo\":\"ML-20260604-4044\",\"applyStatus\":\"0\",\"createBy\":\"admin\",\"detailList\":[{\"applyId\":6,\"receivedQuantity\":0,\"requiredQuantity\":0}],\"params\":{},\"productModel\":\"NE-75\",\"productName\":\"三元锂电池包\",\"productSpec\":\"75kWh/350V\",\"productUnit\":\"组\",\"productionPlanCode\":\"PP-2026-004\",\"receiveDate\":\"2026-06-03\",\"schedulingCode\":\"SC-2026-004\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:17:05', 162);
+INSERT INTO `sys_oper_log` VALUES (134, '领料申请', 2, 'com.ruoyi.mes.controller.MaterialApplyController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/materialApply', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-03\",\"applyId\":6,\"applyNo\":\"ML-20260604-4044\",\"applyStatus\":\"0\",\"createBy\":\"admin\",\"createTime\":\"2026-06-04 22:17:05\",\"detailList\":[{\"applyId\":6,\"detailId\":12,\"receivedQuantity\":0,\"requiredQuantity\":0}],\"params\":{},\"pendingQuantity\":1,\"productModel\":\"NE-75\",\"productName\":\"三元锂电池包\",\"productSpec\":\"75kWh/350V\",\"productUnit\":\"组\",\"productionPlanCode\":\"PP-2026-004\",\"receiveDate\":\"2026-06-03\",\"schedulingCode\":\"SC-2026-004\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 22:17:05\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:17:12', 14);
+INSERT INTO `sys_oper_log` VALUES (135, '领料申请', 3, 'com.ruoyi.mes.controller.MaterialApplyController.remove()', 'DELETE', 1, 'admin', '研发部门', '/mes/materialApply/6', '127.0.0.1', '内网IP', '[6] ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:17:15', 16);
+INSERT INTO `sys_oper_log` VALUES (136, '生产完工单', 2, 'com.ruoyi.mes.controller.CompletionOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/completionOrder', '127.0.0.1', '内网IP', '{\"batchNo\":\"BATCH-20260605-002\",\"completionDate\":\"2026-06-05\",\"completionId\":2,\"createBy\":\"admin\",\"createTime\":\"2026-06-04 22:26:11\",\"homeworkName\":\"变速箱装配作业\",\"orderNo\":\"CO-2026-002\",\"params\":{},\"productModel\":\"DQ381\",\"productName\":\"双离合变速箱\",\"productSpec\":\"7速/380Nm\",\"productUnit\":\"台\",\"productionPlanCode\":\"PP-2026-002\",\"productionQuantity\":30,\"remark\":\"待入库\",\"status\":\"0\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 22:26:11\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:28:26', 30);
+INSERT INTO `sys_oper_log` VALUES (137, '生产完工单', 2, 'com.ruoyi.mes.controller.CompletionOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/completionOrder', '127.0.0.1', '内网IP', '{\"batchNo\":\"BATCH-20260601-001\",\"completionDate\":\"2026-06-01\",\"completionId\":1,\"createBy\":\"admin\",\"createTime\":\"2026-06-04 22:26:11\",\"homeworkName\":\"发动机总装作业\",\"orderNo\":\"CO-2026-001\",\"params\":{},\"productModel\":\"EA888\",\"productName\":\"汽油发动机\",\"productSpec\":\"2.0T/162kW\",\"productUnit\":\"台\",\"productionPlanCode\":\"PP-2026-001\",\"productionQuantity\":50,\"remark\":\"首批完工，质检通过\",\"status\":\"2\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 22:26:11\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:28:30', 14);
+INSERT INTO `sys_oper_log` VALUES (138, '生产完工单', 2, 'com.ruoyi.mes.controller.CompletionOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/completionOrder', '127.0.0.1', '内网IP', '{\"batchNo\":\"BATCH-20260605-002\",\"completionDate\":\"2026-06-05\",\"completionId\":2,\"createBy\":\"admin\",\"createTime\":\"2026-06-04 22:26:11\",\"homeworkName\":\"变速箱装配作业\",\"orderNo\":\"CO-2026-002\",\"params\":{},\"productModel\":\"DQ381\",\"productName\":\"双离合变速箱\",\"productSpec\":\"7速/380Nm\",\"productUnit\":\"台\",\"productionPlanCode\":\"PP-2026-002\",\"productionQuantity\":30,\"remark\":\"待入库\",\"status\":\"1\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 22:28:26\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:34:35', 15);
+INSERT INTO `sys_oper_log` VALUES (139, '生产完工单', 2, 'com.ruoyi.mes.controller.CompletionOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/completionOrder', '127.0.0.1', '内网IP', '{\"batchNo\":\"BATCH-20260605-002\",\"completionDate\":\"2026-06-05\",\"completionId\":2,\"createBy\":\"admin\",\"createTime\":\"2026-06-04 22:26:11\",\"homeworkName\":\"变速箱装配作业\",\"orderNo\":\"CO-2026-002\",\"params\":{},\"productModel\":\"DQ381\",\"productName\":\"双离合变速箱\",\"productSpec\":\"7速/380Nm\",\"productUnit\":\"台\",\"productionPlanCode\":\"PP-2026-002\",\"productionQuantity\":30,\"remark\":\"待入库\",\"status\":\"2\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 22:34:35\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:34:41', 16);
+INSERT INTO `sys_oper_log` VALUES (140, '生产完工单', 2, 'com.ruoyi.mes.controller.CompletionOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/completionOrder', '127.0.0.1', '内网IP', '{\"batchNo\":\"BATCH-20260605-002\",\"completionDate\":\"2026-06-05\",\"completionId\":2,\"createBy\":\"admin\",\"createTime\":\"2026-06-04 22:26:11\",\"homeworkName\":\"变速箱装配作业\",\"orderNo\":\"CO-2026-002\",\"params\":{},\"productModel\":\"DQ381\",\"productName\":\"双离合变速箱\",\"productSpec\":\"7速/380Nm\",\"productUnit\":\"台\",\"productionPlanCode\":\"PP-2026-002\",\"productionQuantity\":30,\"remark\":\"待入库\",\"status\":\"3\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 22:34:41\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:34:45', 12);
+INSERT INTO `sys_oper_log` VALUES (141, '生产完工单', 2, 'com.ruoyi.mes.controller.CompletionOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/completionOrder', '127.0.0.1', '内网IP', '{\"batchNo\":\"BATCH-20260605-002\",\"completionDate\":\"2026-06-05\",\"completionId\":2,\"createBy\":\"admin\",\"createTime\":\"2026-06-04 22:26:11\",\"homeworkName\":\"变速箱装配作业\",\"orderNo\":\"CO-2026-002\",\"params\":{},\"productModel\":\"DQ381\",\"productName\":\"双离合变速箱\",\"productSpec\":\"7速/380Nm\",\"productUnit\":\"台\",\"productionPlanCode\":\"PP-2026-002\",\"productionQuantity\":30,\"remark\":\"待入库\",\"status\":\"0\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 22:34:45\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 22:34:49', 14);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1025,7 +1196,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-04 18:45:34', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-04 20:39:44', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-04 10:35:53', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '测试员');
 
 -- ----------------------------

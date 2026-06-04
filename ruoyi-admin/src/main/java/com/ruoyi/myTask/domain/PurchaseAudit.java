@@ -41,8 +41,8 @@ public class PurchaseAudit extends BaseEntity implements Serializable
     private String applicant;
 
     /** 申请日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "申请日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @Excel(name = "申请日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date applyDate;
 
     /** 申请状态(0未提交 1待审核 2已审核) */
@@ -54,8 +54,8 @@ public class PurchaseAudit extends BaseEntity implements Serializable
     private String auditor;
 
     /** 审核日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "审核日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @Excel(name = "审核日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date auditDate;
 
     /** 审核状态(0通过 1驳回) */

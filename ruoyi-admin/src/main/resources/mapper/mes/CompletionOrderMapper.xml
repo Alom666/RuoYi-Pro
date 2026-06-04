@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mes.mapper.CompletionOrderMapper">
+
+    <resultMap type="CompletionOrder" id="CompletionOrderResult">
+        <result property="completionId"        column="completion_id"         />
+        <result property="orderNo"             column="order_no"              />
+        <result property="productionPlanCode"  column="production_plan_code"  />
+        <result property="homeworkName"        column="homework_name"         />
+        <result property="productName"         column="product_name"          />
+        <result property="productModel"        column="product_model"         />
+        <result property="productSpec"         column="product_spec"          />
+        <result property="productUnit"         column="product_unit"          />
+        <result property="completionDate"      column="completion_date"       />
+        <result property="productionQuantity"  column="production_quantity"   />
+        <result property="batchNo"             column="batch_no"              />
+        <result property="status"              column="status"                />
+        <result property="createBy"            column="create_by"             />
+        <result property="createTime"          column="create_time"           />
+        <result property="updateBy"            column="update_by"             />
+        <result property="updateTime"          column="update_time"           />
+        <result property="remark"              column="remark"                />
+    </resultMap>
+
+    <sql id="selectCompletionOrderVo">
+        select completion_id, order_no, production_plan_code, homework_name, product_name, product_model,
+               product_spec, product_unit, completion_date, production_quantity, batch_no, status,
+               create_by, create_time, update_by, update_time, remark
+        from mes_completion_order
+    </sql>
+
+    <select id="selectCompletionOrderById" parameterType="Long" resultMap="CompletionOrderResult">
+        <include refid="selectCompletionOrderVo"/>
+        where completion_id = #{completionId}
+    </select>
+
+    <select id="selectCompletionOrderList" parameterType="CompletionOrder" resultMap="CompletionOrderResult">
+        <include refid="selectCompletionOrderVo"/>
+        <where>
+            <if test="orderNo != null and orderNo != ''">
+                AND order_no like concat('%', #{orderNo}, '%')
+            </if>
+            <if test="productionPlanCode != null and productionPlanCode != ''">
+                AND production_plan_code like concat('%', #{productionPlanCode}, '%')
+            </if>
+            <if test="homeworkName != null and homeworkName != ''">
+                AND homework_name like concat('%', #{homeworkName}, '%')
+            </if>
+            <if test="productName != null and productName != ''">
+                AND product_name like concat('%', #{productName}, '%')
+            </if>
+            <if test="batchNo != null and batchNo != ''">
+                AND batch_no like concat('%', #{batchNo}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="params.beginCompletionDate != null and params.beginCompletionDate != ''">
+                AND completion_date &gt;= #{params.beginCompletionDate}
+            </if>
+            <if test="params.endCompletionDate != null and params.endCompletionDate != ''">
+                AND completion_date &lt;= #{params.endCompletionDate}
+            </if>
+        </where>
+        order by completion_id desc
+    </select>
+
+    <insert id="insertCompletionOrder" parameterType="CompletionOrder" useGeneratedKeys="true" keyProperty="completionId">
+        insert into mes_completion_order (
+            <if test="orderNo != null and orderNo != ''">order_no,</if>
+            <if test="productionPlanCode != null and productionPlanCode != ''">production_plan_code,</if>
+            <if test="homeworkName != null and homeworkName != ''">homework_name,</if>
+            <if test="productName != null and productName != ''">product_name,</if>
+            <if test="productModel != null and productModel != ''">product_model,</if>
+            <if test="productSpec != null and productSpec != ''">product_spec,</if>
+            <if test="productUnit != null and productUnit != ''">product_unit,</if>
+            <if test="completionDate != null">completion_date,</if>
+            <if test="productionQuantity != null">production_quantity,</if>
+            <if test="batchNo != null and batchNo != ''">batch_no,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
+            <if test="productionPlanCode != null and productionPlanCode != ''">#{productionPlanCode},</if>
+            <if test="homeworkName != null and homeworkName != ''">#{homeworkName},</if>
+            <if test="productName != null and productName != ''">#{productName},</if>
+            <if test="productModel != null and productModel != ''">#{productModel},</if>
+            <if test="productSpec != null and productSpec != ''">#{productSpec},</if>
+            <if test="productUnit != null and productUnit != ''">#{productUnit},</if>
+            <if test="completionDate != null">#{completionDate},</if>
+            <if test="productionQuantity != null">#{productionQuantity},</if>
+            <if test="batchNo != null and batchNo != ''">#{batchNo},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateCompletionOrder" parameterType="CompletionOrder">
+        update mes_completion_order
+        <set>
+            <if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
+            <if test="productionPlanCode != null">production_plan_code = #{productionPlanCode},</if>
+            <if test="homeworkName != null">homework_name = #{homeworkName},</if>
+            <if test="productName != null">product_name = #{productName},</if>
+            <if test="productModel != null">product_model = #{productModel},</if>
+            <if test="productSpec != null">product_spec = #{productSpec},</if>
+            <if test="productUnit != null">product_unit = #{productUnit},</if>
+            <if test="completionDate != null">completion_date = #{completionDate},</if>
+            <if test="productionQuantity != null">production_quantity = #{productionQuantity},</if>
+            <if test="batchNo != null">batch_no = #{batchNo},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where completion_id = #{completionId}
+    </update>
+
+    <delete id="deleteCompletionOrderByIds" parameterType="Long">
+        delete from mes_completion_order where completion_id in
+        <foreach item="completionId" collection="array" open="(" separator="," close=")">
+            #{completionId}
+        </foreach>
+    </delete>
+
+</mapper>
