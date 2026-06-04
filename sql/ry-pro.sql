@@ -11,7 +11,7 @@
  Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 04/06/2026 11:30:57
+ Date: 04/06/2026 20:30:47
 */
 
 SET NAMES utf8mb4;
@@ -84,6 +84,71 @@ CREATE TABLE `gen_table_column`  (
 -- ----------------------------
 -- Records of gen_table_column
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for mytask_inbound_audit
+-- ----------------------------
+DROP TABLE IF EXISTS `mytask_inbound_audit`;
+CREATE TABLE `mytask_inbound_audit`  (
+  `audit_id` int NOT NULL AUTO_INCREMENT COMMENT '审核ID（编号）',
+  `apply_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '申请单号',
+  `related_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '关联单据号',
+  `business_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型：0生产入库、1采购入库、2退货入库',
+  `supplier_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '供应商',
+  `contract_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '合同号',
+  `contract_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '合同类型：0采购合同、1销售合同',
+  `apply_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请类型',
+  `applicant` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请人',
+  `apply_date` datetime NULL DEFAULT NULL COMMENT '申请日期',
+  `apply_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请状态：0未提交、1待审核、2已审核',
+  `auditor` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '审核人',
+  `audit_date` datetime NULL DEFAULT NULL COMMENT '审核日期',
+  `audit_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '审核状态：0通过、1驳回',
+  `audit_opinion` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '审核意见',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`audit_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '我的任务-入库申请审核' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mytask_inbound_audit
+-- ----------------------------
+INSERT INTO `mytask_inbound_audit` VALUES (1, 'RK20260601001', 'PO20260601001', '1', '华为技术有限公司', 'HT20260101', '0', '采购入库', '曾学川', '2026-06-04 14:00:00', '1', 'admin', '2026-06-04 14:02:56', '1', '不通过', 'admin', '2026-06-04 13:48:12', 'admin', '2026-06-04 14:02:55', NULL);
+INSERT INTO `mytask_inbound_audit` VALUES (2, 'RK20260602001', 'TH20260602001', '2', '中兴通讯股份有限公司', 'HT20260202', '1', '退货入库', 'ry', '2026-06-02 14:30:00', '2', 'admin', '2026-06-04 14:02:27', '0', '审核通过，同意入', 'ry', '2026-06-04 13:48:12', 'admin', '2026-06-04 14:02:26', NULL);
+
+-- ----------------------------
+-- Table structure for mytask_purchase_audit
+-- ----------------------------
+DROP TABLE IF EXISTS `mytask_purchase_audit`;
+CREATE TABLE `mytask_purchase_audit`  (
+  `audit_id` bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `apply_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请单号',
+  `apply_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请类型(0计划申请 1补货申请)',
+  `plan_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '计划单号',
+  `replenishment_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '补货单号',
+  `applicant` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请人',
+  `apply_date` datetime NULL DEFAULT NULL COMMENT '申请日期',
+  `apply_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请状态(0未提交 1待审核 2已审核)',
+  `auditor` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核人',
+  `audit_date` datetime NULL DEFAULT NULL COMMENT '审核日期',
+  `audit_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核状态(0通过 1驳回)',
+  `audit_opinion` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核意见',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`audit_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '采购申请审核表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of mytask_purchase_audit
+-- ----------------------------
+INSERT INTO `mytask_purchase_audit` VALUES (5, 'CQ-20260601-001', '0', 'JH-2026-001', 'BH-2026-002', 'admin', '2026-06-01 00:00:00', '1', 'admin', '2026-06-04 19:58:52', '1', NULL, '计划采购申请', 'admin', '2026-06-04 19:56:26', 'admin', '2026-06-04 19:58:52');
+INSERT INTO `mytask_purchase_audit` VALUES (6, 'CQ-20260602-002', '1', 'JH-2026-002', 'BH-2026-001', 'ry', '2026-06-02 00:00:00', '1', 'admin', '2026-06-04 19:58:40', '0', NULL, '补货采购申请', 'ry', '2026-06-04 19:56:26', 'admin', '2026-06-04 19:58:40');
 
 -- ----------------------------
 -- Table structure for qrtz_blob_triggers
@@ -523,12 +588,14 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 103 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_logininfor
 -- ----------------------------
 INSERT INTO `sys_logininfor` VALUES (100, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 10:45:14');
+INSERT INTO `sys_logininfor` VALUES (101, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 13:52:12');
+INSERT INTO `sys_logininfor` VALUES (102, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 18:45:36');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -556,15 +623,15 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2000 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2009 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
 INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, 'system', NULL, '', '', 1, 0, 'M', '0', '0', '', 'system', 'admin', '2026-06-04 10:35:53', '', NULL, '系统管理目录');
 INSERT INTO `sys_menu` VALUES (2, '系统监控', 0, 2, 'monitor', NULL, '', '', 1, 0, 'M', '0', '0', '', 'monitor', 'admin', '2026-06-04 10:35:53', '', NULL, '系统监控目录');
-INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 3, 'tool', NULL, '', '', 1, 0, 'M', '0', '0', '', 'tool', 'admin', '2026-06-04 10:35:53', '', NULL, '系统工具目录');
-INSERT INTO `sys_menu` VALUES (4, '若依官网', 0, 4, 'http://ruoyi.vip', NULL, '', '', 0, 0, 'M', '0', '0', '', 'guide', 'admin', '2026-06-04 10:35:53', '', NULL, '若依官网地址');
+INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 4, 'tool', NULL, '', '', 1, 0, 'M', '0', '0', '', 'tool', 'admin', '2026-06-04 10:35:53', '', NULL, '系统工具目录');
+INSERT INTO `sys_menu` VALUES (4, '若依官网', 0, 5, 'http://ruoyi.vip', NULL, '', '', 0, 0, 'M', '0', '0', '', 'guide', 'admin', '2026-06-04 10:35:53', '', NULL, '若依官网地址');
 INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, 'user', 'system/user/index', '', '', 1, 0, 'C', '0', '0', 'system:user:list', 'user', 'admin', '2026-06-04 10:35:53', '', NULL, '用户管理菜单');
 INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, 'role', 'system/role/index', '', '', 1, 0, 'C', '0', '0', 'system:role:list', 'peoples', 'admin', '2026-06-04 10:35:53', '', NULL, '角色管理菜单');
 INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, 'menu', 'system/menu/index', '', '', 1, 0, 'C', '0', '0', 'system:menu:list', 'tree-table', 'admin', '2026-06-04 10:35:53', '', NULL, '菜单管理菜单');
@@ -646,6 +713,15 @@ INSERT INTO `sys_menu` VALUES (1057, '生成删除', 116, 3, '#', '', '', '', 1,
 INSERT INTO `sys_menu` VALUES (1058, '导入代码', 116, 4, '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:import', '#', 'admin', '2026-06-04 10:35:53', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (1059, '预览代码', 116, 5, '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:preview', '#', 'admin', '2026-06-04 10:35:53', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (1060, '生成代码', 116, 6, '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:code', '#', 'admin', '2026-06-04 10:35:53', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2000, '我的任务', 0, 3, 'myTask', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, 'user', 'admin', '2026-06-04 13:53:02', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2001, '流程审核', 2000, 1, 'audit', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, '#', 'admin', '2026-06-04 13:53:23', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2002, '入库申请审核', 2001, 1, 'inboundAudit', 'mes/inboundAudit/index', NULL, '', 1, 0, 'C', '0', '0', 'myTask:inboundAudit:list', '#', 'admin', '2026-06-04 13:53:55', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2003, '采购申请审核', 2001, 1, 'purchaseAudit', 'myTask/purchaseAudit/index', NULL, '', 1, 0, 'C', '0', '0', 'myTask:purchaseAudit:list', '#', 'admin', '2026-06-04 19:16:39', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2004, '制造执行MES', 0, 3, 'mes', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, 'chart', 'admin', '2026-06-04 20:07:57', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2005, '生产管理', 2004, 1, 'production', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, '#', 'admin', '2026-06-04 20:08:24', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2006, '作业装配', 2005, 1, 'assembly', 'mes/assembly/index', NULL, '', 1, 0, 'C', '0', '0', 'mes:HomeworkAssembly:list', '#', 'admin', '2026-06-04 20:11:36', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2007, '领料申请', 2005, 1, 'materialApply', 'mes/materialApply/index', NULL, '', 1, 0, 'C', '0', '0', 'mes:materialApply:list', '#', 'admin', '2026-06-04 20:12:20', 'admin', '2026-06-04 20:12:42', '');
+INSERT INTO `sys_menu` VALUES (2008, '生产完工单', 2005, 1, 'completionOrder', 'mes/completionOrder/index', NULL, '', 1, 0, 'C', '0', '0', 'mes:completionOrder:list', '#', 'admin', '2026-06-04 20:13:23', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -683,11 +759,14 @@ CREATE TABLE `sys_notice_read`  (
   `read_time` datetime NOT NULL COMMENT '阅读时间',
   PRIMARY KEY (`read_id`) USING BTREE,
   UNIQUE INDEX `uk_user_notice`(`user_id` ASC, `notice_id` ASC) USING BTREE COMMENT '同一用户同一公告只记录一次'
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '公告已读记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '公告已读记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_notice_read
 -- ----------------------------
+INSERT INTO `sys_notice_read` VALUES (1, 3, 1, '2026-06-04 13:56:20');
+INSERT INTO `sys_notice_read` VALUES (2, 2, 1, '2026-06-04 13:56:20');
+INSERT INTO `sys_notice_read` VALUES (3, 1, 1, '2026-06-04 13:56:20');
 
 -- ----------------------------
 -- Table structure for sys_oper_log
@@ -715,11 +794,35 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 124 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
 -- ----------------------------
+INSERT INTO `sys_oper_log` VALUES (100, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createBy\":\"admin\",\"icon\":\"user\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"我的任务\",\"menuType\":\"M\",\"orderNum\":2,\"params\":{},\"parentId\":0,\"path\":\"myTask\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 13:53:02', 23);
+INSERT INTO `sys_oper_log` VALUES (101, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"流程审核\",\"menuType\":\"M\",\"orderNum\":1,\"params\":{},\"parentId\":2000,\"path\":\"audit\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 13:53:23', 19);
+INSERT INTO `sys_oper_log` VALUES (102, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/inboundAudit/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"入库申请审核\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":2001,\"path\":\"inboundAudit\",\"perms\":\"myTask:inboundAudit:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 13:53:55', 19);
+INSERT INTO `sys_oper_log` VALUES (103, '入库申请审核', 5, 'com.ruoyi.myTask.controller.InboundAuditController.export()', 'POST', 1, 'admin', '研发部门', '/myTask/inboundAudit/export', '127.0.0.1', '内网IP', '{\"pageSize\":\"10\",\"pageNum\":\"1\"}', NULL, 0, NULL, '2026-06-04 13:54:29', 471);
+INSERT INTO `sys_oper_log` VALUES (104, '入库申请审核', 2, 'com.ruoyi.myTask.controller.InboundAuditController.edit()', 'PUT', 1, 'admin', '研发部门', '/myTask/inboundAudit', '127.0.0.1', '内网IP', '{\"applicant\":\"ry\",\"applyDate\":\"2026-06-02 14:30:00\",\"applyNo\":\"RK20260602001\",\"applyStatus\":\"2\",\"applyType\":\"退货入库\",\"auditDate\":\"2026-06-04 13:56:16\",\"auditId\":2,\"auditOpinion\":\"审核通过，同意入库\",\"auditStatus\":\"1\",\"auditor\":\"admin\",\"businessType\":\"2\",\"contractNo\":\"HT20260202\",\"contractType\":\"1\",\"createBy\":\"ry\",\"createTime\":\"2026-06-04 13:48:12\",\"params\":{},\"relatedNo\":\"TH20260602001\",\"supplierName\":\"中兴通讯股份有限公司\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 13:48:12\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 13:56:16', 36);
+INSERT INTO `sys_oper_log` VALUES (105, '入库申请审核', 2, 'com.ruoyi.myTask.controller.InboundAuditController.edit()', 'PUT', 1, 'admin', '研发部门', '/myTask/inboundAudit', '127.0.0.1', '内网IP', '{\"applicant\":\"ry\",\"applyDate\":\"2026-06-02 14:30:00\",\"applyNo\":\"RK20260602001\",\"applyStatus\":\"2\",\"applyType\":\"退货入库\",\"auditDate\":\"2026-06-04 14:02:26\",\"auditId\":2,\"auditOpinion\":\"审核通过，同意入\",\"auditStatus\":\"0\",\"auditor\":\"admin\",\"businessType\":\"2\",\"contractNo\":\"HT20260202\",\"contractType\":\"1\",\"createBy\":\"ry\",\"createTime\":\"2026-06-04 13:48:12\",\"params\":{},\"relatedNo\":\"TH20260602001\",\"supplierName\":\"中兴通讯股份有限公司\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 13:56:16\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 14:02:26', 15);
+INSERT INTO `sys_oper_log` VALUES (106, '入库申请审核', 2, 'com.ruoyi.myTask.controller.InboundAuditController.edit()', 'PUT', 1, 'admin', '研发部门', '/myTask/inboundAudit', '127.0.0.1', '内网IP', '{\"applicant\":\"曾学川\",\"applyDate\":\"2026-06-04 14:00:00\",\"applyNo\":\"RK20260601001\",\"applyStatus\":\"1\",\"applyType\":\"采购入库\",\"auditDate\":\"2026-06-04 14:02:55\",\"auditId\":1,\"auditOpinion\":\"不通过\",\"auditStatus\":\"1\",\"auditor\":\"admin\",\"businessType\":\"1\",\"contractNo\":\"HT20260101\",\"contractType\":\"0\",\"createBy\":\"admin\",\"createTime\":\"2026-06-04 13:48:12\",\"params\":{},\"relatedNo\":\"PO20260601001\",\"supplierName\":\"华为技术有限公司\",\"updateBy\":\"admin\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 14:02:55', 13);
+INSERT INTO `sys_oper_log` VALUES (107, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"myTask/purchaseAudit/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"采购申请审核\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":2001,\"path\":\"purchaseAudit\",\"perms\":\"myTask:purchaseAudit:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 19:16:39', 33);
+INSERT INTO `sys_oper_log` VALUES (108, '采购申请审核', 2, 'com.ruoyi.myTask.controller.PurchaseAuditController.edit()', 'PUT', 1, 'admin', '研发部门', '/myTask/purchaseAudit', '127.0.0.1', '内网IP', '{\"applicant\":\"ry\",\"applyDate\":\"2026-06-02 14:30:00\",\"applyNo\":\"CGSQ-20260602-002\",\"applyStatus\":\"1\",\"applyType\":\"1\",\"auditDate\":\"2026-06-04 19:44:45\",\"auditId\":2,\"auditStatus\":\"1\",\"auditor\":\"admin\",\"createBy\":\"ry\",\"createTime\":\"2026-06-04 19:28:39\",\"params\":{},\"remark\":\"补货采购申请\",\"replenishmentNo\":\"BH-2026-001\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 19:28:39\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 19:44:45', 55);
+INSERT INTO `sys_oper_log` VALUES (109, '采购申请审核', 2, 'com.ruoyi.myTask.controller.PurchaseAuditController.edit()', 'PUT', 1, 'admin', '研发部门', '/myTask/purchaseAudit', '127.0.0.1', '内网IP', '{\"applicant\":\"admin\",\"applyDate\":\"2026-06-01 10:00:00\",\"applyNo\":\"CGSQ-20260601-001\",\"applyStatus\":\"1\",\"applyType\":\"0\",\"auditDate\":\"2026-06-04 19:44:48\",\"auditId\":1,\"auditStatus\":\"0\",\"auditor\":\"admin\",\"createBy\":\"admin\",\"createTime\":\"2026-06-04 19:28:39\",\"params\":{},\"planNo\":\"JH-2026-001\",\"remark\":\"计划采购申请\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 19:28:39\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 19:44:48', 13);
+INSERT INTO `sys_oper_log` VALUES (110, '采购申请审核', 3, 'com.ruoyi.myTask.controller.PurchaseAuditController.remove()', 'DELETE', 1, 'admin', '研发部门', '/myTask/purchaseAudit/2,1', '127.0.0.1', '内网IP', '[2,1] ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 19:53:14', 8);
+INSERT INTO `sys_oper_log` VALUES (111, '采购申请审核', 2, 'com.ruoyi.myTask.controller.PurchaseAuditController.edit()', 'PUT', 1, 'admin', '研发部门', '/myTask/purchaseAudit', '127.0.0.1', '内网IP', '{\"applicant\":\"ry\",\"applyDate\":\"2026-06-02 14:30:00\",\"applyNo\":\"CQ-20260602-002\",\"applyStatus\":\"1\",\"applyType\":\"1\",\"auditDate\":\"2026-06-04 19:54:11\",\"auditId\":4,\"auditStatus\":\"1\",\"auditor\":\"admin\",\"createBy\":\"ry\",\"createTime\":\"2026-06-04 19:53:23\",\"params\":{},\"remark\":\"补货采购申请\",\"replenishmentNo\":\"BH-2026-001\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 19:53:23\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 19:54:11', 17);
+INSERT INTO `sys_oper_log` VALUES (112, '采购申请审核', 2, 'com.ruoyi.myTask.controller.PurchaseAuditController.edit()', 'PUT', 1, 'admin', '研发部门', '/myTask/purchaseAudit', '127.0.0.1', '内网IP', '{\"applicant\":\"admin\",\"applyDate\":\"2026-06-01 10:00:00\",\"applyNo\":\"CQ-20260601-001\",\"applyStatus\":\"1\",\"applyType\":\"0\",\"auditDate\":\"2026-06-04 19:54:14\",\"auditId\":3,\"auditStatus\":\"1\",\"auditor\":\"admin\",\"createBy\":\"admin\",\"createTime\":\"2026-06-04 19:53:23\",\"params\":{},\"planNo\":\"JH-2026-001\",\"remark\":\"计划采购申请\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 19:53:23\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 19:54:14', 8);
+INSERT INTO `sys_oper_log` VALUES (113, '采购申请审核', 3, 'com.ruoyi.myTask.controller.PurchaseAuditController.remove()', 'DELETE', 1, 'admin', '研发部门', '/myTask/purchaseAudit/4,3', '127.0.0.1', '内网IP', '[4,3] ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 19:55:11', 14);
+INSERT INTO `sys_oper_log` VALUES (114, '采购申请审核', 2, 'com.ruoyi.myTask.controller.PurchaseAuditController.edit()', 'PUT', 1, 'admin', '研发部门', '/myTask/purchaseAudit', '127.0.0.1', '内网IP', '{\"applicant\":\"ry\",\"applyDate\":\"2026-06-02 00:00:00\",\"applyNo\":\"CQ-20260602-002\",\"applyStatus\":\"1\",\"applyType\":\"1\",\"auditDate\":\"2026-06-04 19:58:40\",\"auditId\":6,\"auditStatus\":\"0\",\"auditor\":\"admin\",\"createBy\":\"ry\",\"createTime\":\"2026-06-04 19:56:26\",\"params\":{},\"planNo\":\"JH-2026-002\",\"remark\":\"补货采购申请\",\"replenishmentNo\":\"BH-2026-001\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 19:56:26\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 19:58:40', 14);
+INSERT INTO `sys_oper_log` VALUES (115, '采购申请审核', 2, 'com.ruoyi.myTask.controller.PurchaseAuditController.edit()', 'PUT', 1, 'admin', '研发部门', '/myTask/purchaseAudit', '127.0.0.1', '内网IP', '{\"applicant\":\"admin\",\"applyDate\":\"2026-06-01 00:00:00\",\"applyNo\":\"CQ-20260601-001\",\"applyStatus\":\"1\",\"applyType\":\"0\",\"auditDate\":\"2026-06-04 19:58:52\",\"auditId\":5,\"auditStatus\":\"1\",\"auditor\":\"admin\",\"createBy\":\"admin\",\"createTime\":\"2026-06-04 19:56:26\",\"params\":{},\"planNo\":\"JH-2026-001\",\"remark\":\"计划采购申请\",\"replenishmentNo\":\"BH-2026-002\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 19:56:26\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 19:58:52', 23);
+INSERT INTO `sys_oper_log` VALUES (116, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createBy\":\"admin\",\"icon\":\"chart\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"制造执行MES\",\"menuType\":\"M\",\"orderNum\":2,\"params\":{},\"parentId\":0,\"path\":\"mes\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 20:07:57', 34);
+INSERT INTO `sys_oper_log` VALUES (117, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"生产管理\",\"menuType\":\"M\",\"orderNum\":1,\"params\":{},\"parentId\":2004,\"path\":\"production\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 20:08:24', 15);
+INSERT INTO `sys_oper_log` VALUES (118, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/assembly/index\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"作业装配\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":2005,\"path\":\"production\",\"perms\":\"mes:HomeworkAssembly:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"新增菜单\'作业装配\'失败，路由名称或地址已存在\",\"code\":500}', 0, NULL, '2026-06-04 20:09:36', 6);
+INSERT INTO `sys_oper_log` VALUES (119, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/assembly/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"作业装配\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":2005,\"path\":\"assembly\",\"perms\":\"mes:HomeworkAssembly:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 20:11:36', 20);
+INSERT INTO `sys_oper_log` VALUES (120, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/materialApply/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"领料申请\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":2006,\"path\":\"materialApply\",\"perms\":\"mes:materialApply:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 20:12:20', 18);
+INSERT INTO `sys_oper_log` VALUES (121, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/materialApply/index\",\"createTime\":\"2026-06-04 20:12:20\",\"icon\":\"#\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2007,\"menuName\":\"领料申请\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":2005,\"path\":\"materialApply\",\"perms\":\"mes:materialApply:list\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 20:12:42', 22);
+INSERT INTO `sys_oper_log` VALUES (122, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/completionOrder/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"生产完工单\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":2005,\"path\":\"completionOrder\",\"perms\":\"mes:completionOrder:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 20:13:23', 17);
+INSERT INTO `sys_oper_log` VALUES (123, '保存菜单排序', 2, 'com.ruoyi.web.controller.system.SysMenuController.updateSort()', 'PUT', 1, 'admin', '研发部门', '/system/menu/updateSort', '127.0.0.1', '内网IP', '{\"menuIds\":\"2000,2004,3,4\",\"orderNums\":\"3,3,4,5\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 20:14:01', 28);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -922,7 +1025,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-04 10:45:12', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-04 18:45:34', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-04 10:35:53', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '测试员');
 
 -- ----------------------------

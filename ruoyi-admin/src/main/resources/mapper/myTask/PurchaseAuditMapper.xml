@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.myTask.mapper.PurchaseAuditMapper">
+
+    <resultMap type="PurchaseAudit" id="PurchaseAuditResult">
+        <result property="auditId"          column="audit_id"          />
+        <result property="applyNo"          column="apply_no"          />
+        <result property="applyType"        column="apply_type"        />
+        <result property="planNo"           column="plan_no"           />
+        <result property="replenishmentNo"  column="replenishment_no"  />
+        <result property="applicant"        column="applicant"         />
+        <result property="applyDate"        column="apply_date"        />
+        <result property="applyStatus"      column="apply_status"      />
+        <result property="auditor"          column="auditor"           />
+        <result property="auditDate"        column="audit_date"        />
+        <result property="auditStatus"      column="audit_status"      />
+        <result property="auditOpinion"     column="audit_opinion"     />
+        <result property="createBy"         column="create_by"         />
+        <result property="createTime"       column="create_time"       />
+        <result property="updateBy"         column="update_by"         />
+        <result property="updateTime"       column="update_time"       />
+        <result property="remark"           column="remark"            />
+    </resultMap>
+
+    <sql id="selectPurchaseAuditVo">
+        select audit_id, apply_no, apply_type, plan_no, replenishment_no,
+               applicant, apply_date, apply_status, auditor, audit_date, audit_status, audit_opinion,
+               create_by, create_time, update_by, update_time, remark
+        from myTask_purchase_audit
+    </sql>
+
+    <select id="selectPurchaseAuditById" parameterType="Long" resultMap="PurchaseAuditResult">
+        <include refid="selectPurchaseAuditVo"/>
+        where audit_id = #{auditId}
+    </select>
+
+    <select id="selectPurchaseAuditList" parameterType="PurchaseAudit" resultMap="PurchaseAuditResult">
+        <include refid="selectPurchaseAuditVo"/>
+        <where>
+            <if test="applyNo != null and applyNo != ''">
+                AND apply_no like concat('%', #{applyNo}, '%')
+            </if>
+            <if test="applyType != null and applyType != ''">
+                AND apply_type = #{applyType}
+            </if>
+            <if test="planNo != null and planNo != ''">
+                AND plan_no like concat('%', #{planNo}, '%')
+            </if>
+            <if test="replenishmentNo != null and replenishmentNo != ''">
+                AND replenishment_no like concat('%', #{replenishmentNo}, '%')
+            </if>
+            <if test="applicant != null and applicant != ''">
+                AND applicant = #{applicant}
+            </if>
+            <if test="applyStatus != null and applyStatus != ''">
+                AND apply_status = #{applyStatus}
+            </if>
+            <if test="auditor != null and auditor != ''">
+                AND auditor = #{auditor}
+            </if>
+            <if test="auditStatus != null and auditStatus != ''">
+                AND audit_status = #{auditStatus}
+            </if>
+            <if test="params.beginApplyDate != null and params.beginApplyDate != ''">
+                AND apply_date &gt;= #{params.beginApplyDate}
+            </if>
+            <if test="params.endApplyDate != null and params.endApplyDate != ''">
+                AND apply_date &lt;= #{params.endApplyDate}
+            </if>
+            <if test="params.beginAuditDate != null and params.beginAuditDate != ''">
+                AND audit_date &gt;= #{params.beginAuditDate}
+            </if>
+            <if test="params.endAuditDate != null and params.endAuditDate != ''">
+                AND audit_date &lt;= #{params.endAuditDate}
+            </if>
+        </where>
+        order by audit_id desc
+    </select>
+
+    <insert id="insertPurchaseAudit" parameterType="PurchaseAudit" useGeneratedKeys="true" keyProperty="auditId">
+        insert into myTask_purchase_audit (
+            <if test="applyNo != null and applyNo != ''">apply_no,</if>
+            <if test="applyType != null and applyType != ''">apply_type,</if>
+            <if test="planNo != null and planNo != ''">plan_no,</if>
+            <if test="replenishmentNo != null and replenishmentNo != ''">replenishment_no,</if>
+            <if test="applicant != null and applicant != ''">applicant,</if>
+            <if test="applyDate != null">apply_date,</if>
+            <if test="applyStatus != null and applyStatus != ''">apply_status,</if>
+            <if test="auditor != null and auditor != ''">auditor,</if>
+            <if test="auditDate != null">audit_date,</if>
+            <if test="auditStatus != null and auditStatus != ''">audit_status,</if>
+            <if test="auditOpinion != null and auditOpinion != ''">audit_opinion,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="applyNo != null and applyNo != ''">#{applyNo},</if>
+            <if test="applyType != null and applyType != ''">#{applyType},</if>
+            <if test="planNo != null and planNo != ''">#{planNo},</if>
+            <if test="replenishmentNo != null and replenishmentNo != ''">#{replenishmentNo},</if>
+            <if test="applicant != null and applicant != ''">#{applicant},</if>
+            <if test="applyDate != null">#{applyDate},</if>
+            <if test="applyStatus != null and applyStatus != ''">#{applyStatus},</if>
+            <if test="auditor != null and auditor != ''">#{auditor},</if>
+            <if test="auditDate != null">#{auditDate},</if>
+            <if test="auditStatus != null and auditStatus != ''">#{auditStatus},</if>
+            <if test="auditOpinion != null and auditOpinion != ''">#{auditOpinion},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updatePurchaseAudit" parameterType="PurchaseAudit">
+        update myTask_purchase_audit
+        <set>
+            <if test="applyNo != null and applyNo != ''">apply_no = #{applyNo},</if>
+            <if test="applyType != null and applyType != ''">apply_type = #{applyType},</if>
+            <if test="planNo != null">plan_no = #{planNo},</if>
+            <if test="replenishmentNo != null">replenishment_no = #{replenishmentNo},</if>
+            <if test="applicant != null">applicant = #{applicant},</if>
+            <if test="applyDate != null">apply_date = #{applyDate},</if>
+            <if test="applyStatus != null and applyStatus != ''">apply_status = #{applyStatus},</if>
+            <if test="auditor != null">auditor = #{auditor},</if>
+            <if test="auditDate != null">audit_date = #{auditDate},</if>
+            <if test="auditStatus != null and auditStatus != ''">audit_status = #{auditStatus},</if>
+            <if test="auditOpinion != null">audit_opinion = #{auditOpinion},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where audit_id = #{auditId}
+    </update>
+
+    <delete id="deletePurchaseAuditById" parameterType="Long">
+        delete from myTask_purchase_audit where audit_id = #{auditId}
+    </delete>
+
+    <delete id="deletePurchaseAuditByIds" parameterType="Long">
+        delete from myTask_purchase_audit where audit_id in
+        <foreach item="auditId" collection="array" open="(" separator="," close=")">
+            #{auditId}
+        </foreach>
+    </delete>
+
+</mapper>
