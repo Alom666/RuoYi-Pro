@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mes.mapper.IncomingInspectionMapper">
+
+    <resultMap type="IncomingInspection" id="IncomingInspectionResult">
+        <result property="inspectionId"      column="inspection_id"       />
+        <result property="serialNo"          column="serial_no"           />
+        <result property="materialApplyNo"   column="material_apply_no"   />
+        <result property="materialName"      column="material_name"       />
+        <result property="productSpec"       column="product_spec"        />
+        <result property="productModel"      column="product_model"       />
+        <result property="unit"              column="unit"                />
+        <result property="requiredQuantity"  column="required_quantity"   />
+        <result property="receivedQuantity"  column="received_quantity"   />
+        <result property="sampleQuantity"    column="sample_quantity"     />
+        <result property="inspectionItem"    column="inspection_item"     />
+        <result property="standardUpper"     column="standard_upper"      />
+        <result property="standardLower"     column="standard_lower"      />
+        <result property="testValue"         column="test_value"          />
+        <result property="testResult"        column="test_result"         />
+        <result property="inspector"         column="inspector"           />
+        <result property="inspectionDate"    column="inspection_date"     />
+        <result property="createBy"          column="create_by"           />
+        <result property="createTime"        column="create_time"         />
+        <result property="updateBy"          column="update_by"           />
+        <result property="updateTime"        column="update_time"         />
+        <result property="remark"            column="remark"              />
+    </resultMap>
+
+    <sql id="selectIncomingInspectionVo">
+        select inspection_id, serial_no, material_apply_no, material_name, product_spec, product_model,
+               unit, required_quantity, received_quantity, sample_quantity, inspection_item,
+               standard_upper, standard_lower, test_value, test_result, inspector, inspection_date,
+               create_by, create_time, update_by, update_time, remark
+        from mes_incoming_inspection
+    </sql>
+
+    <select id="selectIncomingInspectionById" parameterType="Long" resultMap="IncomingInspectionResult">
+        <include refid="selectIncomingInspectionVo"/>
+        where inspection_id = #{inspectionId}
+    </select>
+
+    <select id="selectIncomingInspectionList" parameterType="IncomingInspection" resultMap="IncomingInspectionResult">
+        <include refid="selectIncomingInspectionVo"/>
+        <where>
+            <if test="serialNo != null and serialNo != ''">
+                AND serial_no like concat('%', #{serialNo}, '%')
+            </if>
+            <if test="materialApplyNo != null and materialApplyNo != ''">
+                AND material_apply_no like concat('%', #{materialApplyNo}, '%')
+            </if>
+            <if test="materialName != null and materialName != ''">
+                AND material_name like concat('%', #{materialName}, '%')
+            </if>
+            <if test="testResult != null and testResult != ''">
+                AND test_result = #{testResult}
+            </if>
+            <if test="inspector != null and inspector != ''">
+                AND inspector like concat('%', #{inspector}, '%')
+            </if>
+            <if test="params.beginInspectionDate != null and params.beginInspectionDate != ''">
+                AND inspection_date &gt;= #{params.beginInspectionDate}
+            </if>
+            <if test="params.endInspectionDate != null and params.endInspectionDate != ''">
+                AND inspection_date &lt;= #{params.endInspectionDate}
+            </if>
+        </where>
+        order by inspection_id desc
+    </select>
+
+    <insert id="insertIncomingInspection" parameterType="IncomingInspection" useGeneratedKeys="true" keyProperty="inspectionId">
+        insert into mes_incoming_inspection (
+            <if test="serialNo != null and serialNo != ''">serial_no,</if>
+            <if test="materialApplyNo != null and materialApplyNo != ''">material_apply_no,</if>
+            <if test="materialName != null and materialName != ''">material_name,</if>
+            <if test="productSpec != null and productSpec != ''">product_spec,</if>
+            <if test="productModel != null and productModel != ''">product_model,</if>
+            <if test="unit != null and unit != ''">unit,</if>
+            <if test="requiredQuantity != null">required_quantity,</if>
+            <if test="receivedQuantity != null">received_quantity,</if>
+            <if test="sampleQuantity != null">sample_quantity,</if>
+            <if test="inspectionItem != null and inspectionItem != ''">inspection_item,</if>
+            <if test="standardUpper != null">standard_upper,</if>
+            <if test="standardLower != null">standard_lower,</if>
+            <if test="testValue != null">test_value,</if>
+            <if test="testResult != null and testResult != ''">test_result,</if>
+            <if test="inspector != null and inspector != ''">inspector,</if>
+            <if test="inspectionDate != null">inspection_date,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="serialNo != null and serialNo != ''">#{serialNo},</if>
+            <if test="materialApplyNo != null and materialApplyNo != ''">#{materialApplyNo},</if>
+            <if test="materialName != null and materialName != ''">#{materialName},</if>
+            <if test="productSpec != null and productSpec != ''">#{productSpec},</if>
+            <if test="productModel != null and productModel != ''">#{productModel},</if>
+            <if test="unit != null and unit != ''">#{unit},</if>
+            <if test="requiredQuantity != null">#{requiredQuantity},</if>
+            <if test="receivedQuantity != null">#{receivedQuantity},</if>
+            <if test="sampleQuantity != null">#{sampleQuantity},</if>
+            <if test="inspectionItem != null and inspectionItem != ''">#{inspectionItem},</if>
+            <if test="standardUpper != null">#{standardUpper},</if>
+            <if test="standardLower != null">#{standardLower},</if>
+            <if test="testValue != null">#{testValue},</if>
+            <if test="testResult != null and testResult != ''">#{testResult},</if>
+            <if test="inspector != null and inspector != ''">#{inspector},</if>
+            <if test="inspectionDate != null">#{inspectionDate},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateIncomingInspection" parameterType="IncomingInspection">
+        update mes_incoming_inspection
+        <set>
+            <if test="serialNo != null and serialNo != ''">serial_no = #{serialNo},</if>
+            <if test="materialApplyNo != null">material_apply_no = #{materialApplyNo},</if>
+            <if test="materialName != null">material_name = #{materialName},</if>
+            <if test="productSpec != null">product_spec = #{productSpec},</if>
+            <if test="productModel != null">product_model = #{productModel},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="requiredQuantity != null">required_quantity = #{requiredQuantity},</if>
+            <if test="receivedQuantity != null">received_quantity = #{receivedQuantity},</if>
+            <if test="sampleQuantity != null">sample_quantity = #{sampleQuantity},</if>
+            <if test="inspectionItem != null">inspection_item = #{inspectionItem},</if>
+            <if test="standardUpper != null">standard_upper = #{standardUpper},</if>
+            <if test="standardLower != null">standard_lower = #{standardLower},</if>
+            <if test="testValue != null">test_value = #{testValue},</if>
+            <if test="testResult != null and testResult != ''">test_result = #{testResult},</if>
+            <if test="inspector != null">inspector = #{inspector},</if>
+            <if test="inspectionDate != null">inspection_date = #{inspectionDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where inspection_id = #{inspectionId}
+    </update>
+
+    <delete id="deleteIncomingInspectionByIds" parameterType="Long">
+        delete from mes_incoming_inspection where inspection_id in
+        <foreach item="inspectionId" collection="array" open="(" separator="," close=")">
+            #{inspectionId}
+        </foreach>
+    </delete>
+
+</mapper>

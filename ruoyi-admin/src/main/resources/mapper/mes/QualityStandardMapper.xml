@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mes.mapper.QualityStandardMapper">
+
+    <resultMap type="QualityStandard" id="QualityStandardResult">
+        <result property="standardId"      column="standard_id"       />
+        <result property="materialId"      column="material_id"       />
+        <result property="materialName"    column="material_name"     />
+        <result property="productModel"    column="product_model"     />
+        <result property="productSpec"     column="product_spec"      />
+        <result property="unit"            column="unit"              />
+        <result property="inspectionItem"  column="inspection_item"   />
+        <result property="inspectionType"  column="inspection_type"   />
+        <result property="standardUpper"   column="standard_upper"    />
+        <result property="standardLower"   column="standard_lower"    />
+        <result property="createBy"        column="create_by"         />
+        <result property="createTime"      column="create_time"       />
+        <result property="updateBy"        column="update_by"         />
+        <result property="updateTime"      column="update_time"       />
+        <result property="remark"          column="remark"            />
+    </resultMap>
+
+    <sql id="selectQualityStandardVo">
+        select standard_id, material_id, material_name, product_model, product_spec, unit,
+               inspection_item, inspection_type, standard_upper, standard_lower,
+               create_by, create_time, update_by, update_time, remark
+        from mes_quality_standard
+    </sql>
+
+    <select id="selectQualityStandardById" parameterType="Long" resultMap="QualityStandardResult">
+        <include refid="selectQualityStandardVo"/>
+        where standard_id = #{standardId}
+    </select>
+
+    <select id="selectQualityStandardList" parameterType="QualityStandard" resultMap="QualityStandardResult">
+        <include refid="selectQualityStandardVo"/>
+        <where>
+            <if test="materialName != null and materialName != ''">
+                AND material_name like concat('%', #{materialName}, '%')
+            </if>
+            <if test="inspectionItem != null and inspectionItem != ''">
+                AND inspection_item like concat('%', #{inspectionItem}, '%')
+            </if>
+            <if test="inspectionType != null and inspectionType != ''">
+                AND inspection_type like concat('%', #{inspectionType}, '%')
+            </if>
+        </where>
+        order by standard_id desc
+    </select>
+
+    <insert id="insertQualityStandard" parameterType="QualityStandard" useGeneratedKeys="true" keyProperty="standardId">
+        insert into mes_quality_standard (
+            <if test="materialId != null">material_id,</if>
+            <if test="materialName != null and materialName != ''">material_name,</if>
+            <if test="productModel != null and productModel != ''">product_model,</if>
+            <if test="productSpec != null and productSpec != ''">product_spec,</if>
+            <if test="unit != null and unit != ''">unit,</if>
+            <if test="inspectionItem != null and inspectionItem != ''">inspection_item,</if>
+            <if test="inspectionType != null and inspectionType != ''">inspection_type,</if>
+            <if test="standardUpper != null">standard_upper,</if>
+            <if test="standardLower != null">standard_lower,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="materialId != null">#{materialId},</if>
+            <if test="materialName != null and materialName != ''">#{materialName},</if>
+            <if test="productModel != null and productModel != ''">#{productModel},</if>
+            <if test="productSpec != null and productSpec != ''">#{productSpec},</if>
+            <if test="unit != null and unit != ''">#{unit},</if>
+            <if test="inspectionItem != null and inspectionItem != ''">#{inspectionItem},</if>
+            <if test="inspectionType != null and inspectionType != ''">#{inspectionType},</if>
+            <if test="standardUpper != null">#{standardUpper},</if>
+            <if test="standardLower != null">#{standardLower},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateQualityStandard" parameterType="QualityStandard">
+        update mes_quality_standard
+        <set>
+            <if test="materialId != null">material_id = #{materialId},</if>
+            <if test="materialName != null">material_name = #{materialName},</if>
+            <if test="productModel != null">product_model = #{productModel},</if>
+            <if test="productSpec != null">product_spec = #{productSpec},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="inspectionItem != null and inspectionItem != ''">inspection_item = #{inspectionItem},</if>
+            <if test="inspectionType != null and inspectionType != ''">inspection_type = #{inspectionType},</if>
+            <if test="standardUpper != null">standard_upper = #{standardUpper},</if>
+            <if test="standardLower != null">standard_lower = #{standardLower},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where standard_id = #{standardId}
+    </update>
+
+    <delete id="deleteQualityStandardById" parameterType="Long">
+        delete from mes_quality_standard where standard_id = #{standardId}
+    </delete>
+
+    <delete id="deleteQualityStandardByIds" parameterType="Long">
+        delete from mes_quality_standard where standard_id in
+        <foreach item="standardId" collection="array" open="(" separator="," close=")">
+            #{standardId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mes.mapper.ProductionSamplingMapper">
+
+    <resultMap type="ProductionSampling" id="ProductionSamplingResult">
+        <result property="samplingId"         column="sampling_id"         />
+        <result property="serialNo"           column="serial_no"           />
+        <result property="planNo"             column="plan_no"             />
+        <result property="homeworkName"       column="homework_name"       />
+        <result property="materialName"       column="material_name"       />
+        <result property="productSpec"        column="product_spec"        />
+        <result property="productModel"       column="product_model"       />
+        <result property="unit"               column="unit"                />
+        <result property="inspectionItem"     column="inspection_item"     />
+        <result property="productionQuantity" column="production_quantity" />
+        <result property="samplingQuantity"   column="sampling_quantity"   />
+        <result property="testValue"          column="test_value"          />
+        <result property="thresholdUpper"     column="threshold_upper"     />
+        <result property="thresholdLower"     column="threshold_lower"     />
+        <result property="testResult"         column="test_result"         />
+        <result property="inspector"          column="inspector"           />
+        <result property="inspectionDate"     column="inspection_date"     />
+        <result property="createBy"           column="create_by"           />
+        <result property="createTime"         column="create_time"         />
+        <result property="updateBy"           column="update_by"           />
+        <result property="updateTime"         column="update_time"         />
+        <result property="remark"             column="remark"              />
+    </resultMap>
+
+    <sql id="selectProductionSamplingVo">
+        select sampling_id, serial_no, plan_no, homework_name, material_name, product_spec, product_model, unit,
+               inspection_item, production_quantity, sampling_quantity, test_value, threshold_upper, threshold_lower,
+               test_result, inspector, inspection_date, create_by, create_time, update_by, update_time, remark
+        from mes_production_sampling
+    </sql>
+
+    <select id="selectProductionSamplingById" parameterType="Long" resultMap="ProductionSamplingResult">
+        <include refid="selectProductionSamplingVo"/>
+        where sampling_id = #{samplingId}
+    </select>
+
+    <select id="selectProductionSamplingList" parameterType="ProductionSampling" resultMap="ProductionSamplingResult">
+        <include refid="selectProductionSamplingVo"/>
+        <where>
+            <if test="serialNo != null and serialNo != ''">
+                AND serial_no like concat('%', #{serialNo}, '%')
+            </if>
+            <if test="planNo != null and planNo != ''">
+                AND plan_no like concat('%', #{planNo}, '%')
+            </if>
+            <if test="homeworkName != null and homeworkName != ''">
+                AND homework_name like concat('%', #{homeworkName}, '%')
+            </if>
+            <if test="materialName != null and materialName != ''">
+                AND material_name like concat('%', #{materialName}, '%')
+            </if>
+            <if test="inspectionItem != null and inspectionItem != ''">
+                AND inspection_item like concat('%', #{inspectionItem}, '%')
+            </if>
+            <if test="testResult != null and testResult != ''">
+                AND test_result = #{testResult}
+            </if>
+            <if test="inspector != null and inspector != ''">
+                AND inspector like concat('%', #{inspector}, '%')
+            </if>
+            <if test="params.beginInspectionDate != null and params.beginInspectionDate != ''">
+                AND inspection_date &gt;= #{params.beginInspectionDate}
+            </if>
+            <if test="params.endInspectionDate != null and params.endInspectionDate != ''">
+                AND inspection_date &lt;= #{params.endInspectionDate}
+            </if>
+        </where>
+        order by sampling_id desc
+    </select>
+
+    <insert id="insertProductionSampling" parameterType="ProductionSampling" useGeneratedKeys="true" keyProperty="samplingId">
+        insert into mes_production_sampling (
+            <if test="serialNo != null and serialNo != ''">serial_no,</if>
+            <if test="planNo != null and planNo != ''">plan_no,</if>
+            <if test="homeworkName != null and homeworkName != ''">homework_name,</if>
+            <if test="materialName != null and materialName != ''">material_name,</if>
+            <if test="productSpec != null and productSpec != ''">product_spec,</if>
+            <if test="productModel != null and productModel != ''">product_model,</if>
+            <if test="unit != null and unit != ''">unit,</if>
+            <if test="inspectionItem != null and inspectionItem != ''">inspection_item,</if>
+            <if test="productionQuantity != null">production_quantity,</if>
+            <if test="samplingQuantity != null">sampling_quantity,</if>
+            <if test="testValue != null">test_value,</if>
+            <if test="thresholdUpper != null">threshold_upper,</if>
+            <if test="thresholdLower != null">threshold_lower,</if>
+            <if test="testResult != null and testResult != ''">test_result,</if>
+            <if test="inspector != null and inspector != ''">inspector,</if>
+            <if test="inspectionDate != null">inspection_date,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="serialNo != null and serialNo != ''">#{serialNo},</if>
+            <if test="planNo != null and planNo != ''">#{planNo},</if>
+            <if test="homeworkName != null and homeworkName != ''">#{homeworkName},</if>
+            <if test="materialName != null and materialName != ''">#{materialName},</if>
+            <if test="productSpec != null and productSpec != ''">#{productSpec},</if>
+            <if test="productModel != null and productModel != ''">#{productModel},</if>
+            <if test="unit != null and unit != ''">#{unit},</if>
+            <if test="inspectionItem != null and inspectionItem != ''">#{inspectionItem},</if>
+            <if test="productionQuantity != null">#{productionQuantity},</if>
+            <if test="samplingQuantity != null">#{samplingQuantity},</if>
+            <if test="testValue != null">#{testValue},</if>
+            <if test="thresholdUpper != null">#{thresholdUpper},</if>
+            <if test="thresholdLower != null">#{thresholdLower},</if>
+            <if test="testResult != null and testResult != ''">#{testResult},</if>
+            <if test="inspector != null and inspector != ''">#{inspector},</if>
+            <if test="inspectionDate != null">#{inspectionDate},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateProductionSampling" parameterType="ProductionSampling">
+        update mes_production_sampling
+        <set>
+            <if test="serialNo != null">serial_no = #{serialNo},</if>
+            <if test="planNo != null">plan_no = #{planNo},</if>
+            <if test="homeworkName != null">homework_name = #{homeworkName},</if>
+            <if test="materialName != null">material_name = #{materialName},</if>
+            <if test="productSpec != null">product_spec = #{productSpec},</if>
+            <if test="productModel != null">product_model = #{productModel},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="inspectionItem != null and inspectionItem != ''">inspection_item = #{inspectionItem},</if>
+            <if test="productionQuantity != null">production_quantity = #{productionQuantity},</if>
+            <if test="samplingQuantity != null">sampling_quantity = #{samplingQuantity},</if>
+            <if test="testValue != null">test_value = #{testValue},</if>
+            <if test="thresholdUpper != null">threshold_upper = #{thresholdUpper},</if>
+            <if test="thresholdLower != null">threshold_lower = #{thresholdLower},</if>
+            <if test="testResult != null and testResult != ''">test_result = #{testResult},</if>
+            <if test="inspector != null">inspector = #{inspector},</if>
+            <if test="inspectionDate != null">inspection_date = #{inspectionDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where sampling_id = #{samplingId}
+    </update>
+
+    <delete id="deleteProductionSamplingById" parameterType="Long">
+        delete from mes_production_sampling where sampling_id = #{samplingId}
+    </delete>
+
+    <delete id="deleteProductionSamplingByIds" parameterType="Long">
+        delete from mes_production_sampling where sampling_id in
+        <foreach item="samplingId" collection="array" open="(" separator="," close=")">
+            #{samplingId}
+        </foreach>
+    </delete>
+
+</mapper>

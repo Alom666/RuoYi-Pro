@@ -42,4 +42,6 @@ public interface CompletionOrderMapper
      * @return 结果
      */
     public int deleteCompletionOrderByIds(Long[] completionIds);
+
+    int insertCompletionOrder(CompletionOrder completionOrder);
 }

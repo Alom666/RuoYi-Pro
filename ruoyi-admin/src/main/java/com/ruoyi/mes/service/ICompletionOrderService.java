@@ -27,6 +27,8 @@ public interface ICompletionOrderService
      */
     public List<CompletionOrder> selectCompletionOrderList(CompletionOrder completionOrder);
 
+    int insertCompletionOrder(CompletionOrder completionOrder);
+
     /**
      * 修改生产完工单
      *
