@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.scm.mapper.SalesOrderMapper">
+
+    <resultMap type="com.ruoyi.scm.domain.SalesOrder" id="SalesOrderResult">
+        <result property="orderId"       column="order_id"       />
+        <result property="orderNo"       column="order_no"       />
+        <result property="customerId"    column="customer_id"    />
+        <result property="customerName"  column="customer_name"  />
+        <result property="contactPerson" column="contact_person" />
+        <result property="contactPhone"  column="contact_phone"  />
+        <result property="totalAmount"   column="total_amount"   />
+        <result property="deliveryDate"  column="delivery_date"  />
+        <result property="applicant"     column="applicant"      />
+        <result property="applyDate"     column="apply_date"     />
+        <result property="applyStatus"   column="apply_status"   />
+        <result property="auditor"       column="auditor"        />
+        <result property="auditDate"     column="audit_date"     />
+        <result property="auditStatus"   column="audit_status"   />
+        <result property="createBy"      column="create_by"      />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"      column="update_by"      />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"        column="remark"         />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.scm.domain.SalesOrder" id="SalesOrderDetailResult" extends="SalesOrderResult">
+        <collection property="detailList" ofType="com.ruoyi.scm.domain.SalesOrderDetail">
+            <result property="detailId"      column="detail_id"       />
+            <result property="orderId"       column="d_order_id"      />
+            <result property="seqNo"         column="seq_no"          />
+            <result property="materialId"    column="material_id"     />
+            <result property="productName"   column="product_name"    />
+            <result property="productModel"  column="d_product_model" />
+            <result property="productSpec"   column="d_product_spec"  />
+            <result property="unit"          column="d_unit"          />
+            <result property="price"         column="price"           />
+            <result property="orderQuantity" column="order_quantity"  />
+            <result property="amount"        column="amount"          />
+            <result property="remark"        column="d_remark"        />
+        </collection>
+    </resultMap>
+
+    <sql id="selectSalesOrderVo">
+        select order_id, order_no, customer_id, customer_name, contact_person, contact_phone,
+               total_amount, delivery_date, applicant, apply_date, apply_status,
+               auditor, audit_date, audit_status,
+               create_by, create_time, update_by, update_time, remark
+        from scm_sales_order
+    </sql>
+
+    <select id="selectSalesOrderById" parameterType="Long" resultMap="SalesOrderDetailResult">
+        select a.order_id, a.order_no, a.customer_id, a.customer_name, a.contact_person, a.contact_phone,
+               a.total_amount, a.delivery_date, a.applicant, a.apply_date, a.apply_status,
+               a.auditor, a.audit_date, a.audit_status,
+               a.create_by, a.create_time, a.update_by, a.update_time, a.remark,
+               d.detail_id, d.order_id as d_order_id, d.seq_no, d.material_id,
+               d.product_name, d.product_model as d_product_model,
+               d.product_spec as d_product_spec, d.unit as d_unit,
+               d.price, d.order_quantity, d.amount, d.remark as d_remark
+        from scm_sales_order a
+        left join scm_sales_order_detail d on a.order_id = d.order_id
+        where a.order_id = #{orderId}
+        order by d.seq_no
+    </select>
+
+    <select id="selectSalesOrderList" parameterType="com.ruoyi.scm.domain.SalesOrder" resultMap="SalesOrderResult">
+        <include refid="selectSalesOrderVo"/>
+        <where>
+            <if test="orderNo != null and orderNo != ''">
+                AND order_no like concat('%', #{orderNo}, '%')
+            </if>
+            <if test="customerName != null and customerName != ''">
+                AND customer_name like concat('%', #{customerName}, '%')
+            </if>
+            <if test="params.beginDeliveryDate != null and params.beginDeliveryDate != ''">
+                AND delivery_date &gt;= #{params.beginDeliveryDate}
+            </if>
+            <if test="params.endDeliveryDate != null and params.endDeliveryDate != ''">
+                AND delivery_date &lt;= #{params.endDeliveryDate}
+            </if>
+            <if test="applicant != null and applicant != ''">
+                AND applicant like concat('%', #{applicant}, '%')
+            </if>
+            <if test="params.beginApplyDate != null and params.beginApplyDate != ''">
+                AND apply_date &gt;= #{params.beginApplyDate}
+            </if>
+            <if test="params.endApplyDate != null and params.endApplyDate != ''">
+                AND apply_date &lt;= #{params.endApplyDate}
+            </if>
+            <if test="applyStatus != null and applyStatus != ''">
+                AND apply_status = #{applyStatus}
+            </if>
+            <if test="auditor != null and auditor != ''">
+                AND auditor like concat('%', #{auditor}, '%')
+            </if>
+            <if test="params.beginAuditDate != null and params.beginAuditDate != ''">
+                AND audit_date &gt;= #{params.beginAuditDate}
+            </if>
+            <if test="params.endAuditDate != null and params.endAuditDate != ''">
+                AND audit_date &lt;= #{params.endAuditDate}
+            </if>
+            <if test="auditStatus != null and auditStatus != ''">
+                AND audit_status = #{auditStatus}
+            </if>
+        </where>
+        order by order_id desc
+    </select>
+
+    <insert id="insertSalesOrder" parameterType="com.ruoyi.scm.domain.SalesOrder" useGeneratedKeys="true" keyProperty="orderId">
+        insert into scm_sales_order (
+            <if test="orderNo != null and orderNo != ''">order_no,</if>
+            <if test="customerId != null">customer_id,</if>
+            <if test="customerName != null and customerName != ''">customer_name,</if>
+            <if test="contactPerson != null and contactPerson != ''">contact_person,</if>
+            <if test="contactPhone != null and contactPhone != ''">contact_phone,</if>
+            <if test="totalAmount != null">total_amount,</if>
+            <if test="deliveryDate != null">delivery_date,</if>
+            <if test="applicant != null and applicant != ''">applicant,</if>
+            <if test="applyDate != null">apply_date,</if>
+            <if test="applyStatus != null and applyStatus != ''">apply_status,</if>
+            <if test="auditor != null and auditor != ''">auditor,</if>
+            <if test="auditDate != null">audit_date,</if>
+            <if test="auditStatus != null and auditStatus != ''">audit_status,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
+            <if test="customerId != null">#{customerId},</if>
+            <if test="customerName != null and customerName != ''">#{customerName},</if>
+            <if test="contactPerson != null and contactPerson != ''">#{contactPerson},</if>
+            <if test="contactPhone != null and contactPhone != ''">#{contactPhone},</if>
+            <if test="totalAmount != null">#{totalAmount},</if>
+            <if test="deliveryDate != null">#{deliveryDate},</if>
+            <if test="applicant != null and applicant != ''">#{applicant},</if>
+            <if test="applyDate != null">#{applyDate},</if>
+            <if test="applyStatus != null and applyStatus != ''">#{applyStatus},</if>
+            <if test="auditor != null and auditor != ''">#{auditor},</if>
+            <if test="auditDate != null">#{auditDate},</if>
+            <if test="auditStatus != null and auditStatus != ''">#{auditStatus},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateSalesOrder" parameterType="com.ruoyi.scm.domain.SalesOrder">
+        update scm_sales_order
+        <set>
+            <if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="contactPerson != null">contact_person = #{contactPerson},</if>
+            <if test="contactPhone != null">contact_phone = #{contactPhone},</if>
+            <if test="totalAmount != null">total_amount = #{totalAmount},</if>
+            <if test="deliveryDate != null">delivery_date = #{deliveryDate},</if>
+            <if test="applicant != null">applicant = #{applicant},</if>
+            <if test="applyDate != null">apply_date = #{applyDate},</if>
+            <if test="applyStatus != null and applyStatus != ''">apply_status = #{applyStatus},</if>
+            <if test="auditor != null">auditor = #{auditor},</if>
+            <if test="auditDate != null">audit_date = #{auditDate},</if>
+            <if test="auditStatus != null and auditStatus != ''">audit_status = #{auditStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where order_id = #{orderId}
+    </update>
+
+    <delete id="deleteSalesOrderById" parameterType="Long">
+        delete from scm_sales_order where order_id = #{orderId}
+    </delete>
+
+    <delete id="deleteSalesOrderByIds" parameterType="Long">
+        delete from scm_sales_order where order_id in
+        <foreach item="orderId" collection="array" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteDetailByOrderId" parameterType="Long">
+        delete from scm_sales_order_detail where order_id = #{orderId}
+    </delete>
+
+    <insert id="batchInsertDetail" parameterType="java.util.List">
+        insert into scm_sales_order_detail (order_id, seq_no, material_id, product_name, product_model, product_spec, unit, price, order_quantity, amount, remark)
+        values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.orderId}, #{item.seqNo}, #{item.materialId}, #{item.productName}, #{item.productModel}, #{item.productSpec}, #{item.unit}, #{item.price}, #{item.orderQuantity}, #{item.amount}, #{item.remark})
+        </foreach>
+    </insert>
+
+</mapper>

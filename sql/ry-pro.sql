@@ -11,7 +11,7 @@
  Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 04/06/2026 23:40:38
+ Date: 05/06/2026 00:38:57
 */
 
 SET NAMES utf8mb4;
@@ -621,6 +621,132 @@ CREATE TABLE `qrtz_triggers`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for scm_sales_order
+-- ----------------------------
+DROP TABLE IF EXISTS `scm_sales_order`;
+CREATE TABLE `scm_sales_order`  (
+  `order_id` bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `order_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '订单编号',
+  `customer_id` bigint NULL DEFAULT NULL COMMENT '客户ID',
+  `customer_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '客户名称',
+  `contact_person` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '联系人',
+  `contact_phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '联系方式',
+  `total_amount` decimal(12, 2) NULL DEFAULT NULL COMMENT '金额合计',
+  `delivery_date` date NULL DEFAULT NULL COMMENT '交货日期',
+  `applicant` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请人',
+  `apply_date` date NULL DEFAULT NULL COMMENT '申请时间',
+  `apply_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '申请状态：0未提交,1待审核,2已审核',
+  `auditor` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核人',
+  `audit_date` date NULL DEFAULT NULL COMMENT '审核时间',
+  `audit_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核状态：0通过,1驳回',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`order_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售订单主表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of scm_sales_order
+-- ----------------------------
+INSERT INTO `scm_sales_order` VALUES (1, 'SO-20260601-0001', 1, '华东汽车集团', '张伟', '13800001111', 98000.00, '2026-07-16', '若依', '2026-06-01', '0', 'admin', '2026-06-02', '0', 'admin', '2026-06-05 00:35:17', 'admin', '2026-06-05 00:37:47', '首批订单');
+INSERT INTO `scm_sales_order` VALUES (2, 'SO-20260602-0002', 2, '南方新能源科技', '李娜', '13900002222', 235500.00, '2026-07-20', '若依', '2026-06-02', '1', NULL, NULL, NULL, 'admin', '2026-06-05 00:35:17', 'admin', '2026-06-05 00:37:59', '待审核订');
+INSERT INTO `scm_sales_order` VALUES (3, 'SO-20260603-0003', 3, '北方重工机械', '王强', '13700003333', 68000.00, '2026-08-01', 'admin', '2026-06-03', '0', NULL, NULL, NULL, 'admin', '2026-06-05 00:35:17', '', '2026-06-05 00:35:17', '未提交订单');
+
+-- ----------------------------
+-- Table structure for scm_sales_order_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `scm_sales_order_detail`;
+CREATE TABLE `scm_sales_order_detail`  (
+  `detail_id` bigint NOT NULL AUTO_INCREMENT,
+  `order_id` bigint NOT NULL COMMENT '销售订单ID',
+  `seq_no` int NULL DEFAULT NULL COMMENT '序号',
+  `material_id` bigint NULL DEFAULT NULL COMMENT '物料ID',
+  `product_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '产品名称',
+  `product_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '型号',
+  `product_spec` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '规格',
+  `unit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '单位',
+  `price` decimal(12, 2) NULL DEFAULT NULL COMMENT '单价',
+  `order_quantity` int NULL DEFAULT NULL COMMENT '订货数量',
+  `amount` decimal(12, 2) NULL DEFAULT NULL COMMENT '金额',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`detail_id`) USING BTREE,
+  INDEX `order_id`(`order_id` ASC) USING BTREE,
+  CONSTRAINT `scm_sales_order_detail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `scm_sales_order` (`order_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售订单明细' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of scm_sales_order_detail
+-- ----------------------------
+INSERT INTO `scm_sales_order_detail` VALUES (7, 3, 1, 102, '双离合变速箱', 'DQ381', '7速/380Nm', '台', 28000.00, 2, 56000.00, NULL);
+INSERT INTO `scm_sales_order_detail` VALUES (8, 3, 2, 108, '涡轮增压器', 'TC-28', '28mm/单涡管', '件', 5200.00, 2, 10400.00, NULL);
+INSERT INTO `scm_sales_order_detail` VALUES (15, 1, 1, 101, '汽油发动机', 'EA888', '2.0T/162kW', '台', 35000.00, 2, 70000.00, NULL);
+INSERT INTO `scm_sales_order_detail` VALUES (16, 1, 2, 104, '前副车架', 'MQB-A', '钢制/焊接', '件', 4500.00, 2, 9000.00, NULL);
+INSERT INTO `scm_sales_order_detail` VALUES (17, 1, 3, 105, '后桥总成', 'R-Axle-01', '承载1.5T', '件', 6800.00, 2, 13600.00, NULL);
+INSERT INTO `scm_sales_order_detail` VALUES (18, 2, 1, 103, '三元锂电池包', 'NE-75', '75kWh/350V', '组', 65000.00, 2, 130000.00, NULL);
+INSERT INTO `scm_sales_order_detail` VALUES (19, 2, 2, 106, '驱动电机', 'EM-150', '150kW/永磁', '台', 12000.00, 1, 12000.00, NULL);
+INSERT INTO `scm_sales_order_detail` VALUES (20, 2, 3, 107, 'MCU控制器', 'MCU-01', '400V/IGBT', '个', 8500.00, 11, 93500.00, NULL);
+
+-- ----------------------------
+-- Table structure for scm_sales_plan
+-- ----------------------------
+DROP TABLE IF EXISTS `scm_sales_plan`;
+CREATE TABLE `scm_sales_plan`  (
+  `plan_id` bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `plan_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '计划单号',
+  `plan_title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '计划标题',
+  `plan_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '计划类型：0年度计划,1季度计划,2月计划',
+  `start_date` date NULL DEFAULT NULL COMMENT '起始日期',
+  `end_date` date NULL DEFAULT NULL COMMENT '结束日期',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`plan_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售计划主表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of scm_sales_plan
+-- ----------------------------
+INSERT INTO `scm_sales_plan` VALUES (1, 'SP-2026-0001', '2026年度销售计划', '0', '2026-01-01', '2026-12-31', 'admin', '2026-06-05 00:16:37', '', '2026-06-05 00:16:37', '全年销售目标');
+INSERT INTO `scm_sales_plan` VALUES (2, 'SP-2026-Q1', '2026年第一季度销售计划', '1', '2026-01-01', '2026-03-31', 'admin', '2026-06-05 00:16:37', '', '2026-06-05 00:16:37', 'Q1销售目标');
+INSERT INTO `scm_sales_plan` VALUES (3, 'SP-2026-06', '2026年6月销售计划', '2', '2026-06-01', '2026-06-30', 'admin', '2026-06-05 00:16:37', 'admin', '2026-06-05 00:18:32', '6月销售目标');
+
+-- ----------------------------
+-- Table structure for scm_sales_plan_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `scm_sales_plan_detail`;
+CREATE TABLE `scm_sales_plan_detail`  (
+  `detail_id` bigint NOT NULL AUTO_INCREMENT,
+  `plan_id` bigint NOT NULL COMMENT '销售计划ID',
+  `seq_no` int NULL DEFAULT NULL COMMENT '序号',
+  `material_id` bigint NULL DEFAULT NULL COMMENT '物料ID',
+  `product_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '产品名称',
+  `product_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '型号',
+  `product_spec` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '规格',
+  `unit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '单位',
+  `price` decimal(12, 2) NULL DEFAULT NULL COMMENT '单价',
+  `sales_amount` decimal(12, 2) NULL DEFAULT NULL COMMENT '销售额',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`detail_id`) USING BTREE,
+  INDEX `plan_id`(`plan_id` ASC) USING BTREE,
+  CONSTRAINT `scm_sales_plan_detail_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `scm_sales_plan` (`plan_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售计划指标配置' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of scm_sales_plan_detail
+-- ----------------------------
+INSERT INTO `scm_sales_plan_detail` VALUES (1, 1, 1, 101, '汽油发动机', 'EA888', '2.0T/162kW', '台', 35000.00, 4200000.00, NULL);
+INSERT INTO `scm_sales_plan_detail` VALUES (2, 1, 2, 102, '双离合变速箱', 'DQ381', '7速/380Nm', '台', 28000.00, 3360000.00, NULL);
+INSERT INTO `scm_sales_plan_detail` VALUES (3, 1, 3, 103, '三元锂电池包', 'NE-75', '75kWh/350V', '组', 65000.00, 5200000.00, NULL);
+INSERT INTO `scm_sales_plan_detail` VALUES (4, 2, 1, 101, '汽油发动机', 'EA888', '2.0T/162kW', '台', 35000.00, 1050000.00, NULL);
+INSERT INTO `scm_sales_plan_detail` VALUES (5, 2, 2, 104, '前副车架', 'MQB-A', '钢制/焊接', '件', 4500.00, 540000.00, NULL);
+INSERT INTO `scm_sales_plan_detail` VALUES (12, 3, 1, 102, '双离合变速箱', 'DQ381', '7速/380Nm', '台', 28000.00, 560000.00, NULL);
+INSERT INTO `scm_sales_plan_detail` VALUES (13, 3, 2, 105, '后桥总成', 'R-Axle-01', '承载1.5T', '件', 6800.00, 136000.00, NULL);
+
+-- ----------------------------
 -- Table structure for sys_config
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_config`;
@@ -707,7 +833,7 @@ CREATE TABLE `sys_dict_data`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 122 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 130 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dict_data
@@ -753,6 +879,14 @@ INSERT INTO `sys_dict_data` VALUES (118, 4, '检验合格', '3', 'sys_completion
 INSERT INTO `sys_dict_data` VALUES (119, 5, '检验未合格', '4', 'sys_completion_status', '', 'danger', 'N', '0', 'admin', '2026-06-04 22:26:06', '', NULL, '检验未合格');
 INSERT INTO `sys_dict_data` VALUES (120, 1, '合格', '0', 'mes_test_result', '', 'success', 'Y', '0', 'admin', '2026-06-04 23:32:21', '', NULL, '合格');
 INSERT INTO `sys_dict_data` VALUES (121, 2, '不合格', '1', 'mes_test_result', '', 'danger', 'N', '0', 'admin', '2026-06-04 23:32:21', '', NULL, '不合格');
+INSERT INTO `sys_dict_data` VALUES (122, 1, '年度计划', '0', 'sys_plan_type', '', 'primary', 'N', '0', 'admin', '2026-06-05 00:16:10', '', NULL, '年度计划');
+INSERT INTO `sys_dict_data` VALUES (123, 2, '季度计划', '1', 'sys_plan_type', '', 'success', 'N', '0', 'admin', '2026-06-05 00:16:10', '', NULL, '季度计划');
+INSERT INTO `sys_dict_data` VALUES (124, 3, '月计划', '2', 'sys_plan_type', '', 'warning', 'N', '0', 'admin', '2026-06-05 00:16:10', '', NULL, '月计划');
+INSERT INTO `sys_dict_data` VALUES (125, 1, '未提交', '0', 'sys_apply_status', '', 'info', 'N', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '未提交');
+INSERT INTO `sys_dict_data` VALUES (126, 2, '待审核', '1', 'sys_apply_status', '', 'warning', 'N', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '待审核');
+INSERT INTO `sys_dict_data` VALUES (127, 3, '已审核', '2', 'sys_apply_status', '', 'success', 'N', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '已审核');
+INSERT INTO `sys_dict_data` VALUES (128, 1, '通过', '0', 'sys_audit_status', '', 'success', 'N', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '通过');
+INSERT INTO `sys_dict_data` VALUES (129, 2, '驳回', '1', 'sys_audit_status', '', 'danger', 'N', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '驳回');
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -770,7 +904,7 @@ CREATE TABLE `sys_dict_type`  (
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_id`) USING BTREE,
   UNIQUE INDEX `dict_type`(`dict_type` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 203 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 206 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dict_type
@@ -788,6 +922,9 @@ INSERT INTO `sys_dict_type` VALUES (10, '系统状态', 'sys_common_status', '0'
 INSERT INTO `sys_dict_type` VALUES (200, '申请状态', 'mes_apply_status', '0', 'admin', '2026-06-04 21:57:10', '', NULL, '领料申请状态');
 INSERT INTO `sys_dict_type` VALUES (201, '审核状态', 'mes_audit_status', '0', 'admin', '2026-06-04 21:57:10', '', NULL, '领料审核状态');
 INSERT INTO `sys_dict_type` VALUES (202, '检验结果', 'mes_test_result', '0', 'admin', '2026-06-04 23:32:14', '', NULL, '检验结果字典');
+INSERT INTO `sys_dict_type` VALUES (203, '计划类型', 'sys_plan_type', '0', 'admin', '2026-06-05 00:16:10', '', NULL, '计划类型列表');
+INSERT INTO `sys_dict_type` VALUES (204, '申请状态', 'sys_apply_status', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '申请状态列表');
+INSERT INTO `sys_dict_type` VALUES (205, '审核状态', 'sys_audit_status', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '审核状态列表');
 
 -- ----------------------------
 -- Table structure for sys_job
@@ -893,15 +1030,15 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2039 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2045 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
 INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, 'system', NULL, '', '', 1, 0, 'M', '0', '0', '', 'system', 'admin', '2026-06-04 10:35:53', '', NULL, '系统管理目录');
 INSERT INTO `sys_menu` VALUES (2, '系统监控', 0, 2, 'monitor', NULL, '', '', 1, 0, 'M', '0', '0', '', 'monitor', 'admin', '2026-06-04 10:35:53', '', NULL, '系统监控目录');
-INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 4, 'tool', NULL, '', '', 1, 0, 'M', '0', '0', '', 'tool', 'admin', '2026-06-04 10:35:53', '', NULL, '系统工具目录');
-INSERT INTO `sys_menu` VALUES (4, '若依官网', 0, 5, 'http://ruoyi.vip', NULL, '', '', 0, 0, 'M', '0', '0', '', 'guide', 'admin', '2026-06-04 10:35:53', '', NULL, '若依官网地址');
+INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 5, 'tool', NULL, '', '', 1, 0, 'M', '0', '0', '', 'tool', 'admin', '2026-06-04 10:35:53', 'admin', '2026-06-04 23:53:13', '系统工具目录');
+INSERT INTO `sys_menu` VALUES (4, '若依官网', 0, 6, 'http://ruoyi.vip', NULL, '', '', 0, 0, 'M', '0', '0', '', 'guide', 'admin', '2026-06-04 10:35:53', 'admin', '2026-06-04 23:53:22', '若依官网地址');
 INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, 'user', 'system/user/index', '', '', 1, 0, 'C', '0', '0', 'system:user:list', 'user', 'admin', '2026-06-04 10:35:53', '', NULL, '用户管理菜单');
 INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, 'role', 'system/role/index', '', '', 1, 0, 'C', '0', '0', 'system:role:list', 'peoples', 'admin', '2026-06-04 10:35:53', '', NULL, '角色管理菜单');
 INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, 'menu', 'system/menu/index', '', '', 1, 0, 'C', '0', '0', 'system:menu:list', 'tree-table', 'admin', '2026-06-04 10:35:53', '', NULL, '菜单管理菜单');
@@ -1010,6 +1147,12 @@ INSERT INTO `sys_menu` VALUES (2035, '来料检验查询', 2034, 1, '#', '', NUL
 INSERT INTO `sys_menu` VALUES (2036, '来料检验新增', 2034, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'mes:incomingInspection:add', '#', 'admin', '2026-06-04 23:32:35', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2037, '来料检验修改', 2034, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'mes:incomingInspection:edit', '#', 'admin', '2026-06-04 23:32:35', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2038, '来料检验删除', 2034, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'mes:incomingInspection:remove', '#', 'admin', '2026-06-04 23:32:35', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2039, '供应链SCM', 0, 4, 'scm', NULL, NULL, '', 1, 0, 'M', '0', '0', '', 'shopping', 'admin', '2026-06-04 23:52:56', 'admin', '2026-06-04 23:53:07', '');
+INSERT INTO `sys_menu` VALUES (2040, '销售管理', 2039, 1, 'sales', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, '#', 'admin', '2026-06-04 23:53:41', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2041, '销售计划', 2040, 1, 'salesPlan', 'scm/salesPlan/index', NULL, '', 1, 0, 'C', '0', '0', 'scm:salesPlan:list', '#', 'admin', '2026-06-04 23:58:53', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2042, '销售订单', 2040, 2, 'salesOrder', 'scm/salesOrder/index', NULL, '', 1, 0, 'C', '0', '0', 'scm:salesOrder:list', '#', 'admin', '2026-06-04 23:59:24', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2043, '销售合同', 2040, 3, 'salesContract', 'scm/salesContract/index', NULL, '', 1, 0, 'C', '0', '0', 'scm:salesContract:list', '#', 'admin', '2026-06-04 23:59:53', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2044, '销售退货', 2040, 4, 'salesReturn', 'scm/salesReturn/index', NULL, '', 1, 0, 'C', '0', '0', 'scm:salesReturn:list', '#', 'admin', '2026-06-05 00:00:18', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -1082,7 +1225,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 159 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 181 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -1146,6 +1289,28 @@ INSERT INTO `sys_oper_log` VALUES (155, '菜单管理', 1, 'com.ruoyi.web.contro
 INSERT INTO `sys_oper_log` VALUES (156, '质检标准', 2, 'com.ruoyi.mes.controller.QualityStandardController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/qualityStandard', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"createTime\":\"2026-06-04 23:09:05\",\"inspectionItem\":\"硬度\",\"inspectionType\":\"过程检验\",\"materialId\":2,\"materialName\":\"不锈钢管材\",\"params\":{},\"productModel\":\"SUS-304\",\"productSpec\":\"Φ25×2mm\",\"remark\":\"过程硬度检测标准\",\"standardId\":2,\"standardLower\":150,\"standardUpper\":200,\"unit\":\"根\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 23:09:05\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 23:37:18', 36);
 INSERT INTO `sys_oper_log` VALUES (157, '质检标准', 2, 'com.ruoyi.mes.controller.QualityStandardController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/qualityStandard', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"createTime\":\"2026-06-04 23:09:05\",\"inspectionItem\":\"硬度\",\"inspectionType\":\"过程检验\",\"materialId\":2,\"materialName\":\"不锈钢管材\",\"params\":{},\"productModel\":\"SUS-304\",\"productSpec\":\"Φ25×2mm\",\"remark\":\"过程硬度检测标准\",\"standardId\":2,\"standardLower\":150,\"standardUpper\":200,\"unit\":\"根\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 23:37:18\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 23:37:21', 11);
 INSERT INTO `sys_oper_log` VALUES (158, '来料检验', 2, 'com.ruoyi.mes.controller.IncomingInspectionController.edit()', 'PUT', 1, 'admin', '研发部门', '/mes/incomingInspection', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"createTime\":\"2026-06-04 23:34:37\",\"inspectionDate\":\"2026-06-08\",\"inspectionId\":39,\"inspectionItem\":\"尺寸检测\",\"inspector\":\"王五\",\"materialApplyNo\":\"LL-2026-008\",\"materialName\":\"散热片\",\"params\":{},\"productModel\":\"HS-6060\",\"productSpec\":\"60x60mm\",\"receivedQuantity\":60,\"remark\":\"尺寸偏大，不合格\",\"requiredQuantity\":80,\"sampleQuantity\":8,\"serialNo\":\"IQC-2026-0009\",\"standardLower\":59.5,\"standardUpper\":60.5,\"testResult\":\"1\",\"testValue\":60.8,\"unit\":\"个\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-04 23:34:37\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 23:39:38', 23);
+INSERT INTO `sys_oper_log` VALUES (159, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createBy\":\"admin\",\"icon\":\"shopping\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"供应链SCM\",\"menuType\":\"M\",\"orderNum\":3,\"params\":{},\"parentId\":0,\"path\":\"scm\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 23:52:56', 189);
+INSERT INTO `sys_oper_log` VALUES (160, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createTime\":\"2026-06-04 23:52:56\",\"icon\":\"shopping\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2039,\"menuName\":\"供应链SCM\",\"menuType\":\"M\",\"orderNum\":4,\"params\":{},\"parentId\":0,\"path\":\"scm\",\"perms\":\"\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 23:53:07', 24);
+INSERT INTO `sys_oper_log` VALUES (161, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createTime\":\"2026-06-04 10:35:53\",\"icon\":\"tool\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":3,\"menuName\":\"系统工具\",\"menuType\":\"M\",\"orderNum\":5,\"params\":{},\"parentId\":0,\"path\":\"tool\",\"perms\":\"\",\"query\":\"\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 23:53:13', 18);
+INSERT INTO `sys_oper_log` VALUES (162, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createTime\":\"2026-06-04 10:35:53\",\"icon\":\"guide\",\"isCache\":\"0\",\"isFrame\":\"0\",\"menuId\":4,\"menuName\":\"若依官网\",\"menuType\":\"M\",\"orderNum\":6,\"params\":{},\"parentId\":0,\"path\":\"http://ruoyi.vip\",\"perms\":\"\",\"query\":\"\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 23:53:22', 20);
+INSERT INTO `sys_oper_log` VALUES (163, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"销售管理\",\"menuType\":\"M\",\"orderNum\":1,\"params\":{},\"parentId\":2039,\"path\":\"sales\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 23:53:41', 21);
+INSERT INTO `sys_oper_log` VALUES (164, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/incomingInspection/index\",\"createTime\":\"2026-06-04 23:32:29\",\"icon\":\"#\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2034,\"menuName\":\"来料检验\",\"menuType\":\"C\",\"orderNum\":6,\"params\":{},\"parentId\":2026,\"path\":\"incomingInspection\",\"perms\":\"mes:incomingInspection:list\",\"routeName\":\"\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"修改菜单\'来料检验\'失败，菜单名称已存在\",\"code\":500}', 0, NULL, '2026-06-04 23:55:26', 3);
+INSERT INTO `sys_oper_log` VALUES (165, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/incomingInspection/index\",\"createTime\":\"2026-06-04 23:32:29\",\"icon\":\"#\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2034,\"menuName\":\"来料检验\",\"menuType\":\"C\",\"orderNum\":3,\"params\":{},\"parentId\":0,\"path\":\"incomingInspection\",\"perms\":\"mes:incomingInspection:list\",\"routeName\":\"\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"修改菜单\'来料检验\'失败，路由名称或地址已存在\",\"code\":500}', 0, NULL, '2026-06-04 23:56:07', 7);
+INSERT INTO `sys_oper_log` VALUES (166, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/incomingInspection/index\",\"createTime\":\"2026-06-04 23:32:29\",\"icon\":\"#\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2034,\"menuName\":\"来料检验\",\"menuType\":\"C\",\"orderNum\":3,\"params\":{},\"parentId\":0,\"path\":\"incomingInspection\",\"perms\":\"mes:incomingInspection:list\",\"routeName\":\"\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"修改菜单\'来料检验\'失败，路由名称或地址已存在\",\"code\":500}', 0, NULL, '2026-06-04 23:56:12', 6);
+INSERT INTO `sys_oper_log` VALUES (167, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/incomingInspection/index\",\"createTime\":\"2026-06-04 23:32:29\",\"icon\":\"#\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2034,\"menuName\":\"来料检验\",\"menuType\":\"C\",\"orderNum\":7,\"params\":{},\"parentId\":0,\"path\":\"incomingInspection\",\"perms\":\"mes:incomingInspection:list\",\"routeName\":\"\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"修改菜单\'来料检验\'失败，路由名称或地址已存在\",\"code\":500}', 0, NULL, '2026-06-04 23:56:25', 2);
+INSERT INTO `sys_oper_log` VALUES (168, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/incomingInspection/index\",\"createTime\":\"2026-06-04 23:32:29\",\"icon\":\"#\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2034,\"menuName\":\"来料检验\",\"menuType\":\"C\",\"orderNum\":6,\"params\":{},\"parentId\":2026,\"path\":\"incomingInspection\",\"perms\":\"mes:incomingInspection:list\",\"routeName\":\"\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"修改菜单\'来料检验\'失败，菜单名称已存在\",\"code\":500}', 0, NULL, '2026-06-04 23:57:35', 3);
+INSERT INTO `sys_oper_log` VALUES (169, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"mes/incomingInspection/index\",\"createTime\":\"2026-06-04 23:32:29\",\"icon\":\"#\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2034,\"menuName\":\"来料检验\",\"menuType\":\"C\",\"orderNum\":6,\"params\":{},\"parentId\":2005,\"path\":\"incomingInspection\",\"perms\":\"mes:incomingInspection:list\",\"routeName\":\"\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"修改菜单\'来料检验\'失败，路由名称或地址已存在\",\"code\":500}', 0, NULL, '2026-06-04 23:57:50', 4);
+INSERT INTO `sys_oper_log` VALUES (170, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"scm/salesPlan/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"销售计划\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":2040,\"path\":\"salesPlan\",\"perms\":\"scm:salesPlan:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 23:58:53', 17);
+INSERT INTO `sys_oper_log` VALUES (171, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"scm/salesOrder/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"销售订单\",\"menuType\":\"C\",\"orderNum\":2,\"params\":{},\"parentId\":2040,\"path\":\"salesOrder\",\"perms\":\"scm:salesOrder:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 23:59:24', 18);
+INSERT INTO `sys_oper_log` VALUES (172, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"scm/salesContract/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"销售合同\",\"menuType\":\"C\",\"orderNum\":3,\"params\":{},\"parentId\":2040,\"path\":\"salesContract\",\"perms\":\"scm:salesContract:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-04 23:59:53', 20);
+INSERT INTO `sys_oper_log` VALUES (173, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"scm/salesReturn/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"销售退货\",\"menuType\":\"C\",\"orderNum\":4,\"params\":{},\"parentId\":2040,\"path\":\"salesReturn\",\"perms\":\"scm:salesReturn:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:00:18', 17);
+INSERT INTO `sys_oper_log` VALUES (174, '销售计划', 2, 'com.ruoyi.scm.controller.SalesPlanController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/salesPlan', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"createTime\":\"2026-06-05 00:16:37\",\"detailList\":[{\"detailId\":6,\"materialId\":102,\"planId\":3,\"price\":28000,\"productModel\":\"DQ381\",\"productName\":\"双离合变速箱\",\"productSpec\":\"7速/380Nm\",\"salesAmount\":560000,\"seqNo\":1,\"unit\":\"台\"},{\"detailId\":7,\"materialId\":105,\"planId\":3,\"price\":6800,\"productModel\":\"R-Axle-01\",\"productName\":\"后桥总成\",\"productSpec\":\"承载1.5T\",\"salesAmount\":136000,\"seqNo\":2,\"unit\":\"件\"}],\"endDate\":\"2026-06-30\",\"params\":{},\"planId\":3,\"planNo\":\"SP-2026-06\",\"planTitle\":\"2026年6月销售计划\",\"planType\":\"0\",\"remark\":\"6月销售目标\",\"startDate\":\"2026-06-01\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 00:16:37\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:18:22', 160);
+INSERT INTO `sys_oper_log` VALUES (175, '销售计划', 2, 'com.ruoyi.scm.controller.SalesPlanController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/salesPlan', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"createTime\":\"2026-06-05 00:16:37\",\"detailList\":[{\"detailId\":8,\"materialId\":102,\"planId\":3,\"price\":28000,\"productModel\":\"DQ381\",\"productName\":\"双离合变速箱\",\"productSpec\":\"7速/380Nm\",\"salesAmount\":560000,\"seqNo\":1,\"unit\":\"台\"},{\"detailId\":9,\"materialId\":105,\"planId\":3,\"price\":6800,\"productModel\":\"R-Axle-01\",\"productName\":\"后桥总成\",\"productSpec\":\"承载1.5T\",\"salesAmount\":136000,\"seqNo\":2,\"unit\":\"件\"}],\"endDate\":\"2026-06-30\",\"params\":{},\"planId\":3,\"planNo\":\"SP-2026-06\",\"planTitle\":\"2026年6月销售计划\",\"planType\":\"2\",\"remark\":\"6月销售目标\",\"startDate\":\"2026-06-01\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 00:18:21\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:18:28', 20);
+INSERT INTO `sys_oper_log` VALUES (176, '销售计划', 2, 'com.ruoyi.scm.controller.SalesPlanController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/salesPlan', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"createTime\":\"2026-06-05 00:16:37\",\"detailList\":[{\"detailId\":10,\"materialId\":102,\"planId\":3,\"price\":28000,\"productModel\":\"DQ381\",\"productName\":\"双离合变速箱\",\"productSpec\":\"7速/380Nm\",\"salesAmount\":560000,\"seqNo\":1,\"unit\":\"台\"},{\"detailId\":11,\"materialId\":105,\"planId\":3,\"price\":6800,\"productModel\":\"R-Axle-01\",\"productName\":\"后桥总成\",\"productSpec\":\"承载1.5T\",\"salesAmount\":136000,\"seqNo\":2,\"unit\":\"件\"}],\"endDate\":\"2026-06-30\",\"params\":{},\"planId\":3,\"planNo\":\"SP-2026-06\",\"planTitle\":\"2026年6月销售计划\",\"planType\":\"2\",\"remark\":\"6月销售目标\",\"startDate\":\"2026-06-01\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 00:18:28\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:18:32', 17);
+INSERT INTO `sys_oper_log` VALUES (177, '销售订单', 2, 'com.ruoyi.scm.controller.SalesOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/salesOrder', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-02\",\"applyStatus\":\"0\",\"contactPerson\":\"李娜\",\"contactPhone\":\"13900002222\",\"createBy\":\"admin\",\"createTime\":\"2026-06-05 00:35:17\",\"customerId\":2,\"customerName\":\"南方新能源科技\",\"deliveryDate\":\"2026-07-20\",\"detailList\":[{\"amount\":130000,\"detailId\":4,\"materialId\":103,\"orderId\":2,\"orderQuantity\":2,\"price\":65000,\"productModel\":\"NE-75\",\"productName\":\"三元锂电池包\",\"productSpec\":\"75kWh/350V\",\"seqNo\":1,\"unit\":\"组\"},{\"amount\":12000,\"detailId\":5,\"materialId\":106,\"orderId\":2,\"orderQuantity\":1,\"price\":12000,\"productModel\":\"EM-150\",\"productName\":\"驱动电机\",\"productSpec\":\"150kW/永磁\",\"seqNo\":2,\"unit\":\"台\"},{\"amount\":17000,\"detailId\":6,\"materialId\":107,\"orderId\":2,\"orderQuantity\":2,\"price\":8500,\"productModel\":\"MCU-01\",\"productName\":\"MCU控制器\",\"productSpec\":\"400V/IGBT\",\"seqNo\":3,\"unit\":\"个\"}],\"orderId\":2,\"orderNo\":\"SO-20260602-0002\",\"params\":{},\"remark\":\"待审核订\",\"totalAmount\":156000,\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 00:35:17\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:36:49', 162);
+INSERT INTO `sys_oper_log` VALUES (178, '销售订单', 2, 'com.ruoyi.scm.controller.SalesOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/salesOrder', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-01\",\"applyStatus\":\"1\",\"auditDate\":\"2026-06-02\",\"auditStatus\":\"0\",\"auditor\":\"admin\",\"contactPerson\":\"张伟\",\"contactPhone\":\"13800001111\",\"createBy\":\"admin\",\"createTime\":\"2026-06-05 00:35:17\",\"customerId\":1,\"customerName\":\"华东汽车集团\",\"deliveryDate\":\"2026-07-15\",\"detailList\":[{\"amount\":70000,\"detailId\":1,\"materialId\":101,\"orderId\":1,\"orderQuantity\":2,\"price\":35000,\"productModel\":\"EA888\",\"productName\":\"汽油发动机\",\"productSpec\":\"2.0T/162kW\",\"seqNo\":1,\"unit\":\"台\"},{\"amount\":9000,\"detailId\":2,\"materialId\":104,\"orderId\":1,\"orderQuantity\":2,\"price\":4500,\"productModel\":\"MQB-A\",\"productName\":\"前副车架\",\"productSpec\":\"钢制/焊接\",\"seqNo\":2,\"unit\":\"件\"},{\"amount\":13600,\"detailId\":3,\"materialId\":105,\"orderId\":1,\"orderQuantity\":2,\"price\":6800,\"productModel\":\"R-Axle-01\",\"productName\":\"后桥总成\",\"productSpec\":\"承载1.5T\",\"seqNo\":3,\"unit\":\"件\"}],\"orderId\":1,\"orderNo\":\"SO-20260601-0001\",\"params\":{},\"remark\":\"首批订单\",\"totalAmount\":98000,\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 00:35:17\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:37:39', 17);
+INSERT INTO `sys_oper_log` VALUES (179, '销售订单', 2, 'com.ruoyi.scm.controller.SalesOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/salesOrder', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-01\",\"applyStatus\":\"0\",\"auditDate\":\"2026-06-02\",\"auditStatus\":\"0\",\"auditor\":\"admin\",\"contactPerson\":\"张伟\",\"contactPhone\":\"13800001111\",\"createBy\":\"admin\",\"createTime\":\"2026-06-05 00:35:17\",\"customerId\":1,\"customerName\":\"华东汽车集团\",\"deliveryDate\":\"2026-07-16\",\"detailList\":[{\"amount\":70000,\"detailId\":12,\"materialId\":101,\"orderId\":1,\"orderQuantity\":2,\"price\":35000,\"productModel\":\"EA888\",\"productName\":\"汽油发动机\",\"productSpec\":\"2.0T/162kW\",\"seqNo\":1,\"unit\":\"台\"},{\"amount\":9000,\"detailId\":13,\"materialId\":104,\"orderId\":1,\"orderQuantity\":2,\"price\":4500,\"productModel\":\"MQB-A\",\"productName\":\"前副车架\",\"productSpec\":\"钢制/焊接\",\"seqNo\":2,\"unit\":\"件\"},{\"amount\":13600,\"detailId\":14,\"materialId\":105,\"orderId\":1,\"orderQuantity\":2,\"price\":6800,\"productModel\":\"R-Axle-01\",\"productName\":\"后桥总成\",\"productSpec\":\"承载1.5T\",\"seqNo\":3,\"unit\":\"件\"}],\"orderId\":1,\"orderNo\":\"SO-20260601-0001\",\"params\":{},\"remark\":\"首批订单\",\"totalAmount\":98000,\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 00:37:39\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:37:47', 30);
+INSERT INTO `sys_oper_log` VALUES (180, '销售订单', 2, 'com.ruoyi.scm.controller.SalesOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/salesOrder', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-02\",\"applyStatus\":\"1\",\"contactPerson\":\"李娜\",\"contactPhone\":\"13900002222\",\"createBy\":\"admin\",\"createTime\":\"2026-06-05 00:35:17\",\"customerId\":2,\"customerName\":\"南方新能源科技\",\"deliveryDate\":\"2026-07-20\",\"detailList\":[{\"amount\":130000,\"detailId\":9,\"materialId\":103,\"orderId\":2,\"orderQuantity\":2,\"price\":65000,\"productModel\":\"NE-75\",\"productName\":\"三元锂电池包\",\"productSpec\":\"75kWh/350V\",\"seqNo\":1,\"unit\":\"组\"},{\"amount\":12000,\"detailId\":10,\"materialId\":106,\"orderId\":2,\"orderQuantity\":1,\"price\":12000,\"productModel\":\"EM-150\",\"productName\":\"驱动电机\",\"productSpec\":\"150kW/永磁\",\"seqNo\":2,\"unit\":\"台\"},{\"amount\":93500,\"detailId\":11,\"materialId\":107,\"orderId\":2,\"orderQuantity\":11,\"price\":8500,\"productModel\":\"MCU-01\",\"productName\":\"MCU控制器\",\"productSpec\":\"400V/IGBT\",\"seqNo\":3,\"unit\":\"个\"}],\"orderId\":2,\"orderNo\":\"SO-20260602-0002\",\"params\":{},\"remark\":\"待审核订\",\"totalAmount\":235500,\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 00:36:49\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:37:59', 12);
 
 -- ----------------------------
 -- Table structure for sys_post

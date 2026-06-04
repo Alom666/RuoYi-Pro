@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.scm.mapper.SalesPlanMapper">
+
+    <resultMap type="com.ruoyi.scm.domain.SalesPlan" id="SalesPlanResult">
+        <result property="planId"      column="plan_id"      />
+        <result property="planNo"      column="plan_no"      />
+        <result property="planTitle"   column="plan_title"   />
+        <result property="planType"    column="plan_type"    />
+        <result property="startDate"   column="start_date"   />
+        <result property="endDate"     column="end_date"     />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"  column="create_time"  />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"  column="update_time"  />
+        <result property="remark"      column="remark"       />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.scm.domain.SalesPlan" id="SalesPlanDetailResult" extends="SalesPlanResult">
+        <collection property="detailList" ofType="com.ruoyi.scm.domain.SalesPlanDetail">
+            <result property="detailId"     column="detail_id"      />
+            <result property="planId"       column="d_plan_id"      />
+            <result property="seqNo"        column="seq_no"         />
+            <result property="materialId"   column="material_id"    />
+            <result property="productName"  column="product_name"   />
+            <result property="productModel" column="d_product_model"/>
+            <result property="productSpec"  column="d_product_spec" />
+            <result property="unit"         column="d_unit"         />
+            <result property="price"        column="price"          />
+            <result property="salesAmount"  column="sales_amount"   />
+            <result property="remark"       column="d_remark"       />
+        </collection>
+    </resultMap>
+
+    <sql id="selectSalesPlanVo">
+        select plan_id, plan_no, plan_title, plan_type, start_date, end_date,
+               create_by, create_time, update_by, update_time, remark
+        from scm_sales_plan
+    </sql>
+
+    <select id="selectSalesPlanById" parameterType="Long" resultMap="SalesPlanDetailResult">
+        select a.plan_id, a.plan_no, a.plan_title, a.plan_type, a.start_date, a.end_date,
+               a.create_by, a.create_time, a.update_by, a.update_time, a.remark,
+               d.detail_id, d.plan_id as d_plan_id, d.seq_no, d.material_id,
+               d.product_name, d.product_model as d_product_model,
+               d.product_spec as d_product_spec, d.unit as d_unit,
+               d.price, d.sales_amount, d.remark as d_remark
+        from scm_sales_plan a
+        left join scm_sales_plan_detail d on a.plan_id = d.plan_id
+        where a.plan_id = #{planId}
+        order by d.seq_no
+    </select>
+
+    <select id="selectSalesPlanList" parameterType="com.ruoyi.scm.domain.SalesPlan" resultMap="SalesPlanResult">
+        select a.plan_id, a.plan_no, a.plan_title, a.plan_type, a.start_date, a.end_date,
+               a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from scm_sales_plan a
+        <where>
+            <if test="planNo != null and planNo != ''">
+                AND a.plan_no like concat('%', #{planNo}, '%')
+            </if>
+            <if test="planTitle != null and planTitle != ''">
+                AND a.plan_title like concat('%', #{planTitle}, '%')
+            </if>
+            <if test="planType != null and planType != ''">
+                AND a.plan_type = #{planType}
+            </if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != ''">
+                AND a.create_time &gt;= #{params.beginCreateTime}
+            </if>
+            <if test="params.endCreateTime != null and params.endCreateTime != ''">
+                AND a.create_time &lt;= #{params.endCreateTime}
+            </if>
+        </where>
+        order by a.plan_id desc
+    </select>
+
+    <insert id="insertSalesPlan" parameterType="com.ruoyi.scm.domain.SalesPlan" useGeneratedKeys="true" keyProperty="planId">
+        insert into scm_sales_plan (
+            <if test="planNo != null and planNo != ''">plan_no,</if>
+            <if test="planTitle != null and planTitle != ''">plan_title,</if>
+            <if test="planType != null and planType != ''">plan_type,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="planNo != null and planNo != ''">#{planNo},</if>
+            <if test="planTitle != null and planTitle != ''">#{planTitle},</if>
+            <if test="planType != null and planType != ''">#{planType},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateSalesPlan" parameterType="com.ruoyi.scm.domain.SalesPlan">
+        update scm_sales_plan
+        <set>
+            <if test="planNo != null and planNo != ''">plan_no = #{planNo},</if>
+            <if test="planTitle != null">plan_title = #{planTitle},</if>
+            <if test="planType != null and planType != ''">plan_type = #{planType},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where plan_id = #{planId}
+    </update>
+
+    <delete id="deleteSalesPlanById" parameterType="Long">
+        delete from scm_sales_plan where plan_id = #{planId}
+    </delete>
+
+    <delete id="deleteSalesPlanByIds" parameterType="Long">
+        delete from scm_sales_plan where plan_id in
+        <foreach item="planId" collection="array" open="(" separator="," close=")">
+            #{planId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteDetailByPlanId" parameterType="Long">
+        delete from scm_sales_plan_detail where plan_id = #{planId}
+    </delete>
+
+    <insert id="batchInsertDetail" parameterType="java.util.List">
+        insert into scm_sales_plan_detail (plan_id, seq_no, material_id, product_name, product_model, product_spec, unit, price, sales_amount, remark)
+        values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.planId}, #{item.seqNo}, #{item.materialId}, #{item.productName}, #{item.productModel}, #{item.productSpec}, #{item.unit}, #{item.price}, #{item.salesAmount}, #{item.remark})
+        </foreach>
+    </insert>
+
+</mapper>
