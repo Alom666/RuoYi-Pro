@@ -11,7 +11,7 @@
  Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 05/06/2026 01:20:54
+ Date: 05/06/2026 14:20:06
 */
 
 SET NAMES utf8mb4;
@@ -621,6 +621,68 @@ CREATE TABLE `qrtz_triggers`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for scm_purchase_apply
+-- ----------------------------
+DROP TABLE IF EXISTS `scm_purchase_apply`;
+CREATE TABLE `scm_purchase_apply`  (
+  `apply_id` bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `apply_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '申请单号',
+  `apply_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请类型：0计划申请,1补货申请',
+  `plan_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '计划单号',
+  `replenishment_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '补货单号',
+  `applicant` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请人',
+  `apply_date` date NULL DEFAULT NULL COMMENT '申请日期',
+  `apply_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '申请状态：0未提交,1待审核,2已审核',
+  `auditor` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核人',
+  `audit_date` date NULL DEFAULT NULL COMMENT '审核日期',
+  `audit_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核状态：0通过,1驳回',
+  `audit_opinion` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '审核意见',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '',
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`apply_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '采购申请表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of scm_purchase_apply
+-- ----------------------------
+INSERT INTO `scm_purchase_apply` VALUES (1, 'PA-20260610-1001', '0', 'PL-20260601-001', NULL, 'admin', '2026-06-10', '2', 'admin', '2026-06-12', '0', '同意采购', 'admin', '2026-06-05 14:18:52', '', '2026-06-05 14:18:52', 'Q3动力总成采购');
+INSERT INTO `scm_purchase_apply` VALUES (2, 'PA-20260615-1002', '1', NULL, 'RP-20260615-001', 'admin', '2026-06-15', '0', NULL, NULL, NULL, NULL, 'admin', '2026-06-05 14:18:52', 'admin', '2026-06-05 14:19:31', '新能源产线补货');
+
+-- ----------------------------
+-- Table structure for scm_purchase_apply_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `scm_purchase_apply_detail`;
+CREATE TABLE `scm_purchase_apply_detail`  (
+  `detail_id` bigint NOT NULL AUTO_INCREMENT,
+  `apply_id` bigint NOT NULL,
+  `seq_no` int NULL DEFAULT NULL,
+  `material_id` bigint NULL DEFAULT NULL,
+  `material_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '物料',
+  `product_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '型号',
+  `product_spec` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '规格',
+  `unit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '单位',
+  `price` decimal(12, 2) NULL DEFAULT NULL COMMENT '单价',
+  `purchase_quantity` int NULL DEFAULT NULL COMMENT '采购数量',
+  `required_quantity` int NULL DEFAULT NULL COMMENT '需求数量',
+  `required_date` date NULL DEFAULT NULL COMMENT '需求日期',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`detail_id`) USING BTREE,
+  INDEX `apply_id`(`apply_id` ASC) USING BTREE,
+  CONSTRAINT `scm_purchase_apply_detail_ibfk_1` FOREIGN KEY (`apply_id`) REFERENCES `scm_purchase_apply` (`apply_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '采购申请明细' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of scm_purchase_apply_detail
+-- ----------------------------
+INSERT INTO `scm_purchase_apply_detail` VALUES (1, 1, 1, 101, '汽油发动机', 'EA888', '2.0T/162kW', '台', 35000.00, 10, 10, '2026-07-01', NULL);
+INSERT INTO `scm_purchase_apply_detail` VALUES (2, 1, 2, 102, '双离合变速箱', 'DQ381', '7速/380Nm', '台', 28000.00, 10, 10, '2026-07-01', NULL);
+INSERT INTO `scm_purchase_apply_detail` VALUES (7, 2, 1, 103, '三元锂电池包', 'NE-75', '75kWh/350V', '组', 65000.00, 5, 3, '2026-07-15', NULL);
+INSERT INTO `scm_purchase_apply_detail` VALUES (8, 2, 2, 106, '驱动电机', 'EM-150', '150kW/永磁', '台', 12000.00, 8, 8, '2026-07-15', NULL);
+
+-- ----------------------------
 -- Table structure for scm_sales_contract
 -- ----------------------------
 DROP TABLE IF EXISTS `scm_sales_contract`;
@@ -970,7 +1032,7 @@ CREATE TABLE `sys_dict_data`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 135 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 137 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dict_data
@@ -1029,6 +1091,8 @@ INSERT INTO `sys_dict_data` VALUES (131, 2, '物流', '1', 'sys_delivery_method'
 INSERT INTO `sys_dict_data` VALUES (132, 1, '未入库', '0', 'sys_inbound_status', '', 'info', 'N', '0', 'admin', '2026-06-05 01:15:46', '', NULL, '未入库');
 INSERT INTO `sys_dict_data` VALUES (133, 2, '入库中', '1', 'sys_inbound_status', '', 'warning', 'N', '0', 'admin', '2026-06-05 01:15:46', '', NULL, '入库中');
 INSERT INTO `sys_dict_data` VALUES (134, 3, '已入库', '2', 'sys_inbound_status', '', 'success', 'N', '0', 'admin', '2026-06-05 01:15:46', '', NULL, '已入库');
+INSERT INTO `sys_dict_data` VALUES (135, 1, '计划申请', '0', 'sys_apply_type', '', 'primary', 'Y', '0', 'admin', '2026-06-05 14:18:15', '', NULL, '计划申请');
+INSERT INTO `sys_dict_data` VALUES (136, 2, '补货申请', '1', 'sys_apply_type', '', 'warning', 'N', '0', 'admin', '2026-06-05 14:18:15', '', NULL, '补货申请');
 
 -- ----------------------------
 -- Table structure for sys_dict_type
@@ -1114,7 +1178,7 @@ CREATE TABLE `sys_job_log`  (
   `end_time` datetime NULL DEFAULT NULL COMMENT '执行结束时间',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`job_log_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '定时任务调度日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '定时任务调度日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_job_log
@@ -1137,7 +1201,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 106 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 110 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -1148,6 +1212,10 @@ INSERT INTO `sys_logininfor` VALUES (102, 'admin', '127.0.0.1', '内网IP', 'Edg
 INSERT INTO `sys_logininfor` VALUES (103, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 20:39:45');
 INSERT INTO `sys_logininfor` VALUES (104, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-04 23:36:39');
 INSERT INTO `sys_logininfor` VALUES (105, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-05 01:17:16');
+INSERT INTO `sys_logininfor` VALUES (106, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-05 12:51:51');
+INSERT INTO `sys_logininfor` VALUES (107, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-05 14:00:33');
+INSERT INTO `sys_logininfor` VALUES (108, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '1', '验证码错误', '2026-06-05 14:00:35');
+INSERT INTO `sys_logininfor` VALUES (109, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-05 14:00:39');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -1175,7 +1243,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2045 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2049 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -1298,6 +1366,10 @@ INSERT INTO `sys_menu` VALUES (2041, '销售计划', 2040, 1, 'salesPlan', 'scm/
 INSERT INTO `sys_menu` VALUES (2042, '销售订单', 2040, 2, 'salesOrder', 'scm/salesOrder/index', NULL, '', 1, 0, 'C', '0', '0', 'scm:salesOrder:list', '#', 'admin', '2026-06-04 23:59:24', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2043, '销售合同', 2040, 3, 'salesContract', 'scm/salesContract/index', NULL, '', 1, 0, 'C', '0', '0', 'scm:salesContract:list', '#', 'admin', '2026-06-04 23:59:53', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2044, '销售退货', 2040, 4, 'salesReturn', 'scm/salesReturn/index', NULL, '', 1, 0, 'C', '0', '0', 'scm:salesReturn:list', '#', 'admin', '2026-06-05 00:00:18', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2045, '采购管理', 2039, 2, 'purchase', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, '#', 'admin', '2026-06-05 12:52:26', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2046, '采购申请', 2045, 1, 'purchaseApply', 'scm/purchaseApply/index', NULL, '', 1, 0, 'C', '0', '0', 'scm:purchaseApply:list', '#', 'admin', '2026-06-05 12:52:54', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2047, '采购合同', 2045, 2, 'purchaseContract', 'scm/purchaseContract/index', NULL, '', 1, 0, 'C', '0', '0', 'scm:purchaseContract:list', '#', 'admin', '2026-06-05 12:53:27', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2048, '采购到货', 2045, 3, 'purchaseArrival', 'scm/purchaseArrival/index', NULL, '', 1, 0, 'C', '0', '0', 'scm:purchaseArrival:list', '#', 'admin', '2026-06-05 12:54:00', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -1370,7 +1442,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 183 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 189 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -1458,6 +1530,12 @@ INSERT INTO `sys_oper_log` VALUES (179, '销售订单', 2, 'com.ruoyi.scm.contro
 INSERT INTO `sys_oper_log` VALUES (180, '销售订单', 2, 'com.ruoyi.scm.controller.SalesOrderController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/salesOrder', '127.0.0.1', '内网IP', '{\"applicant\":\"若依\",\"applyDate\":\"2026-06-02\",\"applyStatus\":\"1\",\"contactPerson\":\"李娜\",\"contactPhone\":\"13900002222\",\"createBy\":\"admin\",\"createTime\":\"2026-06-05 00:35:17\",\"customerId\":2,\"customerName\":\"南方新能源科技\",\"deliveryDate\":\"2026-07-20\",\"detailList\":[{\"amount\":130000,\"detailId\":9,\"materialId\":103,\"orderId\":2,\"orderQuantity\":2,\"price\":65000,\"productModel\":\"NE-75\",\"productName\":\"三元锂电池包\",\"productSpec\":\"75kWh/350V\",\"seqNo\":1,\"unit\":\"组\"},{\"amount\":12000,\"detailId\":10,\"materialId\":106,\"orderId\":2,\"orderQuantity\":1,\"price\":12000,\"productModel\":\"EM-150\",\"productName\":\"驱动电机\",\"productSpec\":\"150kW/永磁\",\"seqNo\":2,\"unit\":\"台\"},{\"amount\":93500,\"detailId\":11,\"materialId\":107,\"orderId\":2,\"orderQuantity\":11,\"price\":8500,\"productModel\":\"MCU-01\",\"productName\":\"MCU控制器\",\"productSpec\":\"400V/IGBT\",\"seqNo\":3,\"unit\":\"个\"}],\"orderId\":2,\"orderNo\":\"SO-20260602-0002\",\"params\":{},\"remark\":\"待审核订\",\"totalAmount\":235500,\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 00:36:49\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 00:37:59', 12);
 INSERT INTO `sys_oper_log` VALUES (181, '销售计划', 1, 'com.ruoyi.scm.controller.SalesPlanController.add()', 'POST', 1, 'admin', '研发部门', '/scm/salesPlan', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"detailList\":[{\"materialId\":102,\"planId\":4,\"price\":28000,\"productModel\":\"DQ381\",\"productName\":\"双离合变速箱\",\"productSpec\":\"7速/380Nm\",\"salesAmount\":28000,\"seqNo\":1,\"unit\":\"台\"}],\"endDate\":\"2026-06-19\",\"params\":{},\"planId\":4,\"planNo\":\"SP-20260605-5370\",\"planTitle\":\"1\",\"planType\":\"0\",\"remark\":\"1\",\"startDate\":\"2026-06-03\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 01:19:38', 37);
 INSERT INTO `sys_oper_log` VALUES (182, '销售计划', 3, 'com.ruoyi.scm.controller.SalesPlanController.remove()', 'DELETE', 1, 'admin', '研发部门', '/scm/salesPlan/4', '127.0.0.1', '内网IP', '[4] ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 01:19:52', 18);
+INSERT INTO `sys_oper_log` VALUES (183, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"采购管理\",\"menuType\":\"M\",\"orderNum\":2,\"params\":{},\"parentId\":2039,\"path\":\"purchase\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 12:52:27', 37);
+INSERT INTO `sys_oper_log` VALUES (184, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"scm/purchaseApply/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"采购申请\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":2045,\"path\":\"purchaseApply\",\"perms\":\"scm:purchaseApply:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 12:52:54', 13);
+INSERT INTO `sys_oper_log` VALUES (185, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"scm/purchaseContract/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"采购合同\",\"menuType\":\"C\",\"orderNum\":2,\"params\":{},\"parentId\":2045,\"path\":\"purchaseContract\",\"perms\":\"scm:purchaseContract:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 12:53:27', 23);
+INSERT INTO `sys_oper_log` VALUES (186, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"scm/purchaseArrival/index\",\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"采购到货\",\"menuType\":\"C\",\"orderNum\":3,\"params\":{},\"parentId\":2045,\"path\":\"purchaseArrival\",\"perms\":\"scm:purchaseArrival:list\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 12:54:00', 16);
+INSERT INTO `sys_oper_log` VALUES (187, '采购申请', 2, 'com.ruoyi.scm.controller.PurchaseApplyController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/purchaseApply', '127.0.0.1', '内网IP', '{\"applicant\":\"admin\",\"applyDate\":\"2026-06-15\",\"applyId\":2,\"applyNo\":\"PA-20260615-1002\",\"applyStatus\":\"1\",\"applyType\":\"1\",\"createBy\":\"admin\",\"createTime\":\"2026-06-05 14:18:52\",\"detailList\":[{\"applyId\":2,\"detailId\":3,\"materialId\":103,\"materialName\":\"三元锂电池包\",\"price\":65000,\"productModel\":\"NE-75\",\"productSpec\":\"75kWh/350V\",\"purchaseQuantity\":5,\"requiredDate\":\"2026-07-15\",\"requiredQuantity\":5,\"seqNo\":1,\"unit\":\"组\"},{\"applyId\":2,\"detailId\":4,\"materialId\":106,\"materialName\":\"驱动电机\",\"price\":12000,\"productModel\":\"EM-150\",\"productSpec\":\"150kW/永磁\",\"purchaseQuantity\":8,\"requiredDate\":\"2026-07-15\",\"requiredQuantity\":8,\"seqNo\":2,\"unit\":\"台\"}],\"params\":{},\"remark\":\"新能源产线补货\",\"replenishmentNo\":\"RP-20260615-001\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 14:18:52\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 14:19:19', 178);
+INSERT INTO `sys_oper_log` VALUES (188, '采购申请', 2, 'com.ruoyi.scm.controller.PurchaseApplyController.edit()', 'PUT', 1, 'admin', '研发部门', '/scm/purchaseApply', '127.0.0.1', '内网IP', '{\"applicant\":\"admin\",\"applyDate\":\"2026-06-15\",\"applyId\":2,\"applyNo\":\"PA-20260615-1002\",\"applyStatus\":\"0\",\"applyType\":\"1\",\"createBy\":\"admin\",\"createTime\":\"2026-06-05 14:18:52\",\"detailList\":[{\"applyId\":2,\"detailId\":5,\"materialId\":103,\"materialName\":\"三元锂电池包\",\"price\":65000,\"productModel\":\"NE-75\",\"productSpec\":\"75kWh/350V\",\"purchaseQuantity\":5,\"requiredDate\":\"2026-07-15\",\"requiredQuantity\":3,\"seqNo\":1,\"unit\":\"组\"},{\"applyId\":2,\"detailId\":6,\"materialId\":106,\"materialName\":\"驱动电机\",\"price\":12000,\"productModel\":\"EM-150\",\"productSpec\":\"150kW/永磁\",\"purchaseQuantity\":8,\"requiredDate\":\"2026-07-15\",\"requiredQuantity\":8,\"seqNo\":2,\"unit\":\"台\"}],\"params\":{},\"remark\":\"新能源产线补货\",\"replenishmentNo\":\"RP-20260615-001\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-05 14:19:19\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-05 14:19:31', 7);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1660,7 +1738,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-05 01:17:14', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-05 14:00:40', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-04 10:35:53', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '测试员');
 
 -- ----------------------------

@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select audit_id, apply_no, related_no, business_type, supplier_name, contract_no, contract_type,
                apply_type, applicant, apply_date, apply_status, auditor, audit_date, audit_status, audit_opinion,
                create_by, create_time, update_by, update_time, remark
-        from myTask_inbound_audit
+        from mytask_inbound_audit
     </sql>
 
     <select id="selectInboundAuditById" parameterType="Integer" resultMap="InboundAuditResult">
@@ -92,7 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <insert id="insertInboundAudit" parameterType="InboundAudit" useGeneratedKeys="true" keyProperty="auditId">
-        insert into myTask_inbound_audit (
+        insert into mytask_inbound_audit (
             <if test="applyNo != null and applyNo != ''">apply_no,</if>
             <if test="relatedNo != null and relatedNo != ''">related_no,</if>
             <if test="businessType != null and businessType != ''">business_type,</if>
@@ -132,7 +132,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updateInboundAudit" parameterType="InboundAudit">
-        update myTask_inbound_audit
+        update mytask_inbound_audit
         <set>
             <if test="applyNo != null and applyNo != ''">apply_no = #{applyNo},</if>
             <if test="relatedNo != null">related_no = #{relatedNo},</if>
@@ -156,11 +156,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteInboundAuditById" parameterType="Integer">
-        delete from myTask_inbound_audit where audit_id = #{auditId}
+        delete from mytask_inbound_audit where audit_id = #{auditId}
     </delete>
 
     <delete id="deleteInboundAuditByIds" parameterType="Integer">
-        delete from myTask_inbound_audit where audit_id in
+        delete from mytask_inbound_audit where audit_id in
         <foreach item="auditId" collection="array" open="(" separator="," close=")">
             #{auditId}
         </foreach>

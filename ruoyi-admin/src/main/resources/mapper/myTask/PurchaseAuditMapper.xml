@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select audit_id, apply_no, apply_type, plan_no, replenishment_no,
                applicant, apply_date, apply_status, auditor, audit_date, audit_status, audit_opinion,
                create_by, create_time, update_by, update_time, remark
-        from myTask_purchase_audit
+        from mytask_purchase_audit
     </sql>
 
     <select id="selectPurchaseAuditById" parameterType="Long" resultMap="PurchaseAuditResult">
@@ -80,7 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <insert id="insertPurchaseAudit" parameterType="PurchaseAudit" useGeneratedKeys="true" keyProperty="auditId">
-        insert into myTask_purchase_audit (
+        insert into mytask_purchase_audit (
             <if test="applyNo != null and applyNo != ''">apply_no,</if>
             <if test="applyType != null and applyType != ''">apply_type,</if>
             <if test="planNo != null and planNo != ''">plan_no,</if>
@@ -114,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updatePurchaseAudit" parameterType="PurchaseAudit">
-        update myTask_purchase_audit
+        update mytask_purchase_audit
         <set>
             <if test="applyNo != null and applyNo != ''">apply_no = #{applyNo},</if>
             <if test="applyType != null and applyType != ''">apply_type = #{applyType},</if>
@@ -135,11 +135,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deletePurchaseAuditById" parameterType="Long">
-        delete from myTask_purchase_audit where audit_id = #{auditId}
+        delete from mytask_purchase_audit where audit_id = #{auditId}
     </delete>
 
     <delete id="deletePurchaseAuditByIds" parameterType="Long">
-        delete from myTask_purchase_audit where audit_id in
+        delete from mytask_purchase_audit where audit_id in
         <foreach item="auditId" collection="array" open="(" separator="," close=")">
             #{auditId}
         </foreach>
