@@ -11,7 +11,7 @@
  Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 06/06/2026 22:44:43
+ Date: 07/06/2026 00:24:44
 */
 
 SET NAMES utf8mb4;
@@ -370,7 +370,7 @@ CREATE TABLE `mytask_inbound_audit`  (
 -- Records of mytask_inbound_audit
 -- ----------------------------
 INSERT INTO `mytask_inbound_audit` VALUES (1, 'RK20260601001', 'PO20260601001', '1', '华为技术有限公司', 'HT20260101', '0', '采购入库', '曾学川', '2026-06-04 14:00:00', '1', 'admin', '2026-06-04 14:02:56', '1', '不通过', 'admin', '2026-06-04 13:48:12', 'admin', '2026-06-04 14:02:55', NULL);
-INSERT INTO `mytask_inbound_audit` VALUES (2, 'RK20260602001', 'TH20260602001', '2', '中兴通讯股份有限公司', 'HT20260202', '1', '退货入库', 'ry', '2026-06-02 14:30:00', '2', 'admin', '2026-06-04 14:02:27', '0', '审核通过，同意入', 'ry', '2026-06-04 13:48:12', 'admin', '2026-06-04 14:02:26', NULL);
+INSERT INTO `mytask_inbound_audit` VALUES (2, 'RK20260602001', 'TH20260602001', '2', '中兴通讯股份有限公司', 'HT20260202', '1', '退货入库', 'ry', '2026-06-02 00:00:00', '2', 'admin', '2026-06-06 23:16:37', '0', '审核通过，同意入', 'ry', '2026-06-04 13:48:12', 'admin', '2026-06-06 23:16:37', NULL);
 
 -- ----------------------------
 -- Table structure for mytask_purchase_audit
@@ -979,7 +979,7 @@ CREATE TABLE `scm_sales_plan`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`plan_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售计划主表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售计划主表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of scm_sales_plan
@@ -1007,7 +1007,7 @@ CREATE TABLE `scm_sales_plan_detail`  (
   PRIMARY KEY (`detail_id`) USING BTREE,
   INDEX `plan_id`(`plan_id` ASC) USING BTREE,
   CONSTRAINT `scm_sales_plan_detail_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `scm_sales_plan` (`plan_id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售计划指标配置' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '销售计划指标配置' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of scm_sales_plan_detail
@@ -1142,14 +1142,14 @@ CREATE TABLE `sys_dept`  (
 -- ----------------------------
 INSERT INTO `sys_dept` VALUES (100, 0, '0', '若依科技', 0, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL);
 INSERT INTO `sys_dept` VALUES (101, 100, '0,100', '深圳总公司', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL);
-INSERT INTO `sys_dept` VALUES (102, 100, '0,100', '长沙分公司', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL);
+INSERT INTO `sys_dept` VALUES (102, 100, '0,100', '长沙分公司', 2, '若依', '15888888888', 'ry@qq.com', '0', '2', 'admin', '2026-06-04 10:35:53', '', NULL);
 INSERT INTO `sys_dept` VALUES (103, 101, '0,100,101', '研发部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL);
-INSERT INTO `sys_dept` VALUES (104, 101, '0,100,101', '市场部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL);
-INSERT INTO `sys_dept` VALUES (105, 101, '0,100,101', '测试部门', 3, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL);
-INSERT INTO `sys_dept` VALUES (106, 101, '0,100,101', '财务部门', 4, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL);
-INSERT INTO `sys_dept` VALUES (107, 101, '0,100,101', '运维部门', 5, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL);
-INSERT INTO `sys_dept` VALUES (108, 102, '0,100,102', '市场部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL);
-INSERT INTO `sys_dept` VALUES (109, 102, '0,100,102', '财务部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL);
+INSERT INTO `sys_dept` VALUES (104, 101, '0,100,101', '市场部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '2', 'admin', '2026-06-04 10:35:53', '', NULL);
+INSERT INTO `sys_dept` VALUES (105, 101, '0,100,101', '测试部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL);
+INSERT INTO `sys_dept` VALUES (106, 101, '0,100,101', '财务部门', 4, '若依', '15888888888', 'ry@qq.com', '0', '2', 'admin', '2026-06-04 10:35:53', '', NULL);
+INSERT INTO `sys_dept` VALUES (107, 101, '0,100,101', '运维部门', 5, '若依', '15888888888', 'ry@qq.com', '0', '2', 'admin', '2026-06-04 10:35:53', '', NULL);
+INSERT INTO `sys_dept` VALUES (108, 102, '0,100,102', '市场部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '2', 'admin', '2026-06-04 10:35:53', '', NULL);
+INSERT INTO `sys_dept` VALUES (109, 102, '0,100,102', '财务部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '2', 'admin', '2026-06-04 10:35:53', '', NULL);
 
 -- ----------------------------
 -- Table structure for sys_dict_data
@@ -1295,7 +1295,7 @@ INSERT INTO `sys_dict_type` VALUES (204, '申请状态', 'sys_apply_status', '0'
 INSERT INTO `sys_dict_type` VALUES (205, '审核状态', 'sys_audit_status', '0', 'admin', '2026-06-05 00:34:46', '', NULL, '审核状态列表');
 INSERT INTO `sys_dict_type` VALUES (206, '送货方式', 'sys_delivery_method', '0', 'admin', '2026-06-05 01:14:29', '', NULL, '送货方式列表');
 INSERT INTO `sys_dict_type` VALUES (207, '入库状态', 'sys_inbound_status', '0', 'admin', '2026-06-05 01:15:46', '', NULL, '入库状态列表');
-INSERT INTO `sys_dict_type` VALUES (208, '到货状态', 'sys_arrival_status', '0', 'admin', NULL, '', NULL, '到货状态：0未入库,1入库中,2已入库');
+INSERT INTO `sys_dict_type` VALUES (208, '到货状态', 'sys_arrival_status', '0', 'admin', NULL, 'admin', '2026-06-06 23:11:16', '到货状态：0未入库,1入库中,2已入库');
 INSERT INTO `sys_dict_type` VALUES (209, '业务类型', 'wms_business_type', '0', 'admin', '2026-06-05 18:25:25', '', NULL, '业务类型列表');
 INSERT INTO `sys_dict_type` VALUES (210, '合同类型', 'wms_contract_type', '0', 'admin', '2026-06-05 18:25:25', '', NULL, '合同类型列表');
 INSERT INTO `sys_dict_type` VALUES (211, '申请状态', 'wms_apply_status', '0', 'admin', '2026-06-05 18:25:25', '', NULL, '申请状态列表');
@@ -1372,12 +1372,11 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 113 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_logininfor
 -- ----------------------------
-INSERT INTO `sys_logininfor` VALUES (1, 'admin', '127.0.0.1', '内网IP', 'Edge 148', 'Windows >=10', '0', '登录成功', '2026-06-06 22:38:44');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -1413,7 +1412,7 @@ CREATE TABLE `sys_menu`  (
 INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, 'system', NULL, '', '', 1, 0, 'M', '0', '0', '', 'system', 'admin', '2026-06-04 10:35:53', '', NULL, '系统管理目录');
 INSERT INTO `sys_menu` VALUES (2, '系统监控', 0, 2, 'monitor', NULL, '', '', 1, 0, 'M', '0', '0', '', 'monitor', 'admin', '2026-06-04 10:35:53', '', NULL, '系统监控目录');
 INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 7, 'tool', NULL, '', '', 1, 0, 'M', '0', '0', '', 'tool', 'admin', '2026-06-04 10:35:53', 'admin', '2026-06-04 23:53:13', '系统工具目录');
-INSERT INTO `sys_menu` VALUES (4, '若依官网', 0, 8, 'http://ruoyi.vip', NULL, '', '', 0, 0, 'M', '0', '0', '', 'guide', 'admin', '2026-06-04 10:35:53', 'admin', '2026-06-04 23:53:22', '若依官网地址');
+INSERT INTO `sys_menu` VALUES (4, '若依官网', 0, 8, 'http://ruoyi.vip', NULL, '', '', 0, 0, 'M', '0', '1', '', '404', 'admin', '2026-06-04 10:35:53', 'admin', '2026-06-06 23:54:44', '若依官网地址');
 INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, 'user', 'system/user/index', '', '', 1, 0, 'C', '0', '0', 'system:user:list', 'user', 'admin', '2026-06-04 10:35:53', '', NULL, '用户管理菜单');
 INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, 'role', 'system/role/index', '', '', 1, 0, 'C', '0', '0', 'system:role:list', 'peoples', 'admin', '2026-06-04 10:35:53', '', NULL, '角色管理菜单');
 INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, 'menu', 'system/menu/index', '', '', 1, 0, 'C', '0', '0', 'system:menu:list', 'tree-table', 'admin', '2026-06-04 10:35:53', '', NULL, '菜单管理菜单');
@@ -1499,7 +1498,7 @@ INSERT INTO `sys_menu` VALUES (2000, '我的任务', 0, 3, 'myTask', NULL, NULL,
 INSERT INTO `sys_menu` VALUES (2001, '流程审核', 2000, 1, 'audit', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, '#', 'admin', '2026-06-04 13:53:23', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2002, '入库申请审核', 2001, 1, 'inboundAudit', 'mes/inboundAudit/index', NULL, '', 1, 0, 'C', '0', '0', 'myTask:inboundAudit:list', '#', 'admin', '2026-06-04 13:53:55', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2003, '采购申请审核', 2001, 2, 'purchaseAudit', 'myTask/purchaseAudit/index', NULL, '', 1, 0, 'C', '0', '0', 'myTask:purchaseAudit:list', '#', 'admin', '2026-06-04 19:16:39', 'admin', '2026-06-04 23:02:00', '');
-INSERT INTO `sys_menu` VALUES (2004, '制造执行MES', 0, 4, 'mes', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, 'chart', 'admin', '2026-06-04 20:07:57', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2004, '制造执行MES', 0, 4, 'mes', NULL, NULL, '', 1, 0, 'M', '0', '0', '', 'email', 'admin', '2026-06-04 20:07:57', 'admin', '2026-06-06 23:09:12', '');
 INSERT INTO `sys_menu` VALUES (2005, '生产管理', 2004, 1, 'production', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, '#', 'admin', '2026-06-04 20:08:24', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2006, '作业装配', 2005, 1, 'assembly', 'mes/assembly/index', NULL, '', 1, 0, 'C', '0', '0', 'mes:HomeworkAssembly:list', '#', 'admin', '2026-06-04 20:11:36', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2007, '领料申请', 2005, 2, 'materialApply', 'mes/materialApply/index', NULL, '', 1, 0, 'C', '0', '0', 'mes:materialApply:list', '#', 'admin', '2026-06-04 20:12:20', 'admin', '2026-06-04 23:01:42', '');
@@ -1553,9 +1552,6 @@ CREATE TABLE `sys_notice`  (
 -- ----------------------------
 -- Records of sys_notice
 -- ----------------------------
-INSERT INTO `sys_notice` VALUES (1, '温馨提醒：2018-07-01 若依新版本发布啦', '2', 0xE696B0E78988E69CACE58685E5AEB9, '0', 'admin', '2026-06-04 10:35:54', '', NULL, '管理员');
-INSERT INTO `sys_notice` VALUES (2, '维护通知：2018-07-01 若依系统凌晨维护', '1', 0xE7BBB4E68AA4E58685E5AEB9, '0', 'admin', '2026-06-04 10:35:54', '', NULL, '管理员');
-INSERT INTO `sys_notice` VALUES (3, '若依开源框架介绍', '1', 0x3C703E3C7370616E207374796C653D22636F6C6F723A20726762283233302C20302C2030293B223EE9A1B9E79BAEE4BB8BE7BB8D3C2F7370616E3E3C2F703E3C703E3C666F6E7420636F6C6F723D2223333333333333223E52756F5969E5BC80E6BA90E9A1B9E79BAEE698AFE4B8BAE4BC81E4B89AE794A8E688B7E5AE9AE588B6E79A84E5908EE58FB0E8849AE6898BE69EB6E6A186E69EB6EFBC8CE4B8BAE4BC81E4B89AE68993E980A0E79A84E4B880E7AB99E5BC8FE8A7A3E586B3E696B9E6A188EFBC8CE9998DE4BD8EE4BC81E4B89AE5BC80E58F91E68890E69CACEFBC8CE68F90E58D87E5BC80E58F91E69588E78E87E38082E4B8BBE8A681E58C85E68BACE794A8E688B7E7AEA1E79086E38081E8A792E889B2E7AEA1E79086E38081E983A8E997A8E7AEA1E79086E38081E88F9CE58D95E7AEA1E79086E38081E58F82E695B0E7AEA1E79086E38081E5AD97E585B8E7AEA1E79086E380813C2F666F6E743E3C7370616E207374796C653D22636F6C6F723A207267622835312C2035312C203531293B223EE5B297E4BD8DE7AEA1E790863C2F7370616E3E3C7370616E207374796C653D22636F6C6F723A207267622835312C2035312C203531293B223EE38081E5AE9AE697B6E4BBBBE58AA13C2F7370616E3E3C7370616E207374796C653D22636F6C6F723A207267622835312C2035312C203531293B223EE380813C2F7370616E3E3C7370616E207374796C653D22636F6C6F723A207267622835312C2035312C203531293B223EE69C8DE58AA1E79B91E68EA7E38081E799BBE5BD95E697A5E5BF97E38081E6938DE4BD9CE697A5E5BF97E38081E4BBA3E7A081E7949FE68890E7AD89E58A9FE883BDE38082E585B6E4B8ADEFBC8CE8BF98E694AFE68C81E5A49AE695B0E68DAEE6BA90E38081E695B0E68DAEE69D83E99990E38081E59BBDE99985E58C96E380815265646973E7BC93E5AD98E38081446F636B6572E983A8E7BDB2E38081E6BB91E58AA8E9AA8CE8AF81E7A081E38081E7ACACE4B889E696B9E8AEA4E8AF81E799BBE5BD95E38081E58886E5B883E5BC8FE4BA8BE58AA1E380813C2F7370616E3E3C666F6E7420636F6C6F723D2223333333333333223EE58886E5B883E5BC8FE69687E4BBB6E5AD98E582A83C2F666F6E743E3C7370616E207374796C653D22636F6C6F723A207267622835312C2035312C203531293B223EE38081E58886E5BA93E58886E8A1A8E5A484E79086E7AD89E68A80E69CAFE789B9E782B9E380823C2F7370616E3E3C2F703E3C703E3C696D67207372633D2268747470733A2F2F666F727564612E67697465652E636F6D2F696D616765732F313737333933313834383334323433393033322F61346432323331335F313831353039352E706E6722207374796C653D2277696474683A20363470783B223E3C62723E3C2F703E3C703E3C7370616E207374796C653D22636F6C6F723A20726762283233302C20302C2030293B223EE5AE98E7BD91E58F8AE6BC94E7A4BA3C2F7370616E3E3C2F703E3C703E3C7370616E207374796C653D22636F6C6F723A207267622835312C2035312C203531293B223EE88BA5E4BE9DE5AE98E7BD91E59CB0E59D80EFBC9A266E6273703B3C2F7370616E3E3C6120687265663D22687474703A2F2F72756F79692E76697022207461726765743D225F626C616E6B223E687474703A2F2F72756F79692E7669703C2F613E3C6120687265663D22687474703A2F2F72756F79692E76697022207461726765743D225F626C616E6B223E3C2F613E3C2F703E3C703E3C7370616E207374796C653D22636F6C6F723A207267622835312C2035312C203531293B223EE88BA5E4BE9DE69687E6A1A3E59CB0E59D80EFBC9A266E6273703B3C2F7370616E3E3C6120687265663D22687474703A2F2F646F632E72756F79692E76697022207461726765743D225F626C616E6B223E687474703A2F2F646F632E72756F79692E7669703C2F613E3C62723E3C2F703E3C703E3C7370616E207374796C653D22636F6C6F723A207267622835312C2035312C203531293B223EE6BC94E7A4BAE59CB0E59D80E38090E4B88DE58886E7A6BBE78988E38091EFBC9A266E6273703B3C2F7370616E3E3C6120687265663D22687474703A2F2F64656D6F2E72756F79692E76697022207461726765743D225F626C616E6B223E687474703A2F2F64656D6F2E72756F79692E7669703C2F613E3C2F703E3C703E3C7370616E207374796C653D22636F6C6F723A207267622835312C2035312C203531293B223EE6BC94E7A4BAE59CB0E59D80E38090E58886E7A6BBE78988E69CACE38091EFBC9A266E6273703B3C2F7370616E3E3C6120687265663D22687474703A2F2F7675652E72756F79692E76697022207461726765743D225F626C616E6B223E687474703A2F2F7675652E72756F79692E7669703C2F613E3C2F703E3C703E3C7370616E207374796C653D22636F6C6F723A207267622835312C2035312C203531293B223EE6BC94E7A4BAE59CB0E59D80E38090E5BEAEE69C8DE58AA1E78988E38091EFBC9A266E6273703B3C2F7370616E3E3C6120687265663D22687474703A2F2F636C6F75642E72756F79692E76697022207461726765743D225F626C616E6B223E687474703A2F2F636C6F75642E72756F79692E7669703C2F613E3C2F703E3C703E3C7370616E207374796C653D22636F6C6F723A207267622835312C2035312C203531293B223EE6BC94E7A4BAE59CB0E59D80E38090E7A7BBE58AA8E7ABAFE78988E38091EFBC9A266E6273703B3C2F7370616E3E3C6120687265663D22687474703A2F2F68352E72756F79692E76697022207461726765743D225F626C616E6B223E687474703A2F2F68352E72756F79692E7669703C2F613E3C2F703E3C703E3C6272207374796C653D22636F6C6F723A207267622834382C2034392C203531293B20666F6E742D66616D696C793A202671756F743B48656C766574696361204E6575652671756F743B2C2048656C7665746963612C20417269616C2C2073616E732D73657269663B20666F6E742D73697A653A20313270783B223E3C2F703E, '0', 'admin', '2026-06-04 10:35:54', '', NULL, '管理员');
 
 -- ----------------------------
 -- Table structure for sys_notice_read
@@ -1568,14 +1564,14 @@ CREATE TABLE `sys_notice_read`  (
   `read_time` datetime NOT NULL COMMENT '阅读时间',
   PRIMARY KEY (`read_id`) USING BTREE,
   UNIQUE INDEX `uk_user_notice`(`user_id` ASC, `notice_id` ASC) USING BTREE COMMENT '同一用户同一公告只记录一次'
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '公告已读记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '公告已读记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_notice_read
 -- ----------------------------
-INSERT INTO `sys_notice_read` VALUES (1, 3, 1, '2026-06-04 13:56:20');
-INSERT INTO `sys_notice_read` VALUES (2, 2, 1, '2026-06-04 13:56:20');
-INSERT INTO `sys_notice_read` VALUES (3, 1, 1, '2026-06-04 13:56:20');
+INSERT INTO `sys_notice_read` VALUES (4, 3, 1, '2026-06-06 23:12:02');
+INSERT INTO `sys_notice_read` VALUES (5, 2, 1, '2026-06-06 23:12:02');
+INSERT INTO `sys_notice_read` VALUES (6, 1, 1, '2026-06-06 23:12:02');
 
 -- ----------------------------
 -- Table structure for sys_oper_log
@@ -1603,12 +1599,13 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
 -- ----------------------------
-INSERT INTO `sys_oper_log` VALUES (1, '操作日志', 9, 'com.ruoyi.web.controller.monitor.SysOperlogController.clean()', 'DELETE', 1, 'admin', '研发部门', '/monitor/operlog/clean', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-06 21:59:29', 44);
+INSERT INTO `sys_oper_log` VALUES (1, '操作日志', 9, 'com.ruoyi.web.controller.monitor.SysOperlogController.clean()', 'DELETE', 1, 'admin', '研发部门', '/monitor/operlog/clean', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-07 00:21:55', 36);
+INSERT INTO `sys_oper_log` VALUES (2, '登录日志', 9, 'com.ruoyi.web.controller.monitor.SysLogininforController.clean()', 'DELETE', 1, 'admin', '研发部门', '/monitor/logininfor/clean', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-07 00:22:01', 43);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1633,8 +1630,6 @@ CREATE TABLE `sys_post`  (
 -- ----------------------------
 INSERT INTO `sys_post` VALUES (1, 'ceo', '董事长', 1, '0', 'admin', '2026-06-04 10:35:53', '', NULL, '');
 INSERT INTO `sys_post` VALUES (2, 'se', '项目经理', 2, '0', 'admin', '2026-06-04 10:35:53', '', NULL, '');
-INSERT INTO `sys_post` VALUES (3, 'hr', '人力资源', 3, '0', 'admin', '2026-06-04 10:35:53', '', NULL, '');
-INSERT INTO `sys_post` VALUES (4, 'user', '普通员工', 4, '0', 'admin', '2026-06-04 10:35:53', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -1662,7 +1657,7 @@ CREATE TABLE `sys_role`  (
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO `sys_role` VALUES (1, '超级管理员', 'admin', 1, '1', 1, 1, '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL, '超级管理员');
-INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', 2, '2', 1, 1, '0', '0', 'admin', '2026-06-04 10:35:53', '', NULL, '普通角色');
+INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', 2, '2', 0, 0, '0', '0', 'admin', '2026-06-04 10:35:53', 'admin', '2026-06-06 23:08:27', '普通角色');
 
 -- ----------------------------
 -- Table structure for sys_role_dept
@@ -1811,7 +1806,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-06 22:38:42', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', 'MES经理', '00', 'MES123@163.com', '15888888888', '0', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-07 00:20:29', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', '2026-06-06 23:14:41', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-04 10:35:53', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '测试员');
 
 -- ----------------------------
