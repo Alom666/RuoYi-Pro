@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wms.mapper.InventoryCountMapper">
+
+    <resultMap type="com.ruoyi.wms.domain.InventoryCount" id="InventoryCountResult">
+        <result property="countId"            column="count_id"            />
+        <result property="countNo"            column="count_no"            />
+        <result property="materialId"         column="material_id"         />
+        <result property="materialName"       column="material_name"       />
+        <result property="warehouseName"      column="warehouse_name"      />
+        <result property="locationArea"       column="location_area"       />
+        <result property="locationNo"         column="location_no"         />
+        <result property="batchNo"            column="batch_no"            />
+        <result property="countType"          column="count_type"          />
+        <result property="inventoryMonth"     column="inventory_month"     />
+        <result property="countDate"          column="count_date"          />
+        <result property="responsiblePerson"  column="responsible_person"  />
+        <result property="currentStock"       column="current_stock"       />
+        <result property="actualStock"        column="actual_stock"        />
+        <result property="reason"             column="reason"              />
+        <result property="createBy"           column="create_by"           />
+        <result property="createTime"         column="create_time"         />
+        <result property="updateBy"           column="update_by"           />
+        <result property="updateTime"         column="update_time"         />
+        <result property="remark"             column="remark"              />
+    </resultMap>
+
+    <sql id="selectInventoryCountVo">
+        select count_id, count_no, material_id, material_name, warehouse_name, location_area, location_no,
+               batch_no, count_type, inventory_month, count_date, responsible_person, current_stock, actual_stock,
+               reason, create_by, create_time, update_by, update_time, remark
+        from wms_inventory_count
+    </sql>
+
+    <select id="selectInventoryCountById" parameterType="Long" resultMap="InventoryCountResult">
+        <include refid="selectInventoryCountVo"/>
+        where count_id = #{countId}
+    </select>
+
+    <select id="selectInventoryCountList" parameterType="com.ruoyi.wms.domain.InventoryCount" resultMap="InventoryCountResult">
+        <include refid="selectInventoryCountVo"/>
+        <where>
+            <if test="countNo != null and countNo != ''">
+                AND count_no like concat('%', #{countNo}, '%')
+            </if>
+            <if test="materialName != null and materialName != ''">
+                AND material_name like concat('%', #{materialName}, '%')
+            </if>
+            <if test="warehouseName != null and warehouseName != ''">
+                AND warehouse_name like concat('%', #{warehouseName}, '%')
+            </if>
+            <if test="locationArea != null and locationArea != ''">
+                AND location_area like concat('%', #{locationArea}, '%')
+            </if>
+            <if test="locationNo != null and locationNo != ''">
+                AND location_no like concat('%', #{locationNo}, '%')
+            </if>
+            <if test="batchNo != null and batchNo != ''">
+                AND batch_no like concat('%', #{batchNo}, '%')
+            </if>
+            <if test="countType != null and countType != ''">
+                AND count_type = #{countType}
+            </if>
+            <if test="inventoryMonth != null and inventoryMonth != ''">
+                AND inventory_month = #{inventoryMonth}
+            </if>
+            <if test="responsiblePerson != null and responsiblePerson != ''">
+                AND responsible_person like concat('%', #{responsiblePerson}, '%')
+            </if>
+            <if test="params.beginCountDate != null and params.beginCountDate != ''">
+                AND count_date &gt;= #{params.beginCountDate}
+            </if>
+            <if test="params.endCountDate != null and params.endCountDate != ''">
+                AND count_date &lt;= #{params.endCountDate}
+            </if>
+        </where>
+        order by count_id desc
+    </select>
+
+    <insert id="insertInventoryCount" parameterType="com.ruoyi.wms.domain.InventoryCount" useGeneratedKeys="true" keyProperty="countId">
+        insert into wms_inventory_count (
+            <if test="countNo != null and countNo != ''">count_no,</if>
+            <if test="materialId != null">material_id,</if>
+            <if test="materialName != null and materialName != ''">material_name,</if>
+            <if test="warehouseName != null and warehouseName != ''">warehouse_name,</if>
+            <if test="locationArea != null and locationArea != ''">location_area,</if>
+            <if test="locationNo != null and locationNo != ''">location_no,</if>
+            <if test="batchNo != null and batchNo != ''">batch_no,</if>
+            <if test="countType != null and countType != ''">count_type,</if>
+            <if test="inventoryMonth != null and inventoryMonth != ''">inventory_month,</if>
+            <if test="countDate != null">count_date,</if>
+            <if test="responsiblePerson != null and responsiblePerson != ''">responsible_person,</if>
+            <if test="currentStock != null">current_stock,</if>
+            <if test="actualStock != null">actual_stock,</if>
+            <if test="reason != null and reason != ''">reason,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="countNo != null and countNo != ''">#{countNo},</if>
+            <if test="materialId != null">#{materialId},</if>
+            <if test="materialName != null and materialName != ''">#{materialName},</if>
+            <if test="warehouseName != null and warehouseName != ''">#{warehouseName},</if>
+            <if test="locationArea != null and locationArea != ''">#{locationArea},</if>
+            <if test="locationNo != null and locationNo != ''">#{locationNo},</if>
+            <if test="batchNo != null and batchNo != ''">#{batchNo},</if>
+            <if test="countType != null and countType != ''">#{countType},</if>
+            <if test="inventoryMonth != null and inventoryMonth != ''">#{inventoryMonth},</if>
+            <if test="countDate != null">#{countDate},</if>
+            <if test="responsiblePerson != null and responsiblePerson != ''">#{responsiblePerson},</if>
+            <if test="currentStock != null">#{currentStock},</if>
+            <if test="actualStock != null">#{actualStock},</if>
+            <if test="reason != null and reason != ''">#{reason},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateInventoryCount" parameterType="com.ruoyi.wms.domain.InventoryCount">
+        update wms_inventory_count
+        <set>
+            <if test="countNo != null and countNo != ''">count_no = #{countNo},</if>
+            <if test="materialId != null">material_id = #{materialId},</if>
+            <if test="materialName != null">material_name = #{materialName},</if>
+            <if test="warehouseName != null">warehouse_name = #{warehouseName},</if>
+            <if test="locationArea != null">location_area = #{locationArea},</if>
+            <if test="locationNo != null">location_no = #{locationNo},</if>
+            <if test="batchNo != null">batch_no = #{batchNo},</if>
+            <if test="countType != null">count_type = #{countType},</if>
+            <if test="inventoryMonth != null">inventory_month = #{inventoryMonth},</if>
+            <if test="countDate != null">count_date = #{countDate},</if>
+            <if test="responsiblePerson != null">responsible_person = #{responsiblePerson},</if>
+            <if test="currentStock != null">current_stock = #{currentStock},</if>
+            <if test="actualStock != null">actual_stock = #{actualStock},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where count_id = #{countId}
+    </update>
+
+    <delete id="deleteInventoryCountById" parameterType="Long">
+        delete from wms_inventory_count where count_id = #{countId}
+    </delete>
+
+    <delete id="deleteInventoryCountByIds" parameterType="Long">
+        delete from wms_inventory_count where count_id in
+        <foreach item="countId" collection="array" open="(" separator="," close=")">
+            #{countId}
+        </foreach>
+    </delete>
+
+</mapper>

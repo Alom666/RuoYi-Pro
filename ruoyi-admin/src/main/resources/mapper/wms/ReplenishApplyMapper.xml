@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wms.mapper.ReplenishApplyMapper">
+
+    <resultMap type="com.ruoyi.wms.domain.ReplenishApply" id="ReplenishApplyResult">
+        <result property="applyId"       column="apply_id"       />
+        <result property="applyNo"       column="apply_no"       />
+        <result property="applicant"     column="applicant"      />
+        <result property="applyDate"     column="apply_date"     />
+        <result property="applyStatus"   column="apply_status"   />
+        <result property="auditor"       column="auditor"        />
+        <result property="auditDate"     column="audit_date"     />
+        <result property="auditStatus"   column="audit_status"   />
+        <result property="status"        column="status"         />
+        <result property="createBy"      column="create_by"      />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"      column="update_by"      />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"        column="remark"         />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.wms.domain.ReplenishApplyDetail" id="ReplenishApplyDetailResult">
+        <result property="detailId"           column="detail_id"           />
+        <result property="applyId"            column="apply_id"            />
+        <result property="seqNo"              column="seq_no"              />
+        <result property="materialId"         column="material_id"         />
+        <result property="materialName"       column="material_name"       />
+        <result property="productModel"       column="product_model"       />
+        <result property="productSpec"        column="product_spec"        />
+        <result property="unit"               column="unit"                />
+        <result property="replenishQuantity"  column="replenish_quantity"  />
+        <result property="remark"             column="remark"              />
+    </resultMap>
+
+    <sql id="selectReplenishApplyVo">
+        select apply_id, apply_no, applicant, apply_date, apply_status, auditor, audit_date, audit_status, status,
+               create_by, create_time, update_by, update_time, remark
+        from wms_replenish_apply
+    </sql>
+
+    <select id="selectReplenishApplyById" parameterType="Long" resultMap="ReplenishApplyResult">
+        <include refid="selectReplenishApplyVo"/>
+        where apply_id = #{applyId}
+    </select>
+
+    <select id="selectDetailByApplyId" parameterType="Long" resultMap="ReplenishApplyDetailResult">
+        select detail_id, apply_id, seq_no, material_id, material_name, product_model, product_spec, unit, replenish_quantity, remark
+        from wms_replenish_apply_detail
+        where apply_id = #{applyId}
+        order by seq_no
+    </select>
+
+    <select id="selectReplenishApplyList" parameterType="com.ruoyi.wms.domain.ReplenishApply" resultMap="ReplenishApplyResult">
+        <include refid="selectReplenishApplyVo"/>
+        <where>
+            <if test="applyNo != null and applyNo != ''">
+                AND apply_no like concat('%', #{applyNo}, '%')
+            </if>
+            <if test="applicant != null and applicant != ''">
+                AND applicant like concat('%', #{applicant}, '%')
+            </if>
+            <if test="applyStatus != null and applyStatus != ''">
+                AND apply_status = #{applyStatus}
+            </if>
+            <if test="auditor != null and auditor != ''">
+                AND auditor like concat('%', #{auditor}, '%')
+            </if>
+            <if test="auditStatus != null and auditStatus != ''">
+                AND audit_status = #{auditStatus}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="params.beginApplyDate != null and params.beginApplyDate != ''">
+                AND apply_date &gt;= #{params.beginApplyDate}
+            </if>
+            <if test="params.endApplyDate != null and params.endApplyDate != ''">
+                AND apply_date &lt;= #{params.endApplyDate}
+            </if>
+            <if test="params.beginAuditDate != null and params.beginAuditDate != ''">
+                AND audit_date &gt;= #{params.beginAuditDate}
+            </if>
+            <if test="params.endAuditDate != null and params.endAuditDate != ''">
+                AND audit_date &lt;= #{params.endAuditDate}
+            </if>
+        </where>
+        order by apply_id desc
+    </select>
+
+    <insert id="insertReplenishApply" parameterType="com.ruoyi.wms.domain.ReplenishApply" useGeneratedKeys="true" keyProperty="applyId">
+        insert into wms_replenish_apply (
+            <if test="applyNo != null and applyNo != ''">apply_no,</if>
+            <if test="applicant != null and applicant != ''">applicant,</if>
+            <if test="applyDate != null">apply_date,</if>
+            <if test="applyStatus != null and applyStatus != ''">apply_status,</if>
+            <if test="auditor != null and auditor != ''">auditor,</if>
+            <if test="auditDate != null">audit_date,</if>
+            <if test="auditStatus != null and auditStatus != ''">audit_status,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="applyNo != null and applyNo != ''">#{applyNo},</if>
+            <if test="applicant != null and applicant != ''">#{applicant},</if>
+            <if test="applyDate != null">#{applyDate},</if>
+            <if test="applyStatus != null and applyStatus != ''">#{applyStatus},</if>
+            <if test="auditor != null and auditor != ''">#{auditor},</if>
+            <if test="auditDate != null">#{auditDate},</if>
+            <if test="auditStatus != null and auditStatus != ''">#{auditStatus},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateReplenishApply" parameterType="com.ruoyi.wms.domain.ReplenishApply">
+        update wms_replenish_apply
+        <set>
+            <if test="applyNo != null and applyNo != ''">apply_no = #{applyNo},</if>
+            <if test="applicant != null">applicant = #{applicant},</if>
+            <if test="applyDate != null">apply_date = #{applyDate},</if>
+            <if test="applyStatus != null">apply_status = #{applyStatus},</if>
+            <if test="auditor != null">auditor = #{auditor},</if>
+            <if test="auditDate != null">audit_date = #{auditDate},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where apply_id = #{applyId}
+    </update>
+
+    <delete id="deleteReplenishApplyById" parameterType="Long">
+        delete from wms_replenish_apply where apply_id = #{applyId}
+    </delete>
+
+    <delete id="deleteReplenishApplyByIds" parameterType="Long">
+        delete from wms_replenish_apply where apply_id in
+        <foreach item="applyId" collection="array" open="(" separator="," close=")">
+            #{applyId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteDetailByApplyId" parameterType="Long">
+        delete from wms_replenish_apply_detail where apply_id = #{applyId}
+    </delete>
+
+    <insert id="batchInsertDetail" parameterType="java.util.List">
+        insert into wms_replenish_apply_detail (apply_id, seq_no, material_id, material_name, product_model, product_spec, unit, replenish_quantity, remark)
+        values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.applyId}, #{item.seqNo}, #{item.materialId}, #{item.materialName}, #{item.productModel}, #{item.productSpec}, #{item.unit}, #{item.replenishQuantity}, #{item.remark})
+        </foreach>
+    </insert>
+
+</mapper>

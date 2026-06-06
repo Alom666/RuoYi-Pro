@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wms.mapper.WarehouseMapper">
+
+    <resultMap type="com.ruoyi.wms.domain.Warehouse" id="WarehouseResult">
+        <result property="warehouseId"   column="warehouse_id"   />
+        <result property="warehouseCode" column="warehouse_code" />
+        <result property="warehouseName" column="warehouse_name" />
+        <result property="createBy"      column="create_by"      />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"      column="update_by"      />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"        column="remark"         />
+    </resultMap>
+
+    <sql id="selectWarehouseVo">
+        select warehouse_id, warehouse_code, warehouse_name, create_by, create_time, update_by, update_time, remark
+        from wms_warehouse
+    </sql>
+
+    <select id="selectWarehouseById" parameterType="Long" resultMap="WarehouseResult">
+        <include refid="selectWarehouseVo"/>
+        where warehouse_id = #{warehouseId}
+    </select>
+
+    <select id="selectWarehouseList" parameterType="com.ruoyi.wms.domain.Warehouse" resultMap="WarehouseResult">
+        <include refid="selectWarehouseVo"/>
+        <where>
+            <if test="warehouseCode != null and warehouseCode != ''">
+                AND warehouse_code like concat('%', #{warehouseCode}, '%')
+            </if>
+            <if test="warehouseName != null and warehouseName != ''">
+                AND warehouse_name like concat('%', #{warehouseName}, '%')
+            </if>
+        </where>
+        order by warehouse_id
+    </select>
+
+    <insert id="insertWarehouse" parameterType="com.ruoyi.wms.domain.Warehouse" useGeneratedKeys="true" keyProperty="warehouseId">
+        insert into wms_warehouse (
+            <if test="warehouseCode != null and warehouseCode != ''">warehouse_code,</if>
+            <if test="warehouseName != null and warehouseName != ''">warehouse_name,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="warehouseCode != null and warehouseCode != ''">#{warehouseCode},</if>
+            <if test="warehouseName != null and warehouseName != ''">#{warehouseName},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateWarehouse" parameterType="com.ruoyi.wms.domain.Warehouse">
+        update wms_warehouse
+        <set>
+            <if test="warehouseCode != null and warehouseCode != ''">warehouse_code = #{warehouseCode},</if>
+            <if test="warehouseName != null and warehouseName != ''">warehouse_name = #{warehouseName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where warehouse_id = #{warehouseId}
+    </update>
+
+    <delete id="deleteWarehouseById" parameterType="Long">
+        delete from wms_warehouse where warehouse_id = #{warehouseId}
+    </delete>
+
+    <delete id="deleteWarehouseByIds" parameterType="Long">
+        delete from wms_warehouse where warehouse_id in
+        <foreach item="warehouseId" collection="array" open="(" separator="," close=")">
+            #{warehouseId}
+        </foreach>
+    </delete>
+
+</mapper>

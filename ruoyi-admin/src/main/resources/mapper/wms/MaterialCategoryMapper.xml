@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wms.mapper.MaterialCategoryMapper">
+
+    <resultMap type="com.ruoyi.wms.domain.MaterialCategory" id="MaterialCategoryResult">
+        <result property="categoryId"    column="category_id"    />
+        <result property="parentId"      column="parent_id"      />
+        <result property="categoryCode"  column="category_code"  />
+        <result property="categoryName"  column="category_name"  />
+        <result property="description"   column="description"    />
+        <result property="createBy"      column="create_by"      />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"      column="update_by"      />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"        column="remark"         />
+        <result property="parentName"    column="parent_name"    />
+    </resultMap>
+
+    <sql id="selectMaterialCategoryVo">
+        select c.category_id, c.parent_id, c.category_code, c.category_name, c.description,
+               c.create_by, c.create_time, c.update_by, c.update_time, c.remark,
+               p.category_name as parent_name
+        from wms_material_category c
+        left join wms_material_category p on c.parent_id = p.category_id
+    </sql>
+
+    <select id="selectMaterialCategoryById" parameterType="Long" resultMap="MaterialCategoryResult">
+        <include refid="selectMaterialCategoryVo"/>
+        where c.category_id = #{categoryId}
+    </select>
+
+    <select id="selectMaterialCategoryList" parameterType="com.ruoyi.wms.domain.MaterialCategory" resultMap="MaterialCategoryResult">
+        <include refid="selectMaterialCategoryVo"/>
+        <where>
+            <if test="categoryCode != null and categoryCode != ''">
+                AND c.category_code like concat('%', #{categoryCode}, '%')
+            </if>
+            <if test="categoryName != null and categoryName != ''">
+                AND c.category_name like concat('%', #{categoryName}, '%')
+            </if>
+            <if test="parentId != null">
+                AND c.parent_id = #{parentId}
+            </if>
+        </where>
+        order by c.category_id
+    </select>
+
+    <insert id="insertMaterialCategory" parameterType="com.ruoyi.wms.domain.MaterialCategory" useGeneratedKeys="true" keyProperty="categoryId">
+        insert into wms_material_category (
+            <if test="parentId != null">parent_id,</if>
+            <if test="categoryCode != null and categoryCode != ''">category_code,</if>
+            <if test="categoryName != null and categoryName != ''">category_name,</if>
+            <if test="description != null and description != ''">description,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="parentId != null">#{parentId},</if>
+            <if test="categoryCode != null and categoryCode != ''">#{categoryCode},</if>
+            <if test="categoryName != null and categoryName != ''">#{categoryName},</if>
+            <if test="description != null and description != ''">#{description},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateMaterialCategory" parameterType="com.ruoyi.wms.domain.MaterialCategory">
+        update wms_material_category
+        <set>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="categoryCode != null and categoryCode != ''">category_code = #{categoryCode},</if>
+            <if test="categoryName != null and categoryName != ''">category_name = #{categoryName},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where category_id = #{categoryId}
+    </update>
+
+    <delete id="deleteMaterialCategoryById" parameterType="Long">
+        delete from wms_material_category where category_id = #{categoryId}
+    </delete>
+
+    <delete id="deleteMaterialCategoryByIds" parameterType="Long">
+        delete from wms_material_category where category_id in
+        <foreach item="categoryId" collection="array" open="(" separator="," close=")">
+            #{categoryId}
+        </foreach>
+    </delete>
+
+    <select id="hasChildByParentId" parameterType="Long" resultType="int">
+        select count(1) from wms_material_category where parent_id = #{parentId}
+    </select>
+
+</mapper>
