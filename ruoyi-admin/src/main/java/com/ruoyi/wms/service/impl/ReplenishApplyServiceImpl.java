@@ -2,6 +2,8 @@
 package com.ruoyi.wms.service.impl;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import com.ruoyi.wms.service.IReplenishApplyService;
 @Service
 public class ReplenishApplyServiceImpl implements IReplenishApplyService
 {
+    private static final Logger log = LoggerFactory.getLogger(ReplenishApplyServiceImpl.class);
     @Autowired
     private ReplenishApplyMapper replenishApplyMapper;
 
@@ -160,6 +163,7 @@ public class ReplenishApplyServiceImpl implements IReplenishApplyService
         ReplenishApply update = new ReplenishApply();
         update.setApplyId(applyId);
         update.setStatus("1");
+        log.warn("补货申请[{}]未关联采购申请Service，采购申请记录未生成", applyId);
         // TODO: 此处可调用采购申请Service生成采购申请记录
         // purchaseApplyService.generateFromReplenish(applyId);
         return replenishApplyMapper.updateReplenishApply(update);

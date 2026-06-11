@@ -11,7 +11,7 @@
  Target Server Version : 80046 (8.0.46)
  File Encoding         : 65001
 
- Date: 07/06/2026 00:24:44
+ Date: 11/06/2026 11:20:25
 */
 
 SET NAMES utf8mb4;
@@ -370,7 +370,7 @@ CREATE TABLE `mytask_inbound_audit`  (
 -- Records of mytask_inbound_audit
 -- ----------------------------
 INSERT INTO `mytask_inbound_audit` VALUES (1, 'RK20260601001', 'PO20260601001', '1', '华为技术有限公司', 'HT20260101', '0', '采购入库', '曾学川', '2026-06-04 14:00:00', '1', 'admin', '2026-06-04 14:02:56', '1', '不通过', 'admin', '2026-06-04 13:48:12', 'admin', '2026-06-04 14:02:55', NULL);
-INSERT INTO `mytask_inbound_audit` VALUES (2, 'RK20260602001', 'TH20260602001', '2', '中兴通讯股份有限公司', 'HT20260202', '1', '退货入库', 'ry', '2026-06-02 00:00:00', '2', 'admin', '2026-06-06 23:16:37', '0', '审核通过，同意入', 'ry', '2026-06-04 13:48:12', 'admin', '2026-06-06 23:16:37', NULL);
+INSERT INTO `mytask_inbound_audit` VALUES (2, 'RK20260602001', 'TH20260602001', '2', '中兴通讯股份有限公司', 'HT20260202', '1', '退货入库', 'ry', '2026-06-02 00:00:00', '2', 'admin', '2026-06-08 22:31:40', '1', '审核通过，同意入', 'ry', '2026-06-04 13:48:12', 'admin', '2026-06-08 22:31:39', NULL);
 
 -- ----------------------------
 -- Table structure for mytask_purchase_audit
@@ -1372,11 +1372,17 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 113 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_logininfor
 -- ----------------------------
+INSERT INTO `sys_logininfor` VALUES (1, 'admin', '127.0.0.1', '内网IP', 'Edge 149', 'Windows >=10', '0', '登录成功', '2026-06-08 22:25:25');
+INSERT INTO `sys_logininfor` VALUES (2, 'admin', '127.0.0.1', '内网IP', 'Edge 149', 'Windows >=10', '0', '登录成功', '2026-06-08 23:27:23');
+INSERT INTO `sys_logininfor` VALUES (3, 'admin', '127.0.0.1', '内网IP', 'Edge 149', 'Windows >=10', '0', '登录成功', '2026-06-09 17:56:12');
+INSERT INTO `sys_logininfor` VALUES (4, 'admin', '127.0.0.1', '内网IP', 'Edge 149', 'Windows >=10', '0', '登录成功', '2026-06-11 10:42:13');
+INSERT INTO `sys_logininfor` VALUES (5, 'admin', '127.0.0.1', '内网IP', 'Edge 149', 'Windows >=10', '0', '退出成功', '2026-06-11 11:14:49');
+INSERT INTO `sys_logininfor` VALUES (6, 'admin', '127.0.0.1', '内网IP', 'Edge 149', 'Windows >=10', '0', '登录成功', '2026-06-11 11:14:52');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -1599,13 +1605,15 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
 -- ----------------------------
 INSERT INTO `sys_oper_log` VALUES (1, '操作日志', 9, 'com.ruoyi.web.controller.monitor.SysOperlogController.clean()', 'DELETE', 1, 'admin', '研发部门', '/monitor/operlog/clean', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-07 00:21:55', 36);
 INSERT INTO `sys_oper_log` VALUES (2, '登录日志', 9, 'com.ruoyi.web.controller.monitor.SysLogininforController.clean()', 'DELETE', 1, 'admin', '研发部门', '/monitor/logininfor/clean', '127.0.0.1', '内网IP', '', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-07 00:22:01', 43);
+INSERT INTO `sys_oper_log` VALUES (3, '入库申请审核', 2, 'com.ruoyi.myTask.controller.InboundAuditController.edit()', 'PUT', 1, 'admin', '研发部门', '/myTask/inboundAudit', '127.0.0.1', '内网IP', '{\"applicant\":\"ry\",\"applyDate\":\"2026-06-02\",\"applyNo\":\"RK20260602001\",\"applyStatus\":\"2\",\"applyType\":\"退货入库\",\"auditDate\":\"2026-06-08\",\"auditId\":2,\"auditOpinion\":\"审核通过，同意入\",\"auditStatus\":\"0\",\"auditor\":\"admin\",\"businessType\":\"2\",\"contractNo\":\"HT20260202\",\"contractType\":\"1\",\"createBy\":\"ry\",\"createTime\":\"2026-06-04 13:48:12\",\"params\":{},\"relatedNo\":\"TH20260602001\",\"supplierName\":\"中兴通讯股份有限公司\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-06 23:16:37\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-08 22:31:25', 23);
+INSERT INTO `sys_oper_log` VALUES (4, '入库申请审核', 2, 'com.ruoyi.myTask.controller.InboundAuditController.edit()', 'PUT', 1, 'admin', '研发部门', '/myTask/inboundAudit', '127.0.0.1', '内网IP', '{\"applicant\":\"ry\",\"applyDate\":\"2026-06-02\",\"applyNo\":\"RK20260602001\",\"applyStatus\":\"2\",\"applyType\":\"退货入库\",\"auditDate\":\"2026-06-08\",\"auditId\":2,\"auditOpinion\":\"审核通过，同意入\",\"auditStatus\":\"1\",\"auditor\":\"admin\",\"businessType\":\"2\",\"contractNo\":\"HT20260202\",\"contractType\":\"1\",\"createBy\":\"ry\",\"createTime\":\"2026-06-04 13:48:12\",\"params\":{},\"relatedNo\":\"TH20260602001\",\"supplierName\":\"中兴通讯股份有限公司\",\"updateBy\":\"admin\",\"updateTime\":\"2026-06-08 22:31:25\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-06-08 22:31:39', 15);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1806,7 +1814,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', 'MES经理', '00', 'MES123@163.com', '15888888888', '0', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-07 00:20:29', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', '2026-06-06 23:14:41', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', 'MES经理', '00', 'MES123@163.com', '15888888888', '0', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-11 11:14:52', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', '2026-06-06 23:14:41', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-04 10:35:53', '2026-06-04 10:35:53', 'admin', '2026-06-04 10:35:53', '', NULL, '测试员');
 
 -- ----------------------------

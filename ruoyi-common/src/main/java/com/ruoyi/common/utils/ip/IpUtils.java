@@ -2,6 +2,8 @@ package com.ruoyi.common.utils.ip;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -13,6 +15,7 @@ import com.ruoyi.common.utils.StringUtils;
  */
 public class IpUtils
 {
+    private static final Logger log = LoggerFactory.getLogger(IpUtils.class);
     public final static String REGX_0_255 = "(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]\\d|\\d)";
     // 匹配 ip
     public final static String REGX_IP = "((" + REGX_0_255 + "\\.){3}" + REGX_0_255 + ")";
@@ -224,6 +227,7 @@ public class IpUtils
         }
         catch (UnknownHostException e)
         {
+            log.warn("获取本机IP失败", e);
         }
         return "127.0.0.1";
     }
@@ -241,6 +245,7 @@ public class IpUtils
         }
         catch (UnknownHostException e)
         {
+            log.warn("获取主机名失败", e);
         }
         return "未知";
     }
